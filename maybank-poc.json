@@ -2200,6 +2200,35 @@
         }
       ],
       "responseMode": null
+    },
+    {
+      "uuid": "965ce81d-c93f-4df7-9dc3-edd4852a2bc6",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "banking/v2/casa/transactions/history",
+      "responses": [
+        {
+          "uuid": "231c4530-887c-4119-9ae7-67b9cf141a0b",
+          "body": "{\r\n  \"message\": \"success\",\r\n  \"code\": 200,\r\n  \"challenge\": null,\r\n  \"result\": {\r\n    \"transactionHistoryList\": [\r\n      {\r\n        \"transactionList\": [\r\n          {\r\n            \"amt\": \"2000.00\",\r\n            \"curCode\": \"000\",\r\n            \"curAmt\": null,\r\n            \"desc\": \"AUTO SIT A *Hakim\",\r\n            \"postingDate\": \"11 Dec 2024\",\r\n            \"indicator\": \"C\",\r\n            \"expDate\": null,\r\n            \"dueDate\": null,\r\n            \"transactionCode\": null,\r\n            \"transactionRefNo\": null,\r\n            \"effectiveDate\": null,\r\n            \"txnLogTransactionType\": null,\r\n            \"transactionTypeKey\": null,\r\n            \"reprintReceiptEnableFlag\": false\r\n          }\r\n        ],\r\n        \"date\": \"11 Dec 2024\"\r\n      }\r\n    ],\r\n    \"hasNext\": false,\r\n    \"token\": null,\r\n    \"paginationRef\": \"000000000000000000000000\",\r\n    \"noOfRecords\": \"1\",\r\n    \"errorCode\": null,\r\n    \"errorMessage\": null\r\n  }\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
     }
   ],
   "rootChildren": [
@@ -2438,6 +2467,10 @@
     {
       "type": "route",
       "uuid": "e0e4882b-f2e2-478b-926d-484172c9be7c"
+    },
+    {
+      "type": "route",
+      "uuid": "965ce81d-c93f-4df7-9dc3-edd4852a2bc6"
     }
   ],
   "proxyMode": false,
