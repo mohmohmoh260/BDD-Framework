@@ -1,0 +1,1224 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Extent Report</title>
+<link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@b00a2d0486596e73dd7326beacf352c639623a0e/commons/img/logo.png">
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@b00a2d0486596e73dd7326beacf352c639623a0e/commons/img/logo.png">
+<link href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@ce8b10435bcbae260c334c0d0c6b61d2c19b6168/spark/css/spark-style.css" rel="stylesheet" />
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/js/jsontree.js"></script>
+<style type="text/css"></style></head><body class="spa bdd-report standard">
+  <div class="app">
+    <div class="layout">
+<div class="header navbar">
+<div class="vheader">
+<div class="nav-logo">
+<a href="#">
+<div class="logo" style="background-image: url('https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@b00a2d0486596e73dd7326beacf352c639623a0e/commons/img/logo.png')"></div>
+</a>
+</div>
+<ul class="nav-left">
+<li class="search-box">
+<a class="search-toggle" href="#">
+<i class="search-icon fa fa-search"></i>
+<i class="search-icon-close fa fa-close"></i>
+</a>
+</li>
+<li class="search-input"><input id="search-tests" class="form-control" type="text" placeholder="Search..."></li>
+</ul>
+<ul class="nav-right">
+<li class="m-r-10">
+<a href="#"><span class="badge badge-primary">Automation Report</span></a>
+</li>
+<li class="m-r-10">
+<a href="#"><span class="badge badge-primary">Dec 10, 2024 18:29:03</span></a>
+</li>
+</ul>
+</div>
+</div><div class="side-nav">
+<div class="side-nav-inner">
+<ul class="side-nav-menu">
+<li class="nav-item dropdown" onclick="toggleView('dashboard-view')">
+<a id="nav-dashboard" class="dropdown-toggle" href="#">
+<span class="ico"><i class="fa fa-bar-chart"></i></span>
+</a>
+</li>
+<li class="nav-item dropdown" onclick="toggleView('test-view')">
+<a id="nav-test" class="dropdown-toggle" href="#">
+<span class="ico"><i class="fa fa-list"></i></span>
+</a>
+</li>
+<li class="nav-item dropdown" onclick="toggleView('category-view')">
+<a id="nav-category" class="dropdown-toggle" href="#">
+<span class="ico"><i class="fa fa-tag"></i></span>
+</a>
+</li>
+<li class="nav-item dropdown" onclick="toggleView('exception-view')">
+<a id="nav-exception" class="dropdown-toggle" href="#">
+<span class="ico"><i class="fa fa-bug"></i></span>
+</a>
+</li>
+</ul>
+</div>
+</div>      <div class="vcontainer">
+        <div class="main-content">
+<div class="container-fluid p-4 view dashboard-view">
+<div class="row">
+<div class="col-md-3">
+<div class="card"><div class="card-body">
+<p class="m-b-0">Started</p>
+<h3>Dec 10, 2024 18:29:03</h3>
+</div></div>
+</div>
+<div class="col-md-3">
+<div class="card"><div class="card-body">
+<p class="m-b-0">Ended</p>
+<h3>Dec 10, 2024 18:31:07</h3>
+</div></div>
+</div>
+<div class="col-md-3">
+<div class="card"><div class="card-body">
+<p class="m-b-0 text-pass">Features Passed</p>
+<h3>0</h3>
+</div></div>
+</div>
+<div class="col-md-3">
+<div class="card"><div class="card-body">
+<p class="m-b-0 text-fail">Features Failed</p>
+<h3>1</h3>
+</div></div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-4">
+<div class="card">
+<div class="card-header">
+<h6 class="card-title">Features</h6>
+</div>
+<div class="card-body">
+<div class="">
+<canvas id='parent-analysis' width='115' height='90'></canvas>
+</div>
+</div>
+<div class="card-footer">
+<div><small data-tooltip='0%'>
+<b>0</b> features passed
+</small>
+</div>
+<div>
+<small data-tooltip='100%'><b>1</b> features failed,
+<b>0</b> skipped, <b data-tooltip='0%'>0</b> others
+</small>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-4">
+<div class="card">
+<div class="card-header">
+<h6 class="card-title">Scenarios</h6>
+</div>
+<div class="card-body">
+<div class="">
+<canvas id='child-analysis' width='115' height='90'></canvas>
+</div>
+</div>
+<div class="card-footer">
+<div><small data-tooltip='0%'><b>0</b> scenarios passed</small></div>
+<div>
+<small data-tooltip='100%'><b>5</b> scenarios failed,
+<b>0</b> skipped, <b data-tooltip='%'>0</b> others
+</small>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-4">
+<div class="card">
+<div class="card-header">
+<h6 class="card-title">Steps</h6>
+</div>
+<div class="card-body">
+<div class="">
+<canvas id='grandchild-analysis' width='115' height='90'></canvas>
+</div>
+</div>
+<div class="card-footer">
+<div><small data-tooltip='28%'><b>13</b> steps passed</small></div>
+<div>
+<small data-tooltip='21%'><b>10</b> steps failed,
+<b>23</b> skipped, <b data-tooltip='%'>0</b> others
+</small>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><div class="col-md-12">
+<div class="card"><div class="card-header"><p>Timeline</p></div>
+<div class="card-body pt-0"><div>
+<canvas id="timeline" height="120"></canvas>
+</div></div>
+</div>
+</div></div>
+<script>
+var timeline = {
+"Demo Feature":123.845
+};
+</script>
+<div class="row">
+<div class="col-lg-6 col-md-12 category-container">
+<div class="card">
+<div class="card-header"><p>Tags</p></div>
+<div class="card-body pb-0 pt-0"><table class="table table-sm table-bordered">
+<thead><tr class="bg-gray"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Others</th><th>Passed %</th></tr></thead><tbody>
+<tr>
+<td>@Test1</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>@Regression</td>
+<td>0</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>@Test2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="col-lg-6 col-md-12 sysenv-container">
+<div class="card">
+<div class="card-header"><p>System/Environment</p></div>
+<div class="card-body pb-0 pt-0"><table class="table table-sm table-bordered">
+<thead><tr class="bg-gray"><th>Name</th><th>Value</th></tr></thead>
+<tbody>
+<tr>
+<td>TestEngineer</td>
+<td>Amirul Hakim</td>
+</tr>
+<tr>
+<td>Project</td>
+<td>Cucumber Demo Framework</td>
+</tr>
+<tr>
+<td>OS</td>
+<td>Mac OS</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</div>
+<script>
+var statusGroup = {
+parentCount: 5,
+passParent: 0,
+failParent: 1,
+warningParent: 0,
+skipParent: 0,
+childCount: 5,
+passChild: 0,
+failChild: 5,
+warningChild: 0,
+skipChild: 0,
+infoChild: 0,
+grandChildCount: 5,
+passGrandChild: 13,
+failGrandChild: 10,
+warningGrandChild: 0,
+skipGrandChild: 23,
+infoGrandChild: 0,
+eventsCount: 5,
+};
+</script><div class="test-wrapper row view test-view">
+  <div class="test-list">
+    <div class="test-list-tools">
+<ul class="tools pull-left">
+<li><a href="#"><span class="font-size-14">Tests</span></a></li>
+</ul>
+<ul class="tools text-right">
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exclamation-circle"></i></a>
+<ul id="status-toggle" class="dropdown-menu dropdown-md p-v-0">
+<a class="dropdown-item" status="fail" href="#"><span>Fail</span><span class="status danger"></span></a>
+<div class="dropdown-divider"></div>
+<a status="clear" class="dropdown-item" href="#"><span>Clear</span><span class="pull-right"><i class="fa fa-close"></i></span></a>
+</ul>
+</li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-tag"></i></a>
+<ul id="tag-toggle" class="dropdown-menu dropdown-md p-v-0">
+<a class="dropdown-item" href="#">@Test1</a><a class="dropdown-item" href="#">@Regression</a><a class="dropdown-item" href="#">@Test2</a>
+</ul>
+</li>
+</ul>
+</div>    <div class="test-list-wrapper scrollable">
+      <ul class="test-list-item">
+        <li class="test-item"  status="fail" test-id="1"
+          author=""
+          tag=""
+          device="">
+          <div class="test-detail">
+            <p class="name">Demo Feature</p>
+            <p class="text-sm">
+              <span>6:29:03 pm</span> / <span>00:02:03:845</span>
+              <span class="badge fail-bg log float-right">Fail</span>
+            </p>
+          </div>
+          <div class="test-contents d-none">
+<div class="detail-head">
+<div class="p-v-10">
+<div class="info">
+<h5 class="test-status text-fail">Demo Feature</h5>
+<span class='badge badge-success'>12.10.2024 6:29:03 pm</span>
+<span class='badge badge-danger'>12.10.2024 6:31:07 pm</span>
+<span class='badge badge-default'>00:02:03:845</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=1</span>
+<span title='Skip to the next failed step' class='badge badge-danger pointer float-right ne ml-1'><i class="fa fa-fast-forward"></i></span>
+<span title='Collapse all nodes' class='badge badge-default pointer float-right ct ml-1'><i class="fa fa-compress"></i></span>
+<span title='Expand all nodes' class='badge badge-default pointer float-right et'><i class="fa fa-expand"></i></span>
+</div>
+<div class="m-t-10 m-l-5"></div>
+</div>
+</div>
+<div class="accordion mt-4">
+  <div class="card">
+    <div class="card-header" role="tab">
+      <div class="card-title">
+        <div class="node" id="2"><span class="badge log fail-bg mr-2">Fail</span>To Test IOS Simulator with Page Factory Approach</div>
+      </div>
+    </div>
+        <div class="">
+          <div class="card-body">
+              <div class="step pass-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.launchTheIOSSimulator()">
+                <span>Given launch the iOS Simulator</span>
+      <div>
+      </div>
+              </div>
+              <div class="step fail-bg" title="AFTER_STEP">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+        <textarea disabled class="code-block">java.lang.IllegalStateException: You can not use Scenario.log or Scenario.attach when a step is not being executed
+	at io.cucumber.core.runner.TestCaseState.requireActiveTestStep(TestCaseState.java:157)
+	at io.cucumber.core.runner.TestCaseState.attach(TestCaseState.java:73)
+	at io.cucumber.java.Scenario.attach(Scenario.java:78)
+	at builds.actions.MobileActions.screenshot(MobileActions.java:78)
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep(Hooks.java:42)
+</textarea>
+      
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.clickAllowAccess()">
+                <span>Then click Allow Access</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step fail-bg" title="AFTER">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</span>
+      <div>
+        <textarea disabled class="code-block">java.lang.IllegalStateException: You can not use Scenario.log or Scenario.attach when a step is not being executed
+	at io.cucumber.core.runner.TestCaseState.requireActiveTestStep(TestCaseState.java:157)
+	at io.cucumber.core.runner.TestCaseState.attach(TestCaseState.java:73)
+	at io.cucumber.java.Scenario.attach(Scenario.java:78)
+	at builds.actions.MobileActions.screenshot(MobileActions.java:78)
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:26)
+</textarea>
+      
+      </div>
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="card">
+    <div class="card-header" role="tab">
+      <div class="card-title">
+        <div class="node" id="3"><span class="badge log fail-bg mr-2">Fail</span>Verify notepad in mobile is able to write</div>
+      </div>
+    </div>
+        <div class="">
+          <div class="card-body">
+              <div class="step fail-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.NotePadStepDefinitions()">
+                <span>Given launch the mobile apps and open notepad</span>
+      <div>
+        <textarea disabled class="code-block">org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: The application at '/Users/00131018amirulhakim/Documents/com.test 2.framework/Apk/NotePad.apk' does not exist or is not accessible 
+Host info: host: '00131018s-MacBook-Pro.local', ip: '2001:d08:d4:8a64:4969:4d39:a596:c8a0%en0'
+Build info: version: '4.27.0', revision: 'd6e718d134'
+System info: os.name: 'Mac OS X', os.arch: 'aarch64', os.version: '14.6.1', java.version: '22.0.2'
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [null, newSession {capabilities=[Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}]}]
+Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:114)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:75)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:61)
+	at io.appium.java_client.remote.AppiumCommandExecutor.createSession(AppiumCommandExecutor.java:176)
+	at io.appium.java_client.remote.AppiumCommandExecutor.execute(AppiumCommandExecutor.java:237)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:545)
+	at io.appium.java_client.AppiumDriver.startSession(AppiumDriver.java:270)
+	at org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:174)
+	at io.appium.java_client.AppiumDriver.<init>(AppiumDriver.java:91)
+	at io.appium.java_client.AppiumDriver.<init>(AppiumDriver.java:103)
+	at io.appium.java_client.android.AndroidDriver.<init>(AndroidDriver.java:109)
+	at builds.utilities.BaseTest.androidSetup(BaseTest.java:83)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.NotePadStepDefinitions(NotePadStepDefinitions.java:27)
+	at ✽.launch the mobile apps and open notepad(file:///Users/00131018amirulhakim/Documents/com.kym.framework/src/test/resources/features/Demo%20Features/Demo.feature:32)
+</textarea>
+      
+      </div>
+              </div>
+              <div class="step fail-bg" title="AFTER_STEP">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+        <textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because the return value of "java.util.Properties.getProperty(String)" is null
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep(Hooks.java:35)
+</textarea>
+      
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.createNewNote()">
+                <span>And create new note</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.typeNoteTitle(java.util.List<java.util.List<java.lang.String>>)">
+                <span>And type note title</span>
+      <div><table class='markup-table table '><tr><td>Selamat</td><td>Hari</td><td>Raya</td></tr></table>
+      </div>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.typeNoteBody(java.util.List<java.util.Map<java.lang.String, java.lang.String>>)">
+                <span>And type note body</span>
+      <div><table class='markup-table table '><tr><td>First Word</td><td>Second Word</td></tr><tr><td>Gong Xi</td><td>Fa Cai</td></tr></table>
+      </div>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.saveTheNote()">
+                <span>And save the note</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.clickBackButton()">
+                <span>When click back button</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.quit()">
+                <span>And Quit</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step fail-bg" title="AFTER">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</span>
+      <div>
+        <textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because the return value of "java.util.Properties.getProperty(String)" is null
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:19)
+</textarea>
+      
+      </div>
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="card">
+    <div class="card-header" role="tab">
+      <div class="card-title">
+        <div class="node" id="4"><span class="badge log fail-bg mr-2">Fail</span>Verify notepad in mobile is able to write</div>
+      </div>
+    </div>
+        <div class="scenario_outline ">
+            <div class="card-body l1">
+              <div class="card-header">
+                <div class="card-title outline-child">
+                  <div class="node" id="5"><span class="badge log fail-bg mr-2">Fail</span>Verify notepad in mobile is able to write</div>
+                </div>
+              </div>
+              <div class="card-body mt-3 ">
+                  <div class="step fail-bg">
+                    <span>Given launch the mobile apps and open notepad</span>
+      <div>
+        <textarea disabled class="code-block">org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: The application at '/Users/00131018amirulhakim/Documents/com.test 2.framework/Apk/NotePad.apk' does not exist or is not accessible 
+Host info: host: '00131018s-MacBook-Pro.local', ip: '2001:d08:d4:8a64:4969:4d39:a596:c8a0%en0'
+Build info: version: '4.27.0', revision: 'd6e718d134'
+System info: os.name: 'Mac OS X', os.arch: 'aarch64', os.version: '14.6.1', java.version: '22.0.2'
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [null, newSession {capabilities=[Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}]}]
+Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:114)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:75)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:61)
+	at io.appium.java_client.remote.AppiumCommandExecutor.createSession(AppiumCommandExecutor.java:176)
+	at io.appium.java_client.remote.AppiumCommandExecutor.execute(AppiumCommandExecutor.java:237)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:545)
+	at io.appium.java_client.AppiumDriver.startSession(AppiumDriver.java:270)
+	at org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:174)
+	at io.appium.java_client.AppiumDriver.<init>(AppiumDriver.java:91)
+	at io.appium.java_client.AppiumDriver.<init>(AppiumDriver.java:103)
+	at io.appium.java_client.android.AndroidDriver.<init>(AndroidDriver.java:109)
+	at builds.utilities.BaseTest.androidSetup(BaseTest.java:83)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.NotePadStepDefinitions(NotePadStepDefinitions.java:27)
+	at ✽.launch the mobile apps and open notepad(file:///Users/00131018amirulhakim/Documents/com.kym.framework/src/test/resources/features/Demo%20Features/Demo.feature:18)
+</textarea>
+      
+      </div>
+                  </div>
+                  <div class="step fail-bg">
+                    <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+        <textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because the return value of "java.util.Properties.getProperty(String)" is null
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep(Hooks.java:35)
+</textarea>
+      
+      </div>
+                  </div>
+                  <div class="step skip-bg">
+                    <span>And create new note</span>
+      <div>Step skipped
+      </div>
+                  </div>
+                  <div class="step skip-bg">
+                    <span>And type "Hello World!" note title</span>
+      <div>Step skipped
+      </div>
+                  </div>
+                  <div class="step skip-bg">
+                    <span>And type "Don't forget to be happy everyday :)" note body</span>
+      <div>Step skipped
+      </div>
+                  </div>
+                  <div class="step skip-bg">
+                    <span>And save the note</span>
+      <div>Step skipped
+      </div>
+                  </div>
+                  <div class="step skip-bg">
+                    <span>When click back button</span>
+      <div>Step skipped
+      </div>
+                  </div>
+                  <div class="step skip-bg">
+                    <span>Then assert note "Hello World!" is displayed</span>
+      <div>Step skipped
+      </div>
+                  </div>
+                  <div class="step skip-bg">
+                    <span>And Quit</span>
+      <div>Step skipped
+      </div>
+                  </div>
+                  <div class="step fail-bg">
+                    <span>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</span>
+      <div>
+        <textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because the return value of "java.util.Properties.getProperty(String)" is null
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:19)
+</textarea>
+      
+      </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+  </div>
+  <div class="card">
+    <div class="card-header" role="tab">
+      <div class="card-title">
+        <div class="node" id="7"><span class="badge log fail-bg mr-2">Fail</span>Verify Statistics section in web browser</div>
+          <div class="status-avatar float-right mr-4">
+            <i class="fa fa-paperclip"></i>
+          </div>
+      </div>
+    </div>
+        <div class="">
+          <div class="card-body">
+              <div class="step pass-bg" title="workDirectory.stepDefinitions.GooglePageStepDefinition.launchTheBrowserAndNavigateToGooglePage()">
+                <span>Given launch the browser and navigate to Google page</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="AFTER_STEP">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+          <div class="row mb-3"><div class="col-md-3">
+    
+
+<img data-featherlight='./Screenshots/embedded2.png' src="./Screenshots/embedded2.png">
+  
+    
+
+    </div></div>
+</div>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="workDirectory.stepDefinitions.GooglePageStepDefinition.sendKeyTextIntoTheGoogleSearchBarAndPressEnter(java.lang.String)">
+                <span>When send key text "covid-19 stats malaysia" into the google search bar and press enter</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="AFTER_STEP">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+          <div class="row mb-3"><div class="col-md-3">
+    
+
+<img data-featherlight='./Screenshots/embedded4.png' src="./Screenshots/embedded4.png">
+  
+    
+
+    </div></div>
+</div>
+      <div>
+      </div>
+              </div>
+              <div class="step fail-bg" title="workDirectory.stepDefinitions.GooglePageStepDefinition.assertPageTitleIs(java.lang.String)">
+                <span>Then assert page title is "covid-19 stats malaysia - Google Search"</span>
+      <div>
+        <textarea disabled class="code-block">java.lang.AssertionError: expected [covid-19 stats malaysia - Google Search] but found [whiccovid-19 stats malaysiacovid-19 stats malaysia - Google Search]
+	at org.testng.Assert.fail(Assert.java:111)
+	at org.testng.Assert.failNotEquals(Assert.java:1578)
+	at org.testng.Assert.assertEqualsImpl(Assert.java:150)
+	at org.testng.Assert.assertEquals(Assert.java:132)
+	at org.testng.Assert.assertEquals(Assert.java:656)
+	at org.testng.Assert.assertEquals(Assert.java:666)
+	at builds.actions.BrowserActions.assertPageTitle(BrowserActions.java:139)
+	at workDirectory.stepDefinitions.GooglePageStepDefinition.assertPageTitleIs(GooglePageStepDefinition.java:32)
+	at ✽.assert page title is "covid-19 stats malaysia - Google Search"(file:///Users/00131018amirulhakim/Documents/com.kym.framework/src/test/resources/features/Demo%20Features/Demo.feature:8)
+</textarea>
+      
+      </div>
+              </div>
+              <div class="step pass-bg" title="AFTER_STEP">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+          <div class="row mb-3"><div class="col-md-3">
+    
+
+<img data-featherlight='./Screenshots/embedded6.png' src="./Screenshots/embedded6.png">
+  
+    
+
+    </div></div>
+</div>
+      <div>
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.GooglePageStepDefinition.assertStatisticsSectionIsDisplayed()">
+                <span>Then assert statistics section is displayed</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step pass-bg" title="AFTER">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</span>
+      <div>
+          <div class="row mb-3"><div class="col-md-3">
+    
+
+<img data-featherlight='./Screenshots/embedded8.png' src="./Screenshots/embedded8.png">
+  
+    
+
+    </div></div>
+</div>
+      <div>
+      </div>
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="card">
+    <div class="card-header" role="tab">
+      <div class="card-title">
+        <div class="node" id="9"><span class="badge log fail-bg mr-2">Fail</span>Verify Browser & App Login</div>
+          <div class="status-avatar float-right mr-4">
+            <i class="fa fa-paperclip"></i>
+          </div>
+      </div>
+    </div>
+        <div class="">
+          <div class="card-body">
+              <div class="step pass-bg" title="workDirectory.stepDefinitions.GooglePageStepDefinition.launchTheBrowserAndNavigateToGooglePage()">
+                <span>Given launch the browser and navigate to Google page</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="AFTER_STEP">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+          <div class="row mb-3"><div class="col-md-3">
+    
+
+<img data-featherlight='./Screenshots/embedded1.png' src="./Screenshots/embedded1.png">
+  
+    
+
+    </div></div>
+</div>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="workDirectory.stepDefinitions.GooglePageStepDefinition.sendKeyTextIntoTheGoogleSearchBarAndPressEnter(java.lang.String)">
+                <span>When send key text "covid-19 stats malaysia" into the google search bar and press enter</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="AFTER_STEP">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+          <div class="row mb-3"><div class="col-md-3">
+    
+
+<img data-featherlight='./Screenshots/embedded3.png' src="./Screenshots/embedded3.png">
+  
+    
+
+    </div></div>
+</div>
+      <div>
+      </div>
+              </div>
+              <div class="step fail-bg" title="workDirectory.stepDefinitions.GooglePageStepDefinition.assertPageTitleIs(java.lang.String)">
+                <span>Then assert page title is "covid-19 stats malaysia - Google Search"</span>
+      <div>
+        <textarea disabled class="code-block">java.lang.AssertionError: expected [covid-19 stats malaysia - Google Search] but found [whiccovid-19 stats malaysiacovid-19 stats malaysia - Google Search]
+	at org.testng.Assert.fail(Assert.java:111)
+	at org.testng.Assert.failNotEquals(Assert.java:1578)
+	at org.testng.Assert.assertEqualsImpl(Assert.java:150)
+	at org.testng.Assert.assertEquals(Assert.java:132)
+	at org.testng.Assert.assertEquals(Assert.java:656)
+	at org.testng.Assert.assertEquals(Assert.java:666)
+	at builds.actions.BrowserActions.assertPageTitle(BrowserActions.java:139)
+	at workDirectory.stepDefinitions.GooglePageStepDefinition.assertPageTitleIs(GooglePageStepDefinition.java:32)
+	at ✽.assert page title is "covid-19 stats malaysia - Google Search"(file:///Users/00131018amirulhakim/Documents/com.kym.framework/src/test/resources/features/Demo%20Features/Demo.feature:48)
+</textarea>
+      
+      </div>
+              </div>
+              <div class="step pass-bg" title="AFTER_STEP">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+      <div>
+          <div class="row mb-3"><div class="col-md-3">
+    
+
+<img data-featherlight='./Screenshots/embedded5.png' src="./Screenshots/embedded5.png">
+  
+    
+
+    </div></div>
+</div>
+      <div>
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.GooglePageStepDefinition.assertStatisticsSectionIsDisplayed()">
+                <span>Then assert statistics section is displayed</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.NotePadStepDefinitions()">
+                <span>Given launch the mobile apps and open notepad</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.createNewNote()">
+                <span>And create new note</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.typeNoteTitle(java.util.List<java.util.List<java.lang.String>>)">
+                <span>And type note title</span>
+      <div><table class='markup-table table '><tr><td>Selamat</td><td>Hari</td><td>Raya</td></tr></table>
+      </div>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.typeNoteBody(java.util.List<java.util.Map<java.lang.String, java.lang.String>>)">
+                <span>And type note body</span>
+      <div><table class='markup-table table '><tr><td>First Word</td><td>Second Word</td></tr><tr><td>Gong Xi</td><td>Fa Cai</td></tr></table>
+      </div>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.saveTheNote()">
+                <span>And save the note</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.clickBackButton()">
+                <span>When click back button</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step skip-bg" title="workDirectory.stepDefinitions.NotePadStepDefinitions.quit()">
+                <span>And Quit</span>
+      <div>Step skipped
+      </div>
+              </div>
+              <div class="step pass-bg" title="AFTER">
+                <span>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</span>
+      <div>
+          <div class="row mb-3"><div class="col-md-3">
+    
+
+<img data-featherlight='./Screenshots/embedded7.png' src="./Screenshots/embedded7.png">
+  
+    
+
+    </div></div>
+</div>
+      <div>
+      </div>
+              </div>
+          </div>
+        </div>
+  </div>
+</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+<div class="test-content scrollable">
+<div class="test-content-tools">
+<ul><li><a class="back-to-test" href="#"><i class="fa fa-arrow-left"></i></a></li></ul>
+</div>
+<div class="test-content-detail"><div class="detail-body"></div></div>
+</div></div>
+<div class="test-wrapper row view category-view attributes-view">
+<div class="test-list">
+<div class="test-list-tools">
+<ul class="tools pull-left"><li><a href=""><span class="font-size-14">Category</span></a></li></ul>
+<ul class="tools text-right"><li><a href="#"><span class="badge badge-primary">3</span></a></li></ul>
+</div>
+<div class="test-list-wrapper scrollable">
+<ul class="test-list-item">
+<li class="test-item">
+<div class="test-detail">
+<span class="meta">
+<span class='badge log badge-danger'>4</span>
+</span>
+<p class="name">@Test1</p>
+<p class="duration text-sm">4 tests</p>
+</div>
+<div class="test-contents d-none">
+<div class="info">
+<h4>@Test1</h4>
+<span status="fail" class='badge log badge-danger'>4 failed</span>
+</div>
+<table class='table table-sm mt-4'>
+<thead>
+<tr>
+<th class="status-col">Status</th>
+<th class="timestamp-col">Timestamp</th>
+<th>TestName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='2'>To Test IOS Simulator with Page Factory Approach</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.To Test IOS Simulator with Page Factory Approach</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='3'>Verify notepad in mobile is able to write</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='5'>Verify notepad in mobile is able to write</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='9'>Verify Browser & App Login</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify Browser & App Login</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="test-item">
+<div class="test-detail">
+<span class="meta">
+<span class='badge log badge-danger'>5</span>
+</span>
+<p class="name">@Regression</p>
+<p class="duration text-sm">5 tests</p>
+</div>
+<div class="test-contents d-none">
+<div class="info">
+<h4>@Regression</h4>
+<span status="fail" class='badge log badge-danger'>5 failed</span>
+</div>
+<table class='table table-sm mt-4'>
+<thead>
+<tr>
+<th class="status-col">Status</th>
+<th class="timestamp-col">Timestamp</th>
+<th>TestName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='2'>To Test IOS Simulator with Page Factory Approach</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.To Test IOS Simulator with Page Factory Approach</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='3'>Verify notepad in mobile is able to write</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='5'>Verify notepad in mobile is able to write</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='7'>Verify Statistics section in web browser</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify Statistics section in web browser</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='9'>Verify Browser & App Login</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify Browser & App Login</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="test-item">
+<div class="test-detail">
+<span class="meta">
+<span class='badge log badge-danger'>1</span>
+</span>
+<p class="name">@Test2</p>
+<p class="duration text-sm">1 tests</p>
+</div>
+<div class="test-contents d-none">
+<div class="info">
+<h4>@Test2</h4>
+<span status="fail" class='badge log badge-danger'>1 failed</span>
+</div>
+<table class='table table-sm mt-4'>
+<thead>
+<tr>
+<th class="status-col">Status</th>
+<th class="timestamp-col">Timestamp</th>
+<th>TestName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='7'>Verify Statistics section in web browser</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify Statistics section in web browser</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="test-content scrollable">
+<div class="test-content-detail">
+<div class="detail-body"></div>
+</div>
+</div>
+</div><div class="test-wrapper row view exception-view attributes-view">
+<div class="test-list">
+<div class="test-list-tools">
+<ul class="tools pull-left"><li><a href=""><span class="font-size-14">Exception</span></a></li></ul>
+<ul class="tools text-right"><li><a href="#"><span class="badge badge-primary">4</span></a></li></ul>
+</div>
+<div class="test-list-wrapper scrollable">
+<ul class="test-list-item">
+<li class="test-item">
+<div class="test-detail">
+<span class="meta">
+<span class='badge log badge-danger'>2</span>
+</span>
+<p class="name">java.lang.AssertionError</p>
+<p class="duration text-sm">2 tests</p>
+</div>
+<div class="test-contents d-none">
+<div class="info">
+<h4>java.lang.AssertionError</h4>
+<span status="fail" class='badge log badge-danger'>2 failed</span>
+</div>
+<table class='table table-sm mt-4'>
+<thead>
+<tr>
+<th class="status-col">Status</th>
+<th class="timestamp-col">Timestamp</th>
+<th>TestName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:38 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='70'>Then assert page title is "covid-19 stats malaysia - Google Search"</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify Browser & App Login.Then assert page title is "covid-19 stats malaysia - Google Search"</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:38 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='73'>Then assert page title is "covid-19 stats malaysia - Google Search"</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify Statistics section in web browser.Then assert page title is "covid-19 stats malaysia - Google Search"</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="test-item">
+<div class="test-detail">
+<span class="meta">
+<span class='badge log badge-danger'>2</span>
+</span>
+<p class="name">org.openqa.selenium.SessionNotCreatedException</p>
+<p class="duration text-sm">2 tests</p>
+</div>
+<div class="test-contents d-none">
+<div class="info">
+<h4>org.openqa.selenium.SessionNotCreatedException</h4>
+<span status="fail" class='badge log badge-danger'>2 failed</span>
+</div>
+<table class='table table-sm mt-4'>
+<thead>
+<tr>
+<th class="status-col">Status</th>
+<th class="timestamp-col">Timestamp</th>
+<th>TestName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='15'>Given launch the mobile apps and open notepad</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write.Given launch the mobile apps and open notepad</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:03 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='14'>Given launch the mobile apps and open notepad</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write.Given launch the mobile apps and open notepad</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="test-item">
+<div class="test-detail">
+<span class="meta">
+<span class='badge log badge-danger'>4</span>
+</span>
+<p class="name">java.lang.NullPointerException</p>
+<p class="duration text-sm">4 tests</p>
+</div>
+<div class="test-contents d-none">
+<div class="info">
+<h4>java.lang.NullPointerException</h4>
+<span status="fail" class='badge log badge-danger'>4 failed</span>
+</div>
+<table class='table table-sm mt-4'>
+<thead>
+<tr>
+<th class="status-col">Status</th>
+<th class="timestamp-col">Timestamp</th>
+<th>TestName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:04 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='19'>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write.workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:04 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='18'>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write.workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:04 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='55'>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write.workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:29:04 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='60'>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.Verify notepad in mobile is able to write.workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="test-item">
+<div class="test-detail">
+<span class="meta">
+<span class='badge log badge-danger'>2</span>
+</span>
+<p class="name">java.lang.IllegalStateException</p>
+<p class="duration text-sm">2 tests</p>
+</div>
+<div class="test-contents d-none">
+<div class="info">
+<h4>java.lang.IllegalStateException</h4>
+<span status="fail" class='badge log badge-danger'>2 failed</span>
+</div>
+<table class='table table-sm mt-4'>
+<thead>
+<tr>
+<th class="status-col">Status</th>
+<th class="timestamp-col">Timestamp</th>
+<th>TestName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:31:06 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='104'>workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.To Test IOS Simulator with Page Factory Approach.workDirectory.stepDefinitions.Hooks.takeScreenshotEveryStep()</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="fail">
+<td><span class="badge log fail-bg">Fail</span></td>
+<td>18:31:07 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='108'>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</a>
+<div class="">
+<span class="badge badge-default">Demo Feature.To Test IOS Simulator with Page Factory Approach.workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="test-content scrollable">
+<div class="test-content-detail">
+<div class="detail-body"></div>
+</div>
+</div>
+</div>        </div>
+      </div>
+    </div>
+  </div>
+<script src="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@c05cd28cde1617b9d0c05a831daff6cb97fd9fd5/spark/js/spark-script.js"></script>
+<script type="text/javascript"></script></body>
+</html>
