@@ -2206,7 +2206,7 @@
       "type": "http",
       "documentation": "",
       "method": "get",
-      "endpoint": "banking/v2/casa/transactions/history",
+      "endpoint": "banking/v2/casa/transactions/history?accountNo=5623660104710000000&accountType=D&option=A&endDate=20241012&paginationRef=000000000000000000000000",
       "responses": [
         {
           "uuid": "231c4530-887c-4119-9ae7-67b9cf141a0b",
