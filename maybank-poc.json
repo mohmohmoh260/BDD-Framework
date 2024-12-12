@@ -2206,7 +2206,7 @@
       "type": "http",
       "documentation": "",
       "method": "get",
-      "endpoint": "banking/v2/casa/transactions/history?{{anyValue}}",
+      "endpoint": "banking/v2/casa/transactions/history",
       "responses": [
         {
           "uuid": "231c4530-887c-4119-9ae7-67b9cf141a0b",
