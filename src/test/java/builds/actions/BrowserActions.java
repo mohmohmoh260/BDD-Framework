@@ -2,19 +2,19 @@ package builds.actions;
 
 import builds.utilities.BrowserInstance;
 import builds.utilities.GlobalProperties;
-import io.cucumber.java.Scenario;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import workDirectory.stepDefinitions.Hooks;
 import org.openqa.selenium.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+
+import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public class BrowserActions extends BrowserInstance{
 
@@ -25,8 +25,7 @@ public class BrowserActions extends BrowserInstance{
     public void assertElementDisplayed(WebElement element){
         softAssert.assertTrue(element.isDisplayed());
         highlightElement(element);
-        Hooks hooks = new Hooks();
-        hooks.getScenario();
+        getScenario();
         unHighlightElement(element);
     }
 
@@ -41,7 +40,8 @@ public class BrowserActions extends BrowserInstance{
 
     public By getBy(WebElement element){
         String xpath = element.toString();
-        xpath = (xpath.substring(0, xpath.length() - 1).split("-> ")[1]).replace("xpath: ","");
+        xpath = xpath.replace("Located by By.xpath: ", "").trim();
+        System.out.println(xpath);
         By by = By.xpath(xpath);
         return by;
     }
@@ -50,8 +50,8 @@ public class BrowserActions extends BrowserInstance{
        element.click();
     }
 
-    public synchronized void sendKeys(WebElement element, String input) {
-        element.sendKeys(input);
+    public void sendKeys(WebElement element, String input) {
+        getWebDriver().findElement(getBy(element)).sendKeys(input);
     }
 
     public void close(){
@@ -121,10 +121,8 @@ public class BrowserActions extends BrowserInstance{
     }
 
     public synchronized void screenshot() {
-        Scenario scenario = Hooks.getScenario();
-            byte[] screenshot = ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
-            scenario.attach(screenshot, "image/png", "Screenshot");
-            System.err.println("Scenario is null; cannot attach screenshot.");
+        byte[] screenshot = ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
+        getScenario().attach(screenshot, "image/png", "Screenshot");
     }
 
     public void openURL(String globalVariableName) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Cucumber Demo Framework" data-provider-thread-count="3">
-    <test name="Test Demo">
+<suite name="ParallelSuite" parallel="classes" thread-count="4">
+    <test name="ParallelTest">
         <classes>
             <class name="builds.main.CucumberRun"/>
         </classes>
-    </test> <!-- Test -->
-</suite> <!-- Suite -->
+    </test>
+</suite>

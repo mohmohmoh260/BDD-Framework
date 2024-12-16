@@ -11,7 +11,7 @@ Feature: Demo Feature
   @Test2
   Scenario: Verify Statistics section in web browser
     Given launch the browser and navigate to Google page
-    When send key text "covid-19 stats malaysia" into the google search bar and press enter
+    When send key text "Heyyyyyyyyyyyyyyy" into the google search bar and press enter
     Then assert page title is "covid-19 stats malaysia - Google Search"
     Then assert statistics section is displayed
 

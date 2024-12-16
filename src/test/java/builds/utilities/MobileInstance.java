@@ -12,7 +12,7 @@ import java.time.Duration;
 
 public class MobileInstance {
     private static AppiumDriver driver;
-    private static ThreadLocal<AppiumDriver> mobileDriver = new ThreadLocal<>();
+    private static final ThreadLocal<AppiumDriver> mobileDriver = new ThreadLocal<>();
     private BasePages basePages = new BasePages();
 
     public void androidInit() {
@@ -49,11 +49,11 @@ public class MobileInstance {
 
         try {
             driver = new AndroidDriver(new URL(GlobalProperties.getGlobalVariablesProperties().getProperty("mobile.server.url")), uiAutomator2Options);
-            setMobileDriver(driver);
+
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        // Initiate Page Factory For all Page Class
+        setMobileDriver(driver);
         basePages.setMobilePageFactory(driver);
 
         GlobalProperties.setGlobalVariableProperties("currentDriverPlatform", "android");
@@ -91,7 +91,7 @@ public class MobileInstance {
         GlobalProperties.setGlobalVariableProperties("currentDriverPlatform", "iOS");
     }
 
-    public AppiumDriver getMobileDriver(){
+    public static AppiumDriver getMobileDriver(){
         return mobileDriver.get();
     }
 

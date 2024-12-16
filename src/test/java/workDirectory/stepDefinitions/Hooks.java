@@ -10,7 +10,7 @@ public class Hooks{
     private static final ThreadLocal<Scenario> threadLocalScenario = new ThreadLocal<>();
 
     @Before
-    private void setScenario(Scenario scenario) {
+    public void setScenario(Scenario scenario) {
         threadLocalScenario.set(scenario);
     }
 

@@ -38,8 +38,7 @@ public class CucumberRun {
 		}
 
 		@DataProvider(parallel = true)
-		@Override
-		public Object[][] scenarios(){
+		public Object[][] scenarios() {
 			return super.scenarios();
 		}
 

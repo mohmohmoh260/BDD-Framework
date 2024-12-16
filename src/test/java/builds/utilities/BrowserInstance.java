@@ -4,9 +4,9 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 
 public class BrowserInstance {
-    public static WebDriver driver;
-    public static ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
-    public BasePages basePages = new BasePages();
+    private static WebDriver driver = null;
+    private static final ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
+    private BasePages basePages = new BasePages();
 
     public void browserInit(){
         if(GlobalProperties.getGlobalVariablesProperties().getProperty("browser.type").equalsIgnoreCase("chrome")){
@@ -26,17 +26,15 @@ public class BrowserInstance {
             System.exit(1);
         }
         setWebDriver(driver);
-        // Initiate Page Factory For all Page Class
         basePages.setWebPageFactory(driver);
         GlobalProperties.setGlobalVariableProperties("currentDriverPlatform", "browser");
     }
 
-    public WebDriver getWebDriver(){
+    public static WebDriver getWebDriver(){
         return webDriver.get();
     }
 
     private void setWebDriver(WebDriver driver){
-       System.out.println(driver);
         webDriver.set(driver);
     }
 
