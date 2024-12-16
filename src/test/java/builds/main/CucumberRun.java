@@ -21,38 +21,14 @@ public class CucumberRun {
 			plugin= {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
 			features= {"src/test/resources"},
 			glue = {"workDirectory.stepDefinitions"},
-			tags = ("@Regression")
+			tags = ("@Test2")
 	)
 
-	public static class TestRunner extends AbstractTestNGCucumberTests {
-		private static final Logger logger = null;
+	public class TestRunner extends AbstractTestNGCucumberTests {
 
-		@BeforeAll
-		public static void beforeAll() {
-			// To Kill all Driver Before Starting
-			String[] drivers = {"chromedriver", "geckodriver", "safaridriver"};
+		@BeforeSuite
+		public void beforeSuite() {
 
-			for (String driver : drivers) {
-				try {
-					// Execute the kill command
-					Process process = Runtime.getRuntime().exec(new String[] { "sudo", "pkill", "-f", driver });
-
-					// Optionally, capture and print the output (useful for debugging)
-					BufferedReader reader = new BufferedReader(
-							new InputStreamReader(process.getInputStream())
-					);
-					String line;
-					while ((line = reader.readLine()) != null) {
-						logger.info(line);
-					}
-
-					process.waitFor(); // Wait for the command to complete
-					logger.info("Killed all instances of: " + driver);
-				} catch (Exception e) {
-					logger.warning("Failed to kill driver: " + driver);
-					e.printStackTrace();
-				}
-			}
 		}
 
 		@BeforeSuite
@@ -68,7 +44,7 @@ public class CucumberRun {
 		}
 
 		@AfterSuite
-		public void afterAll() throws IOException {
+		public void afterSuite() throws IOException {
 			String OS = System.getProperty("os.name");
 
 			if(!OS.contains("Mac OS")){

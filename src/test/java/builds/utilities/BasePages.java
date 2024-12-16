@@ -11,12 +11,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BasePages{
-    private synchronized static Set<Class> findAllClassesUsingReflectionsLibrary() {
-        Reflections reflections = new Reflections("workDirectory.pages", new SubTypesScanner(false));
+    private Set<Class> findAllClassesUsingReflectionsLibrary() {
+        Reflections reflections = new Reflections("workDirectory.pageObject", new SubTypesScanner(false));
         return new HashSet<>(reflections.getSubTypesOf(Object.class));
     }
 
-    public synchronized static void setWebPageFactory(WebDriver driver){
+    public void setWebPageFactory(WebDriver driver){
         Set<Class> pageClass = findAllClassesUsingReflectionsLibrary();
         try{
             for(Class c : pageClass){
@@ -26,7 +26,7 @@ public class BasePages{
         }
     }
 
-    public synchronized static void setMobilePageFactory(AppiumDriver driver) {
+    public void setMobilePageFactory(AppiumDriver driver) {
         Set<Class> pageClass = findAllClassesUsingReflectionsLibrary();
         try{
             for(Class c : pageClass){

@@ -1,14 +1,21 @@
 package workDirectory.pages.google;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import builds.actions.BrowserActions;
+import workDirectory.pageObject.google.GooglePageObjects;
+import workDirectory.stepDefinitions.Hooks;
 
-public class GooglePage {
+public class GooglePage extends BrowserActions {
+    public void browserSetup(String url){
+        browserSetup();
+        openURL(url);
+    }
 
-    @FindBy(xpath = "//textarea[@title='Search']")
-    public static WebElement searchBar;
-    @FindBy(xpath = "//h3[text()=\"COVIDNOW in Malaysia - COVIDNOW\"]")
-    public static WebElement statistics;
+    public void typeAndSearch(String text){
+       sendKeys(GooglePageObjects.searchBar, text);
+       pressEnter();
+    }
 
+    public void takeScreenshot(){
+        screenshot();
+    }
 }
