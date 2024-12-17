@@ -2,32 +2,37 @@ package builds.utilities;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
+import org.testng.annotations.BeforeSuite;
+
+import java.util.List;
+import java.util.Map;
 
 public class BrowserInstance {
+    public static List<Map<String, String>> globalParameters = null;
     private static WebDriver driver = null;
     private static final ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
-    private BasePages basePages = new BasePages();
+    private PageFactoryInit pageFactoryInit = new PageFactoryInit();
 
-    public void browserInit(){
-        if(GlobalProperties.getGlobalVariablesProperties().getProperty("browser.type").equalsIgnoreCase("chrome")){
+    public void browserInit(String browserType){
+        if(browserType.equalsIgnoreCase("chrome")){
             driver = WebDriverManager.chromiumdriver().create();
-        }else if(GlobalProperties.getGlobalVariablesProperties().getProperty("browser.type").equalsIgnoreCase("firefox")){
+        }else if(browserType.equalsIgnoreCase("firefox")){
             driver = WebDriverManager.firefoxdriver().create();
-        }else if(GlobalProperties.getGlobalVariablesProperties().getProperty("browser.type").equalsIgnoreCase("edge")){
+        }else if(browserType.equalsIgnoreCase("edge")){
             driver = WebDriverManager.edgedriver().create();
-        }else if(GlobalProperties.getGlobalVariablesProperties().getProperty("browser.type").equalsIgnoreCase("chromium")){
+        }else if(browserType.equalsIgnoreCase("chromium")){
             driver = WebDriverManager.chromiumdriver().create();
-        }else if(GlobalProperties.getGlobalVariablesProperties().getProperty("browser.type").equalsIgnoreCase("ie")){
+        }else if(browserType.equalsIgnoreCase("ie")){
             driver = WebDriverManager.iedriver().create();
-        }else if(GlobalProperties.getGlobalVariablesProperties().getProperty("browser.type").equalsIgnoreCase("safari")){
+        }else if(browserType.equalsIgnoreCase("safari")){
             driver = WebDriverManager.safaridriver().create();
         }else{
             System.out.println("Please check your browser.type values correctly in Global Variable properties file");
             System.exit(1);
         }
         setWebDriver(driver);
-        basePages.setWebPageFactory(driver);
-        GlobalProperties.setGlobalVariableProperties("currentDriverPlatform", "browser");
+        pageFactoryInit.setWebPageFactory(driver);
     }
 
     public static WebDriver getWebDriver(){
@@ -44,5 +49,17 @@ public class BrowserInstance {
             webDriver.remove();
         }
     }
+
+    @BeforeSuite
+    private void setGlobalParameters(){
+        TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
+        globalParameters = testNGXmlParser.getGlobalParametersOnly();
+    }
+
+    public static List<Map<String, String>> getGlobalParameters(){
+        System.out.println(globalParameters);
+        return globalParameters;
+    }
+
 
 }

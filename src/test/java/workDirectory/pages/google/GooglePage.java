@@ -2,12 +2,10 @@ package workDirectory.pages.google;
 
 import builds.actions.BrowserActions;
 import workDirectory.pageObject.google.GooglePageObjects;
-import workDirectory.stepDefinitions.Hooks;
 
 public class GooglePage extends BrowserActions {
-    public void browserSetup(String url){
-        browserSetup();
-        openURL(url);
+    public void browserStart(String browserType){
+        browserSetup(browserType);
     }
 
     public void typeAndSearch(String text){

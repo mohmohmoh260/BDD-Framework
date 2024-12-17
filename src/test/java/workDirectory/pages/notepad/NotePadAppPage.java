@@ -5,10 +5,6 @@ import workDirectory.pageObject.notepad.NotePadAppsPageObjects;
 
 public class NotePadAppPage extends MobileActions {
 
-    protected void startAndroid(){
-        androidSetup();
-    }
-
     protected void clickNewNote(){
         click(NotePadAppsPageObjects.newNoteButton);
     }
@@ -19,6 +15,11 @@ public class NotePadAppPage extends MobileActions {
 
     protected void typeIntoBody(String text){
         sendKeys( NotePadAppsPageObjects.noteBodyInput, text);
+    }
+
+    public void start(String text){
+        MobileActions mobileActions = new MobileActions();
+        mobileActions.mobileSetup(text);
     }
 
 }

@@ -3,14 +3,14 @@ Feature: Demo Feature
 
   @Test2
   Scenario: Verify Statistics section in web browser
-    Given launch the browser and navigate to Google page
+    Given launch the browser and navigate to Google page with "firefox"
     When send key text "covid-19 stats malaysia" into the google search bar and press enter
     Then assert page title is "covid-19 stats malaysia - Google Search"
     Then assert statistics section is displayed
 
   @Test2
   Scenario: Verify Statistics section in web browser
-    Given launch the browser and navigate to Google page
+    Given launch the browser and navigate to Google page with "chrome"
     When send key text "Heyyyyyyyyyyyyyyy" into the google search bar and press enter
     Then assert page title is "covid-19 stats malaysia - Google Search"
     Then assert statistics section is displayed
@@ -18,6 +18,15 @@ Feature: Demo Feature
 #    @Test1
 #  Scenario: To Test IOS Simulator with Page Factory Approach
 #    Given launch the iOS Simulator
+#    Then click Allow Access
+
+  @Test1
+  Scenario: To Test Android Simulator with Page Factory Approach
+    Given launch the Android Simulator "Android Device 1"
+
+  @Test1
+  Scenario: To Test Android Simulator with Page Factory Approach
+    Given launch the Android Simulator "Android Device 2"
 #    Then click Allow Access
 #
 #  @Test1

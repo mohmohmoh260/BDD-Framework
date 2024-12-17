@@ -1,23 +1,14 @@
 package workDirectory.stepDefinitions.notepad;
 
 import builds.actions.MobileActions;
-import org.openqa.selenium.WebElement;
-import workDirectory.pageObject.notepad.NotePadAppsPageObjects;
+import builds.utilities.TestNGXmlParser;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import workDirectory.pages.notepad.NotePadAppPage;
 
-import java.util.List;
-import java.util.Map;
-
 public class NotePadStepDefinitions extends NotePadAppPage {
-    
-    @Given("^launch the mobile apps and open notepad$")
-    public void NotePadStepDefinitions() {
-        androidSetup();
-    }
 
     @And("create new note")
     public void createNewNote() {
@@ -32,6 +23,16 @@ public class NotePadStepDefinitions extends NotePadAppPage {
     @When("type {string} note body")
     public void typeNoteBody(String text) {
         typeIntoBody(text);
+    }
+
+    @Given("launch the iOS Simulator")
+    public void launchTheIOSSimulator() {
+
+    }
+
+    @Given("launch the Android Simulator {string}")
+    public void launchTheAndroidSimulator(String testName) {
+        start(testName);
     }
 //    @And("type note title")
 //    public void typeNoteTitle(List<List<String>>  list) {

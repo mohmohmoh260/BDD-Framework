@@ -19,6 +19,15 @@ Feature: Demo Feature
 #  Scenario: To Test IOS Simulator with Page Factory Approach
 #    Given launch the iOS Simulator
 #    Then click Allow Access
+
+  @Test1
+  Scenario: To Test Android Simulator with Page Factory Approach
+    Given launch the Android Simulator "Android Device 1"
+
+  @Test1
+  Scenario: To Test Android Simulator with Page Factory Approach
+    Given launch the Android Simulator "Android Device 2"
+#    Then click Allow Access
 #
 #  @Test1
 #  Scenario Outline: Verify notepad in mobile is able to write

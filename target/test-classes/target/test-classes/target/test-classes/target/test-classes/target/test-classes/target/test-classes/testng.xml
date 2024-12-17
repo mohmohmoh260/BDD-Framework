@@ -1,7 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="ParallelSuite" parallel="classes" thread-count="4">
-    <test name="ParallelTest">
+    <!-- Global Variable -->
+    <parameter name="timeOut" value="30"></parameter>
+    <parameter name="url" value="https://www.google.com/"></parameter>
+    <parameter name="screenshot" value="true"></parameter>
+    <parameter name="appiumServerIP" value="127.0.0.1"></parameter>
+    <!-- Browser Option -->
+    <!-- options for browser types are: - chrome - firefox - edge - chromium - ie - safari-->
+    <test name="Override All Browser Type">
+        <parameter name="browserType" value="chrome"></parameter>
+        <parameter name="state" value="false"></parameter>
+        <classes>
+            <class name="builds.main.CucumberRun"/>
+        </classes>
+    </test>
+    <!-- Device Option -->
+    <test name="Android Device 1">
+        <parameter name="udid" value="emulator-5554"></parameter>
+        <parameter name="platformName" value="android"></parameter>
+        <parameter name="automationName" value="uiautomator2"></parameter>
+        <parameter name="apkPath" value="Apk/NotePad.apk"></parameter>
+        <parameter name="appPackage" value="com.atomczak.notepat"></parameter>
+        <parameter name="appActivity" value="com.atomczak.notepat.MainActivity"></parameter>
+        <parameter name="noReset" value="true"></parameter>
+        <parameter name="fullReset" value="false"></parameter>
+        <parameter name="port" value="1212"></parameter>
+        <classes>
+            <class name="builds.main.CucumberRun"/>
+        </classes>
+    </test>
+    <test name="Android Device 2">
+        <parameter name="udid" value="emulator-5556"></parameter>
+        <parameter name="platformName" value="android"></parameter>
+        <parameter name="automationName" value="uiautomator2"></parameter>
+        <parameter name="apkPath" value="Apk/NotePad.apk"></parameter>
+        <parameter name="appPackage" value="com.atomczak.notepat"></parameter>
+        <parameter name="appActivity" value="com.atomczak.notepat.MainActivity"></parameter>
+        <parameter name="noReset" value="true"></parameter>
+        <parameter name="fullReset" value="false"></parameter>
+        <parameter name="port" value="1213"></parameter>
+        <classes>
+            <class name="builds.main.CucumberRun"/>
+        </classes>
+    </test>
+    <test name="iOS Device 1">
+        <parameter name="udid" value="D4D7EA32-D459-499E-ACE3-0F0C143DCE23"></parameter>
+        <parameter name="platformName" value="iOS"></parameter>
+        <parameter name="automationName" value="XCUITest"></parameter>
+        <parameter name="budleID" value="com.apple.reminders"></parameter>
+        <parameter name="port" value="1214"></parameter>
+        <classes>
+            <class name="builds.main.CucumberRun"/>
+        </classes>
+    </test>
+    <test name="iOS Device 2">
+        <parameter name="udid" value=""></parameter>
+        <parameter name="platformName" value="iOS"></parameter>
+        <parameter name="automationName" value="XCUITest"></parameter>
+        <parameter name="budleID" value="com.apple.reminders"></parameter>
+        <parameter name="port" value="1215"></parameter>
         <classes>
             <class name="builds.main.CucumberRun"/>
         </classes>
