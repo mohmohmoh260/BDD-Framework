@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="ParallelSuite" parallel="classes" thread-count="4">
+<suite name="ParallelSuite" parallel="test" thread-count="4">
     <!-- Global Variable -->
     <parameter name="timeOut" value="30"></parameter>
     <parameter name="url" value="https://www.google.com/"></parameter>
@@ -50,7 +50,7 @@
         <parameter name="platformName" value="iOS"></parameter>
         <parameter name="platformVersion" value="18.1"></parameter>
         <parameter name="automationName" value="XCUITest"></parameter>
-        <parameter name="budleID" value="com.apple.reminders"></parameter>
+        <parameter name="bundleID" value="com.apple.mobilesafari"></parameter>
         <parameter name="port" value="4727"></parameter>
         <classes>
             <class name="builds.main.CucumberRun"/>
@@ -62,7 +62,7 @@
         <parameter name="platformName" value="iOS"></parameter>
         <parameter name="platformVersion" value="18.1"></parameter>
         <parameter name="automationName" value="XCUITest"></parameter>
-        <parameter name="budleID" value="com.apple.reminders"></parameter>
+        <parameter name="bundleID" value="com.apple.mobilesafari"></parameter>
         <parameter name="port" value="4729"></parameter>
         <classes>
             <class name="builds.main.CucumberRun"/>

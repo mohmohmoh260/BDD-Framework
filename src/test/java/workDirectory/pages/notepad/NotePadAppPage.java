@@ -17,7 +17,7 @@ public class NotePadAppPage extends MobileActions {
         sendKeys( NotePadAppsPageObjects.noteBodyInput, text);
     }
 
-    public void start(String text){
+    protected void start(String text){
         MobileActions mobileActions = new MobileActions();
         mobileActions.mobileSetup(text);
     }

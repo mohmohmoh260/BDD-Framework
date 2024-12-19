@@ -32,11 +32,10 @@ public class MobileActions extends MobileInstance{
     public By getBy(WebElement element){
         By by = null;
         String type = element.toString();
-        String[] split1 = type.split("\\.");
-        String[] split2 = type.split(":");
-        String[] split3 = split1[1].split(":");
-        String xpath = split2[1].trim();
-        type = split3[0].trim();
+        type = type.replace("Located by By.chained({AppiumBy.","");
+        String[] getType = type.split(":");
+        type = getType[0].trim();
+        String xpath = getType[1].replace("})","").trim();
         if(type.equals("xpath")){
             by = By.xpath(xpath);
         }else if(type.equals("id")){
@@ -74,15 +73,15 @@ public class MobileActions extends MobileInstance{
         getMobileDriver().findElement(getBy(element)).click();
     }
 
-    public  void sendKeys(WebElement element, String input) {
+    public void sendKeys(WebElement element, String input) {
         getMobileDriver().findElement(getBy(element)).sendKeys(input);
     }
 
-    public  void close() {
+    public void close() {
         getMobileDriver().close();
     }
 
-    public  void quit() {
+    public void quit() {
         getMobileDriver().quit();
     }
 
@@ -121,7 +120,12 @@ public class MobileActions extends MobileInstance{
     }
 
     public  void pressEnter() {
-        ((AndroidDriver) getMobileDriver()).pressKey(new KeyEvent(AndroidKey.ENTER));
+        if(getMobileDriver().toString().contains("IOSDriver")){
+            getMobileDriver().findElement(By.name("Go")).click();
+        }else{
+            ((AndroidDriver) getMobileDriver()).pressKey(new KeyEvent(AndroidKey.ENTER));
+        }
+
     }
 
 }

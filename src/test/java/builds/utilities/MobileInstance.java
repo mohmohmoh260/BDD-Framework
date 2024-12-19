@@ -7,19 +7,15 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
-import org.testng.annotations.Parameters;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 
-public class MobileInstance {
-    private static String device;
-    private static AppiumDriver driver;
+public class MobileInstance extends PageFactoryInit{
     private static final ThreadLocal<AppiumDriver> mobileDriver = new ThreadLocal<>();
-    private PageFactoryInit pageFactoryInit = new PageFactoryInit();
 
-    public void mobileInit(String platformName, String appiumServerIP, String port, String udid, String automationName, String appPackage, String appActivity, String fullReset, String noReset, String apkPath, String bundleID, String deviceName, String platformVersion) {
+    protected void mobileInit(String platformName, String appiumServerIP, String port, String udid, String automationName, String appPackage, String appActivity, String fullReset, String noReset, String apkPath, String bundleID, String deviceName, String platformVersion) {
         if (platformName.equalsIgnoreCase("android")) {
             startAppiumService(appiumServerIP, port);
             UiAutomator2Options uiAutomator2Options = new UiAutomator2Options();
@@ -72,10 +68,10 @@ public class MobileInstance {
         } else {
             System.err.println("Check the platformName value in testng.xml. The value should be either \"android\" or \"iOS\"");
         }
-        pageFactoryInit.setMobilePageFactory(driver);
+        setMobilePageFactory(getMobileDriver());
     }
 
-    public void startAppiumService(String appiumIP, String port){
+    private void startAppiumService(String appiumIP, String port){
         AppiumDriverLocalService appiumDriverLocalService;
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder();
         appiumServiceBuilder.withIPAddress(appiumIP);
@@ -84,7 +80,7 @@ public class MobileInstance {
         appiumDriverLocalService.start();
     }
 
-    public static AppiumDriver getMobileDriver(){
+    public AppiumDriver getMobileDriver(){
         return mobileDriver.get();
     }
 
