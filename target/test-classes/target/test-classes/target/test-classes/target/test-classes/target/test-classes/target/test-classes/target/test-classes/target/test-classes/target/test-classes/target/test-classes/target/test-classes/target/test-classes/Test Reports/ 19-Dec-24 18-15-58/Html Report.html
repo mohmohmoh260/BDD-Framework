@@ -1,0 +1,1165 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='UTF-8' /> 
+	<meta name='description' content='' />
+	<meta name='robots' content='noodp, noydir' />
+	<meta name='viewport' content='width=device-width, initial-scale=1' />
+	<meta id="timeStampFormat" name="timeStampFormat" content='MMM dd, yyyy HH:mm:ss'/>
+	
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' rel='stylesheet' type='text/css' />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link href='https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@ff53917fbbdb5ef820abbbe4d199a6942dc771ff/v3html/css/extent.css' type='text/css' rel='stylesheet' />
+	
+	<title>Extent Report</title>
+
+	<style type='text/css'>
+		/* json-tree */
+		.jstBracket,.jstComma,.jstValue{white-space:pre-wrap}.jstValue{font-size:10px;font-weight:400;font-family:"Lucida Console",Monaco,monospace}.jstProperty{color:#666;word-wrap:break-word}.jstBool{color:#2525CC}.jstNum{color:#D036D0}.jstNull{color:gray}.jstStr{color:#2DB669}.jstFold:after{content:' -';cursor:pointer}.jstExpand{white-space:normal}.jstExpand:after{content:' +';cursor:pointer}.jstFolded{white-space:normal!important}.jstHiddenBlock{display:none}
+			
+	</style>
+	
+	<script type="text/javascript">
+		/*! json-tree - v0.2.2 - 2017-09-25, MIT LICENSE */
+		var JSONTree=function(){var n={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","/":"&#x2F;"},t=0,r=0;this.create=function(n,t){return r+=1,N(u(n,0,!1),{class:"jstValue"})};var e=function(t){return t.replace(/[&<>'"]/g,function(t){return n[t]})},s=function(){return r+"_"+t++},u=function(n,t,r){if(null===n)return f(r?t:0);switch(typeof n){case"boolean":return l(n,r?t:0);case"number":return i(n,r?t:0);case"string":return o(n,r?t:0);default:return n instanceof Array?a(n,t,r):c(n,t,r)}},c=function(n,t,r){var e=s(),u=Object.keys(n).map(function(r){return j(r,n[r],t+1,!0)}).join(m()),c=[g("{",r?t:0,e),N(u,{id:e}),p("}",t)].join("\n");return N(c,{})},a=function(n,t,r){var e=s(),c=n.map(function(n){return u(n,t+1,!0)}).join(m());return[g("[",r?t:0,e),N(c,{id:e}),p("]",t)].join("\n")},o=function(n,t){var r=e(JSON.stringify(n));return N(v(r,t),{class:"jstStr"})},i=function(n,t){return N(v(n,t),{class:"jstNum"})},l=function(n,t){return N(v(n,t),{class:"jstBool"})},f=function(n){return N(v("null",n),{class:"jstNull"})},j=function(n,t,r){var s=v(e(JSON.stringify(n))+": ",r),c=N(u(t,r,!1),{});return N(s+c,{class:"jstProperty"})},m=function(){return N(",\n",{class:"jstComma"})},N=function(n,t){return d("span",t,n)},d=function(n,t,r){return"<"+n+Object.keys(t).map(function(n){return" "+n+'="'+t[n]+'"'}).join("")+">"+r+"</"+n+">"},g=function(n,t,r){return N(v(n,t),{class:"jstBracket"})+N("",{class:"jstFold",onclick:"JSONTree.toggle('"+r+"')"})};this.toggle=function(n){var t=document.getElementById(n),r=t.parentNode,e=t.previousElementSibling;""===t.className?(t.className="jstHiddenBlock",r.className="jstFolded",e.className="jstExpand"):(t.className="",r.className="",e.className="jstFold")};var p=function(n,t){return N(v(n,t),{})},v=function(n,t){return Array(2*t+1).join(" ")+n};return this}();
+	</script>
+</head>
+	<body class='extent standard default hide-overflow bdd-report'>
+		<div id='theme-selector' alt='Click to toggle theme. To enable by default, use theme configuration.' title='Click to toggle theme. To enable by default, use theme configuration.'>
+			<span><i class='material-icons'>desktop_windows</i></span>
+		</div>
+<nav>
+	<div class="nav-wrapper">
+        <a href="#!" class="brand-logo black"><img src="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@ff53917fbbdb5ef820abbbe4d199a6942dc771ff/commons/img/logo.png"></a>
+		<!-- slideout menu -->
+		<ul id='slide-out' class='side-nav fixed hide-on-med-and-down'>
+			<li class='waves-effect active'><a href='#!' view='test-view' onclick="configureView(0);chartsView('test');"><i class='material-icons'>dashboard</i></a></li>
+			<li class='waves-effect'><a href='#!' view='category-view' onclick="configureView(1)"><i class='material-icons'>label_outline</i></a></li>
+			<li class='waves-effect'><a href='#!' view='exception-view' onclick="configureView(2)"><i class='material-icons'>bug_report</i></a></li>
+			<li class='waves-effect'><a href='#!' onclick="configureView(-1);chartsView('dashboard');" view='dashboard-view'><i class='material-icons'>track_changes</i></a></li>
+		</ul>
+		<!-- report name -->
+		<span class='report-name'>Automation Report</span>
+		<!-- report headline -->
+		<span class='report-headline'></span>
+		<!-- nav-right -->
+		<ul id='nav-mobile' class='right hide-on-med-and-down nav-right'>
+			<a href='#!'>
+			<span class='label blue darken-3 suite-start-time'>Dec 19, 2024 18:15:58</span>
+			</a>
+		</ul>
+	</div>
+</nav>		<!-- container -->
+		<div class='container'>
+<div id='test-view' class='view'>
+	<section id='controls'>
+		<div class='controls grey lighten-4'>
+			<!-- test toggle -->
+			<div class='chip transparent'>
+				<a class='dropdown-button tests-toggle' data-activates='tests-toggle' data-constrainwidth='true' data-beloworigin='true' data-hover='true' href='#'>
+				<i class='material-icons'>warning</i> Status
+				</a>
+				<ul id='tests-toggle' class='dropdown-content'>
+										<li status='fail'><a href='#!'>Fail <i class='material-icons red-text'>cancel</i></a></li>
+					<li class='divider'></li>
+					<li status='clear' clear='true'><a href='#!'>Clear Filters <i class='material-icons'>clear</i></a></li>
+				</ul>
+			</div>
+			<!-- test toggle -->
+			<!-- category toggle -->
+			<div class='chip transparent'>
+				<a class='dropdown-button category-toggle' data-activates='category-toggle' data-constrainwidth='false' data-beloworigin='true' data-hover='true' href='#'>
+				<i class='material-icons'>local_offer</i> Category
+				</a>
+				<ul id='category-toggle' class='dropdown-content'>
+					<li><a href='#'>@Test1</a></li>
+					<li class='divider'></li>
+					<li class='clear'><a href='#!' clear='true'>Clear Filters</a></li>
+				</ul>
+			</div>
+			<!-- category toggle -->
+			<!-- clear filters -->
+			<div class='chip transparent hide'>
+				<a class='' id='clear-filters' alt='Clear Filters' title='Clear Filters'>
+				<i class='material-icons'>close</i> Clear
+				</a>
+			</div>
+			<!-- clear filters -->
+			<!-- enable dashboard -->
+			<div id='toggle-test-view-charts' class='chip transparent'>
+				<a class='pink-text' id='enable-dashboard' alt='Enable Dashboard' title='Enable Dashboard'>
+				<i class='material-icons'>track_changes</i> Dashboard
+				</a>
+			</div>
+			<!-- enable dashboard -->
+			<!-- search -->
+			<div class='chip transparent' alt='Search Tests' title='Search Tests'>
+				<a href="#" class='search-div'>
+				<i class='material-icons'>search</i> Search
+				</a>
+				<div class='input-field left hide'>
+					<input id='search-tests' type='text' class='validate browser-default' placeholder='Search Tests...'>
+				</div>
+			</div>
+			<!-- search -->
+		</div>
+	</section>
+
+<div id='test-view-charts' class='subview-full'>
+    <div id='charts-row' class='row nm-v nm-h'>
+        <div class='col s12 m4 l4 np-h'>
+            <div class='card-panel nm-v'>
+                <div class='left panel-name'>Features</div>
+                <div class='chart-box' style="max-height:94px;">
+                    <canvas id='parent-analysis' width='90' height='70'></canvas>
+                </div>
+                <div class='block text-small'>
+                    <span class='tooltipped' data-position='top' data-tooltip='$0%'>
+                    <span class='strong'>0</span> features passed</span>
+                </div>
+                <div class='block text-small'>
+                    <span class='strong tooltipped' data-position='top' data-tooltip='100%'>
+                    1</span> features failed, 
+                    <span class='strong tooltipped' data-position='top' data-tooltip='0%'>
+                    0</span> skipped
+                </div>
+            </div>
+        </div>
+        <div class='col s12 m4 l4 np-h'>
+            <div class='card-panel nm-v'>
+                <div class='left panel-name'>Scenarios</div>
+                <div class='chart-box' style="max-height:94px;">
+                    <canvas id='child-analysis' width='90' height='70'></canvas>
+                </div>
+                <div class='block text-small'>
+                    <span class='tooltipped' data-position='top' data-tooltip='0%'>
+                    <span class='strong'>0</span> scenarios passed</span>
+                </div>
+                <div class='block text-small'>
+                    <span class='strong tooltipped' data-position='top' data-tooltip='100%'>
+                    3</span> scenarios failed, 
+                    <span class='strong tooltipped' data-position='top' data-tooltip='0%'>
+                    0</span> skipped, 
+                    <span class='strong tooltipped' data-position='top' data-tooltip='0%'>
+                    0</span> others
+                </div>
+            </div>
+        </div>
+        <div class='col s12 m4 l4 np-h'>
+            <div class='card-panel nm-v'>
+                <div class='left panel-name'>Steps</div>
+                <div class='chart-box' style="max-height:94px;">
+                    <canvas id='grandchild-analysis' width='90' height='70'></canvas>
+                </div>
+                <div class='block text-small'>
+                    <span class='tooltipped' data-position='top' data-tooltip='0%'>
+                    <span class='strong'>0</span> steps passed</span>
+                </div>
+                <div class='block text-small'>
+                    <span class='strong tooltipped' data-position='top' data-tooltip='66%'>
+                    6</span> steps failed, 
+                    <span class='strong tooltipped' data-position='top' data-tooltip='33%'>
+                    3</span> skipped, 
+                    <span class='strong tooltipped' data-position='top' data-tooltip='0%'>
+                    0</span> others
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="timeline-chart" class="row nm-v nm-h">
+        <div class="col s12 m12 l12 np-h">
+            <div class="card-panel">
+                <div class='left panel-name'>Timeline (seconds)</div>
+                <div class="chart-box" style="width:98%;max-height:145px;">
+                    <canvas id="timeline" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>	
+	<div class='subview-left left'>
+		<div class='view-summary'>
+			<ul id='test-collection' class='test-collection'>
+				<li class='test displayed active has-leaf fail' status='fail' bdd='true' test-id='1'>
+					<div class='test-heading'>
+						<span class='test-name'>Using IOS 1</span>
+						<span class='test-time'>Dec 19, 2024 18:15:58</span>
+						<span class='test-status right fail'>Fail</span>
+					</div>
+					<div class='test-content hide'>
+<div class="sr-filters bdd-filters">
+	<a class="btn-floating waves-effect waves-light pass green" title="pass"><i class='material-icons'>check_circle</i></a>
+	<a class="btn-floating waves-effect waves-light fail red" title="fail"><i class='material-icons'>cancel</i></a>
+	<a class="btn-floating waves-effect waves-light skip blue" title="skip"><i class='material-icons'>redo</i></a>
+	<a class="btn-floating waves-effect waves-light clear grey" title="clear"><i class='material-icons'>clear</i></a>
+</div>
+
+<div class='scenario node' test-id='2' status='fail'>
+
+	<span class='duration right label'>00 00 20.770</span>
+	<div class="bdd-test">
+		<div class="scenario-name"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span> Scenario: User To Test Search Bar Function</div>
+	</div>
+	
+	
+		<div class='category-list'>
+				<span class='category label'>@Test1</span>
+		</div>
+	
+	<ul class='steps'>
+		<li test-id='9' class='node given Fail' status='Fail'>
+			<div class="step-name" title="(workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(java.lang.String))"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span>Given I launch the Mobile Simulator "Android Device 1"</div>
+
+
+					<textarea disabled class="code-block">io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException: Appium HTTP server is not listening at http://127.0.0.1:4723/ after 20000 ms timeout. Consider increasing the server startup timeout value and check the server log for possible error messages occurrences.
+Node.js executable path: /opt/homebrew/bin/node
+Arguments: [/opt/homebrew/lib/node_modules/appium/build/lib/main.js, --port, 4723, --address, 127.0.0.1]
+Server log: [35m[Appium][39m Welcome to Appium v2.6.0 (REV 3001afe88112c13b5aafdd92e097680897060881)
+[35m[Appium][39m Non-default server args:
+[35m[Appium][39m { address: [32m'127.0.0.1'[39m }
+[35m[Appium][39m The autodetected Appium home path: /Users/00131018amirulhakim/.appium
+[35m[Appium][39m Attempting to load driver uiautomator2...
+[35m[Appium][39m Attempting to load driver xcuitest...
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-uiautomator2-driver/build/index.js
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-xcuitest-driver/build/index.js
+[Appium] AndroidUiautomator2Driver has been successfully loaded in 0.660s
+[Appium] XCUITestDriver has been successfully loaded in 1.068s
+[38;5;0m[HTTP][0m Could not start REST http interface listener. The requested port may already be in use. Please make sure there is no other instance of this server running already.
+[Appium] Could not configure Appium server. It's possible that a driver or plugin tried to update the server and failed. Original error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium] Error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium]     at Server.setupListenHandle [as _listen2] (node:net:1912:16)
+[Appium]     at listenInCluster (node:net:1969:12)
+[Appium]     at node:net:2178:7
+[Appium]     at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:192)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at ✽.I launch the Mobile Simulator "Android Device 1"(file:///Users/00131018amirulhakim/git/BDD-Framework/src/test/resources/features/Test%20Features/Test.feature:5)
+Caused by: io.appium.java_client.service.local.AppiumServerAvailabilityChecker$ConnectionTimeout: ConnectionTimeout
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:72)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.ping(AppiumDriverLocalService.java:144)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:185)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:62)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:81)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:53)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:84)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.testng.TestNGCucumberRunner.lambda$runScenario$1(TestNGCucumberRunner.java:135)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$5(CucumberExecutionContext.java:136)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:136)
+	at io.cucumber.testng.TestNGCucumberRunner.runScenario(TestNGCucumberRunner.java:132)
+	at io.cucumber.testng.AbstractTestNGCucumberTests.runScenario(AbstractTestNGCucumberTests.java:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:81)
+	at org.testng.internal.thread.Async$AsyncTask.run(Async.java:34)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:549)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.Socket.connect(Socket.java:752)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:178)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:531)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:636)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:280)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:386)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:408)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1310)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1243)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1129)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1058)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.connectToUrl(AppiumServerAvailabilityChecker.java:79)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:61)
+	... 36 more
+</textarea>
+		</li>
+		<li test-id='17' class='node * Fail' status='Fail'>
+			<div class="step-name" title="(AFTER_STEP)"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</div>
+
+
+					<textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "org.openqa.selenium.TakesScreenshot.getScreenshotAs(org.openqa.selenium.OutputType)" because the return value of "builds.actions.MobileActions.getMobileDriver()" is null
+	at builds.actions.MobileActions.screenshot(MobileActions.java:118)
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:30)
+</textarea>
+		</li>
+		<li test-id='18' class='node when Skip' status='Skip'>
+			<div class="step-name" title="(workDirectory.stepDefinitions.safari.SafariStepDefinitions.iTypeIntoSearchbar(java.lang.String))"><span class='status skip' title='Skip'><i class='material-icons'>redo</i></span>When I type "covid" into searchbar</div>
+
+
+					<div class="node-step">Step skipped</div>
+		</li>
+	</ul>
+</div>
+<div class='scenario node' test-id='3' status='fail'>
+
+	<span class='duration right label'>00 00 20.550</span>
+	<div class="bdd-test">
+		<div class="scenario-name"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span> Scenario: User To Test Search Bar Function</div>
+	</div>
+	
+	
+		<div class='category-list'>
+				<span class='category label'>@Test1</span>
+		</div>
+	
+	<ul class='steps'>
+		<li test-id='10' class='node given Fail' status='Fail'>
+			<div class="step-name" title="(workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(java.lang.String))"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span>Given I launch the Mobile Simulator "Android Device 1"</div>
+
+
+					<textarea disabled class="code-block">io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException: Appium HTTP server is not listening at http://127.0.0.1:4723/ after 20000 ms timeout. Consider increasing the server startup timeout value and check the server log for possible error messages occurrences.
+Node.js executable path: /opt/homebrew/bin/node
+Arguments: [/opt/homebrew/lib/node_modules/appium/build/lib/main.js, --port, 4723, --address, 127.0.0.1]
+Server log: [35m[Appium][39m Welcome to Appium v2.6.0 (REV 3001afe88112c13b5aafdd92e097680897060881)
+[35m[Appium][39m Non-default server args:
+[35m[Appium][39m { address: [32m'127.0.0.1'[39m }
+[35m[Appium][39m The autodetected Appium home path: /Users/00131018amirulhakim/.appium
+[35m[Appium][39m Attempting to load driver uiautomator2...
+[35m[Appium][39m Attempting to load driver xcuitest...
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-uiautomator2-driver/build/index.js
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-xcuitest-driver/build/index.js
+[Appium] AndroidUiautomator2Driver has been successfully loaded in 0.661s
+[Appium] XCUITestDriver has been successfully loaded in 1.068s
+[38;5;0m[HTTP][0m Could not start REST http interface listener. The requested port may already be in use. Please make sure there is no other instance of this server running already.
+[Appium] Could not configure Appium server. It's possible that a driver or plugin tried to update the server and failed. Original error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium] Error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium]     at Server.setupListenHandle [as _listen2] (node:net:1912:16)
+[Appium]     at listenInCluster (node:net:1969:12)
+[Appium]     at node:net:2178:7
+[Appium]     at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:192)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at ✽.I launch the Mobile Simulator "Android Device 1"(file:///Users/00131018amirulhakim/git/BDD-Framework/src/test/resources/features/Test%20Features/Test.feature:5)
+Caused by: io.appium.java_client.service.local.AppiumServerAvailabilityChecker$ConnectionTimeout: ConnectionTimeout
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:72)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.ping(AppiumDriverLocalService.java:144)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:185)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:62)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:81)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:53)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:84)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.testng.TestNGCucumberRunner.lambda$runScenario$1(TestNGCucumberRunner.java:135)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$5(CucumberExecutionContext.java:136)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:136)
+	at io.cucumber.testng.TestNGCucumberRunner.runScenario(TestNGCucumberRunner.java:132)
+	at io.cucumber.testng.AbstractTestNGCucumberTests.runScenario(AbstractTestNGCucumberTests.java:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:81)
+	at org.testng.internal.thread.Async$AsyncTask.run(Async.java:34)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:549)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.Socket.connect(Socket.java:752)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:178)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:531)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:636)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:280)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:386)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:408)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1310)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1243)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1129)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1058)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.connectToUrl(AppiumServerAvailabilityChecker.java:79)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:61)
+	... 36 more
+</textarea>
+		</li>
+		<li test-id='11' class='node * Fail' status='Fail'>
+			<div class="step-name" title="(AFTER_STEP)"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</div>
+
+
+					<textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "org.openqa.selenium.TakesScreenshot.getScreenshotAs(org.openqa.selenium.OutputType)" because the return value of "builds.actions.MobileActions.getMobileDriver()" is null
+	at builds.actions.MobileActions.screenshot(MobileActions.java:118)
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:30)
+</textarea>
+		</li>
+		<li test-id='13' class='node when Skip' status='Skip'>
+			<div class="step-name" title="(workDirectory.stepDefinitions.safari.SafariStepDefinitions.iTypeIntoSearchbar(java.lang.String))"><span class='status skip' title='Skip'><i class='material-icons'>redo</i></span>When I type "covid" into searchbar</div>
+
+
+					<div class="node-step">Step skipped</div>
+		</li>
+	</ul>
+</div>
+<div class='scenario node' test-id='4' status='fail'>
+
+	<span class='duration right label'>00 00 20.550</span>
+	<div class="bdd-test">
+		<div class="scenario-name"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span> Scenario: User To Test Search Bar Function</div>
+	</div>
+	
+	
+		<div class='category-list'>
+				<span class='category label'>@Test1</span>
+		</div>
+	
+	<ul class='steps'>
+		<li test-id='8' class='node given Fail' status='Fail'>
+			<div class="step-name" title="(workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(java.lang.String))"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span>Given I launch the Mobile Simulator "Android Device 1"</div>
+
+
+					<textarea disabled class="code-block">io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException: Appium HTTP server is not listening at http://127.0.0.1:4723/ after 20000 ms timeout. Consider increasing the server startup timeout value and check the server log for possible error messages occurrences.
+Node.js executable path: /opt/homebrew/bin/node
+Arguments: [/opt/homebrew/lib/node_modules/appium/build/lib/main.js, --port, 4723, --address, 127.0.0.1]
+Server log: [35m[Appium][39m Welcome to Appium v2.6.0 (REV 3001afe88112c13b5aafdd92e097680897060881)
+[35m[Appium][39m Non-default server args:
+[35m[Appium][39m { address: [32m'127.0.0.1'[39m }
+[35m[Appium][39m The autodetected Appium home path: /Users/00131018amirulhakim/.appium
+[35m[Appium][39m Attempting to load driver uiautomator2...
+[35m[Appium][39m Attempting to load driver xcuitest...
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-xcuitest-driver/build/index.js
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-uiautomator2-driver/build/index.js
+[Appium] XCUITestDriver has been successfully loaded in 0.749s
+[Appium] AndroidUiautomator2Driver has been successfully loaded in 1.094s
+[38;5;0m[HTTP][0m Could not start REST http interface listener. The requested port may already be in use. Please make sure there is no other instance of this server running already.
+[Appium] Could not configure Appium server. It's possible that a driver or plugin tried to update the server and failed. Original error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium] Error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium]     at Server.setupListenHandle [as _listen2] (node:net:1912:16)
+[Appium]     at listenInCluster (node:net:1969:12)
+[Appium]     at node:net:2178:7
+[Appium]     at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:192)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at ✽.I launch the Mobile Simulator "Android Device 1"(file:///Users/00131018amirulhakim/git/BDD-Framework/src/test/resources/features/Test%20Features/Test.feature:5)
+Caused by: io.appium.java_client.service.local.AppiumServerAvailabilityChecker$ConnectionTimeout: ConnectionTimeout
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:72)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.ping(AppiumDriverLocalService.java:144)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:185)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:62)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:81)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:53)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:84)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.testng.TestNGCucumberRunner.lambda$runScenario$1(TestNGCucumberRunner.java:135)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$5(CucumberExecutionContext.java:136)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:136)
+	at io.cucumber.testng.TestNGCucumberRunner.runScenario(TestNGCucumberRunner.java:132)
+	at io.cucumber.testng.AbstractTestNGCucumberTests.runScenario(AbstractTestNGCucumberTests.java:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:81)
+	at org.testng.internal.thread.Async$AsyncTask.run(Async.java:34)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:549)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.Socket.connect(Socket.java:752)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:178)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:531)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:636)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:280)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:386)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:408)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1310)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1243)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1129)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1058)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.connectToUrl(AppiumServerAvailabilityChecker.java:79)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:61)
+	... 36 more
+</textarea>
+		</li>
+		<li test-id='12' class='node * Fail' status='Fail'>
+			<div class="step-name" title="(AFTER_STEP)"><span class='status fail' title='Fail'><i class='material-icons'>cancel</i></span>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</div>
+
+
+					<textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "org.openqa.selenium.TakesScreenshot.getScreenshotAs(org.openqa.selenium.OutputType)" because the return value of "builds.actions.MobileActions.getMobileDriver()" is null
+	at builds.actions.MobileActions.screenshot(MobileActions.java:118)
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:30)
+</textarea>
+		</li>
+		<li test-id='14' class='node when Skip' status='Skip'>
+			<div class="step-name" title="(workDirectory.stepDefinitions.safari.SafariStepDefinitions.iTypeIntoSearchbar(java.lang.String))"><span class='status skip' title='Skip'><i class='material-icons'>redo</i></span>When I type "covid" into searchbar</div>
+
+
+					<div class="node-step">Step skipped</div>
+		</li>
+	</ul>
+</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	
+	<!-- subview left -->
+	<div class='subview-right left'>
+		<div class='view-summary'>
+			<div id='step-filters' class="right sr-filters">
+				<a class="btn-floating waves-effect waves-light green" status="pass" alt="pass" title="pass"><i class="material-icons">check_circle</i></a>
+				<a class="btn-floating waves-effect waves-light red" status="fail" alt="fail" title="fail"><i class="material-icons">cancel</i></a>
+				<a class="btn-floating waves-effect waves-light red darken-4" status="fatal" alt="fatal" title="fatal"><i class="material-icons">cancel</i></a>
+				<a class="btn-floating waves-effect waves-light pink text-lighten-1" status="error" alt="error" title="error"><i class="material-icons">error</i></a>
+				<a class="btn-floating waves-effect waves-light orange" alt="warning" status="warning" title="warning"><i class="material-icons">warning</i></a>
+				<a class="btn-floating waves-effect waves-light teal" status="skip" alt="skip" title="skip"><i class="material-icons">redo</i></a>
+				<a class="btn-floating waves-effect waves-light grey" status="clear" alt="Clear filters" title="Clear filters"><i class="material-icons">clear</i></a>
+			</div>
+			<h5 class='test-name'></h5>
+		</div>
+	</div>
+	<!-- subview right -->
+</div>
+<!-- test view --><div id='category-view' class='view hide'>
+	<section id='controls'>
+		<div class='controls grey lighten-4'>
+			<!-- search -->
+			<div class='chip transparent' alt='Search Tests' title='Search Tests'>
+				<a href="#" class='search-div'>
+				<i class='material-icons'>search</i> Search
+				</a>
+				<div class='input-field left hide'>
+					<input id='search-tests' type='text' class='validate browser-default' placeholder='Search Tests...'>
+				</div>
+			</div>
+			<!-- search -->
+		</div>
+	</section>
+	<div class='subview-left left'>
+		<div class='view-summary'>
+			<ul id='category-collection' class='category-collection'>
+				<li class='category displayed active'>
+					<div class='category-heading'>
+						<span class='category-name'>@Test1</span>
+						<span class='category-status right'>
+						<span class='label fail'>3</span>
+						</span>
+					</div>
+					<div class='category-content hide'>
+						<div class='category-status-counts'>
+							
+							<span status="fail" class='label red lighten-1 white-text'>Failed: 3</span>
+							
+						</div>
+						<div class='category-tests'>
+							<table class='bordered table-results'>
+								<thead>
+									<tr>
+										<th>Timestamp</th>
+										<th>TestName</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Dec 19, 2024 18:15:58</td>
+										<td class='linked' test-id='2'>User To Test Search Bar Function</td>
+										<td><span class='test-status Fail'>Fail</span></td>
+									</tr>
+									<tr>
+										<td>Dec 19, 2024 18:15:58</td>
+										<td class='linked' test-id='3'>User To Test Search Bar Function</td>
+										<td><span class='test-status Fail'>Fail</span></td>
+									</tr>
+									<tr>
+										<td>Dec 19, 2024 18:15:58</td>
+										<td class='linked' test-id='4'>User To Test Search Bar Function</td>
+										<td><span class='test-status Fail'>Fail</span></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class='subview-right left'>
+		<div class='view-summary'>
+			<h5 class='category-name'></h5>
+		</div>
+	</div>
+</div>
+<!-- category view --><div id='exception-view' class='view hide'>
+	<section id='controls'>
+		<div class='controls grey lighten-4'>
+			<!-- search -->
+			<div class='chip transparent' alt='Search Tests' title='Search Tests'>
+				<a href="#" class='search-div'>
+				<i class='material-icons'>search</i> Search
+				</a>
+				<div class='input-field left hide'>
+					<input id='search-tests' type='text' class='validate browser-default' placeholder='Search Tests...'>
+				</div>
+			</div>
+			<!-- search -->
+		</div>
+	</section>
+	<div class='subview-left left'>
+		<div class='view-summary'>
+			<ul id='exception-collection' class='exception-collection'>
+				<li class='exception displayed active'>
+					<div class='exception-heading'>
+						<span class='exception-name'>io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException</span>
+						<span class='exception-count right'><span class='label red lighten-1 white-text'>3</span></span>
+					</div>
+					<div class='exception-content hide'>
+						<div class='exception-tests'>
+							<table class='bordered table-results'>
+								<thead>
+									<tr>
+										<th>Timestamp</th>
+										<th>TestName</th>
+										<th>StackTrace</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Dec 19, 2024 18:15:58</td>
+										<td class='linked' test-id='10'>Given I launch the Mobile Simulator "Android Device 1"</td>
+										<td>
+											<textarea disabled class="code-block">io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException: Appium HTTP server is not listening at http://127.0.0.1:4723/ after 20000 ms timeout. Consider increasing the server startup timeout value and check the server log for possible error messages occurrences.
+Node.js executable path: /opt/homebrew/bin/node
+Arguments: [/opt/homebrew/lib/node_modules/appium/build/lib/main.js, --port, 4723, --address, 127.0.0.1]
+Server log: [35m[Appium][39m Welcome to Appium v2.6.0 (REV 3001afe88112c13b5aafdd92e097680897060881)
+[35m[Appium][39m Non-default server args:
+[35m[Appium][39m { address: [32m'127.0.0.1'[39m }
+[35m[Appium][39m The autodetected Appium home path: /Users/00131018amirulhakim/.appium
+[35m[Appium][39m Attempting to load driver uiautomator2...
+[35m[Appium][39m Attempting to load driver xcuitest...
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-uiautomator2-driver/build/index.js
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-xcuitest-driver/build/index.js
+[Appium] AndroidUiautomator2Driver has been successfully loaded in 0.661s
+[Appium] XCUITestDriver has been successfully loaded in 1.068s
+[38;5;0m[HTTP][0m Could not start REST http interface listener. The requested port may already be in use. Please make sure there is no other instance of this server running already.
+[Appium] Could not configure Appium server. It's possible that a driver or plugin tried to update the server and failed. Original error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium] Error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium]     at Server.setupListenHandle [as _listen2] (node:net:1912:16)
+[Appium]     at listenInCluster (node:net:1969:12)
+[Appium]     at node:net:2178:7
+[Appium]     at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:192)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at ✽.I launch the Mobile Simulator "Android Device 1"(file:///Users/00131018amirulhakim/git/BDD-Framework/src/test/resources/features/Test%20Features/Test.feature:5)
+Caused by: io.appium.java_client.service.local.AppiumServerAvailabilityChecker$ConnectionTimeout: ConnectionTimeout
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:72)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.ping(AppiumDriverLocalService.java:144)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:185)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:62)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:81)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:53)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:84)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.testng.TestNGCucumberRunner.lambda$runScenario$1(TestNGCucumberRunner.java:135)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$5(CucumberExecutionContext.java:136)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:136)
+	at io.cucumber.testng.TestNGCucumberRunner.runScenario(TestNGCucumberRunner.java:132)
+	at io.cucumber.testng.AbstractTestNGCucumberTests.runScenario(AbstractTestNGCucumberTests.java:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:81)
+	at org.testng.internal.thread.Async$AsyncTask.run(Async.java:34)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:549)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.Socket.connect(Socket.java:752)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:178)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:531)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:636)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:280)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:386)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:408)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1310)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1243)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1129)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1058)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.connectToUrl(AppiumServerAvailabilityChecker.java:79)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:61)
+	... 36 more
+</textarea>
+										</td>
+									</tr>
+									<tr>
+										<td>Dec 19, 2024 18:15:58</td>
+										<td class='linked' test-id='8'>Given I launch the Mobile Simulator "Android Device 1"</td>
+										<td>
+											<textarea disabled class="code-block">io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException: Appium HTTP server is not listening at http://127.0.0.1:4723/ after 20000 ms timeout. Consider increasing the server startup timeout value and check the server log for possible error messages occurrences.
+Node.js executable path: /opt/homebrew/bin/node
+Arguments: [/opt/homebrew/lib/node_modules/appium/build/lib/main.js, --port, 4723, --address, 127.0.0.1]
+Server log: [35m[Appium][39m Welcome to Appium v2.6.0 (REV 3001afe88112c13b5aafdd92e097680897060881)
+[35m[Appium][39m Non-default server args:
+[35m[Appium][39m { address: [32m'127.0.0.1'[39m }
+[35m[Appium][39m The autodetected Appium home path: /Users/00131018amirulhakim/.appium
+[35m[Appium][39m Attempting to load driver uiautomator2...
+[35m[Appium][39m Attempting to load driver xcuitest...
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-uiautomator2-driver/build/index.js
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-xcuitest-driver/build/index.js
+[Appium] AndroidUiautomator2Driver has been successfully loaded in 0.661s
+[Appium] XCUITestDriver has been successfully loaded in 1.068s
+[38;5;0m[HTTP][0m Could not start REST http interface listener. The requested port may already be in use. Please make sure there is no other instance of this server running already.
+[Appium] Could not configure Appium server. It's possible that a driver or plugin tried to update the server and failed. Original error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium] Error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium]     at Server.setupListenHandle [as _listen2] (node:net:1912:16)
+[Appium]     at listenInCluster (node:net:1969:12)
+[Appium]     at node:net:2178:7
+[Appium]     at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:192)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at ✽.I launch the Mobile Simulator "Android Device 1"(file:///Users/00131018amirulhakim/git/BDD-Framework/src/test/resources/features/Test%20Features/Test.feature:5)
+Caused by: io.appium.java_client.service.local.AppiumServerAvailabilityChecker$ConnectionTimeout: ConnectionTimeout
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:72)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.ping(AppiumDriverLocalService.java:144)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:185)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:62)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:81)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:53)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:84)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.testng.TestNGCucumberRunner.lambda$runScenario$1(TestNGCucumberRunner.java:135)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$5(CucumberExecutionContext.java:136)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:136)
+	at io.cucumber.testng.TestNGCucumberRunner.runScenario(TestNGCucumberRunner.java:132)
+	at io.cucumber.testng.AbstractTestNGCucumberTests.runScenario(AbstractTestNGCucumberTests.java:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:81)
+	at org.testng.internal.thread.Async$AsyncTask.run(Async.java:34)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:549)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.Socket.connect(Socket.java:752)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:178)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:531)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:636)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:280)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:386)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:408)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1310)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1243)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1129)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1058)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.connectToUrl(AppiumServerAvailabilityChecker.java:79)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:61)
+	... 36 more
+</textarea>
+										</td>
+									</tr>
+									<tr>
+										<td>Dec 19, 2024 18:15:58</td>
+										<td class='linked' test-id='9'>Given I launch the Mobile Simulator "Android Device 1"</td>
+										<td>
+											<textarea disabled class="code-block">io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException: Appium HTTP server is not listening at http://127.0.0.1:4723/ after 20000 ms timeout. Consider increasing the server startup timeout value and check the server log for possible error messages occurrences.
+Node.js executable path: /opt/homebrew/bin/node
+Arguments: [/opt/homebrew/lib/node_modules/appium/build/lib/main.js, --port, 4723, --address, 127.0.0.1]
+Server log: [35m[Appium][39m Welcome to Appium v2.6.0 (REV 3001afe88112c13b5aafdd92e097680897060881)
+[35m[Appium][39m Non-default server args:
+[35m[Appium][39m { address: [32m'127.0.0.1'[39m }
+[35m[Appium][39m The autodetected Appium home path: /Users/00131018amirulhakim/.appium
+[35m[Appium][39m Attempting to load driver uiautomator2...
+[35m[Appium][39m Attempting to load driver xcuitest...
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-uiautomator2-driver/build/index.js
+[35m[Appium][39m Requiring driver at /Users/00131018amirulhakim/.appium/node_modules/appium-xcuitest-driver/build/index.js
+[Appium] AndroidUiautomator2Driver has been successfully loaded in 0.661s
+[Appium] XCUITestDriver has been successfully loaded in 1.068s
+[38;5;0m[HTTP][0m Could not start REST http interface listener. The requested port may already be in use. Please make sure there is no other instance of this server running already.
+[Appium] Could not configure Appium server. It's possible that a driver or plugin tried to update the server and failed. Original error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium] Error: listen EADDRINUSE: address already in use 127.0.0.1:4723
+[Appium]     at Server.setupListenHandle [as _listen2] (node:net:1912:16)
+[Appium]     at listenInCluster (node:net:1969:12)
+[Appium]     at node:net:2178:7
+[Appium]     at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:192)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at ✽.I launch the Mobile Simulator "Android Device 1"(file:///Users/00131018amirulhakim/git/BDD-Framework/src/test/resources/features/Test%20Features/Test.feature:5)
+Caused by: io.appium.java_client.service.local.AppiumServerAvailabilityChecker$ConnectionTimeout: ConnectionTimeout
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:72)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.ping(AppiumDriverLocalService.java:144)
+	at io.appium.java_client.service.local.AppiumDriverLocalService.start(AppiumDriverLocalService.java:185)
+	at builds.utilities.MobileInstance.startAppiumService(MobileInstance.java:157)
+	at builds.utilities.MobileInstance.mobileInit(MobileInstance.java:60)
+	at builds.actions.MobileActions.mobileSetup(MobileActions.java:25)
+	at workDirectory.stepDefinitions.common.CommonStepDefinitions.launchTheMobileSimulator(CommonStepDefinitions.java:14)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:62)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:81)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:53)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:84)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.testng.TestNGCucumberRunner.lambda$runScenario$1(TestNGCucumberRunner.java:135)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$5(CucumberExecutionContext.java:136)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:136)
+	at io.cucumber.testng.TestNGCucumberRunner.runScenario(TestNGCucumberRunner.java:132)
+	at io.cucumber.testng.AbstractTestNGCucumberTests.runScenario(AbstractTestNGCucumberTests.java:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:81)
+	at org.testng.internal.thread.Async$AsyncTask.run(Async.java:34)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:549)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.Socket.connect(Socket.java:752)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:178)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:531)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:636)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:280)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:386)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:408)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1310)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1243)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1129)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1058)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.connectToUrl(AppiumServerAvailabilityChecker.java:79)
+	at io.appium.java_client.service.local.AppiumServerAvailabilityChecker.waitUntilAvailable(AppiumServerAvailabilityChecker.java:61)
+	... 36 more
+</textarea>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</li>
+				<li class='exception displayed active'>
+					<div class='exception-heading'>
+						<span class='exception-name'>java.lang.NullPointerException</span>
+						<span class='exception-count right'><span class='label red lighten-1 white-text'>3</span></span>
+					</div>
+					<div class='exception-content hide'>
+						<div class='exception-tests'>
+							<table class='bordered table-results'>
+								<thead>
+									<tr>
+										<th>Timestamp</th>
+										<th>TestName</th>
+										<th>StackTrace</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Dec 19, 2024 18:16:19</td>
+										<td class='linked' test-id='11'>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</td>
+										<td>
+											<textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "org.openqa.selenium.TakesScreenshot.getScreenshotAs(org.openqa.selenium.OutputType)" because the return value of "builds.actions.MobileActions.getMobileDriver()" is null
+	at builds.actions.MobileActions.screenshot(MobileActions.java:118)
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:30)
+</textarea>
+										</td>
+									</tr>
+									<tr>
+										<td>Dec 19, 2024 18:16:19</td>
+										<td class='linked' test-id='12'>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</td>
+										<td>
+											<textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "org.openqa.selenium.TakesScreenshot.getScreenshotAs(org.openqa.selenium.OutputType)" because the return value of "builds.actions.MobileActions.getMobileDriver()" is null
+	at builds.actions.MobileActions.screenshot(MobileActions.java:118)
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:30)
+</textarea>
+										</td>
+									</tr>
+									<tr>
+										<td>Dec 19, 2024 18:16:19</td>
+										<td class='linked' test-id='17'>workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(io.cucumber.java.Scenario)</td>
+										<td>
+											<textarea disabled class="code-block">java.lang.NullPointerException: Cannot invoke "org.openqa.selenium.TakesScreenshot.getScreenshotAs(org.openqa.selenium.OutputType)" because the return value of "builds.actions.MobileActions.getMobileDriver()" is null
+	at builds.actions.MobileActions.screenshot(MobileActions.java:118)
+	at workDirectory.stepDefinitions.Hooks.takeScreenshotIfFailed(Hooks.java:30)
+</textarea>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class='subview-right left'>
+		<div class='view-summary'>
+			<h5 class='exception-name'></h5>
+		</div>
+	</div>
+</div>
+<!-- exception view --><div id='dashboard-view' class='view hide'>
+	<div class='card-panel transparent np-v'>
+		<h5>Dashboard</h5>
+
+		<div class='row'>
+			<div class='col s2'>
+				<div class='card-panel r'>
+					Features
+					<div class='panel-lead'>1</div>
+				</div>
+			</div>
+			<div class='col s2'>
+				<div class='card-panel r'>
+					Scenarios
+					<div class='panel-lead'>3</div>
+				</div>
+			</div>
+			<div class='col s2'>
+				<div class='card-panel r'>
+					Steps
+					<div class='panel-lead'>9</div>
+				</div>
+			</div>
+			<div class='col s2'>
+				<div class='card-panel r'>
+					Start
+					<div class='panel-lead'>Dec 19, 2024 18:15:58</div>
+				</div>
+			</div>
+			<div class='col s2'>
+				<div class='card-panel r'>
+			 		End
+			 		<div class='panel-lead'>Dec 19, 2024 18:16:19</div>
+				</div>
+			</div>
+			<div class='col s2'>
+				<div class='card-panel r'>
+					Time Taken
+					<div class='panel-lead'>00 00 21.078</div>
+				</div>
+			</div>
+			<div class='col s4'>
+				<div class='card-panel dashboard-environment'>
+					<span class='right label cyan white-text'>Environment</span><p>&nbsp;</p>
+					
+					<table>
+						<tr>
+							<th>Name</th>
+							<th>Value</th>
+						</tr>
+							<tr>
+								<td>TestEngineer</td>
+								<td>Amirul Hakim</td>
+							</tr>
+							<tr>
+								<td>Project</td>
+								<td>Cucumber Demo Framework</td>
+							</tr>
+							<tr>
+								<td>OS</td>
+								<td>Mac OS</td>
+							</tr>
+					</table>
+				</div>
+			</div>
+			<div class='col s6'>
+				<div class='card-panel dashboard-categories'>
+					<span class='right label cyan white-text'>Categories</span><p>&nbsp;</p>
+					
+					<table>
+						<tr>
+							<th>Name</th>
+							<th>Passed</th>
+							<th>Failed</th>
+							<th>Skipped</th>
+							<th>Passed %</th>
+						</tr>
+						<tr>
+							<td>@Test1</td>
+							<td>0</td>
+							<td>3</td>
+							<td>0</td>
+							<td>
+									0%
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- dashboard view -->
+		</div>
+		<!-- container -->
+		<script>
+			var statusGroup = {
+                parentCount: 1,
+				passParent: 0,
+				failParent: 1,
+				fatalParent: 0,
+				errorParent: 0,
+				warningParent: 0,
+				skipParent: 0,
+				childCount: 3,
+				passChild: 0,
+				failChild: 3,
+				fatalChild: 0,
+				errorChild: 0,
+				warningChild: 0,
+				skipChild: 0,
+				infoChild: 0,
+				grandChildCount: 9,
+				passGrandChild: 0,
+				failGrandChild: 6,
+				fatalGrandChild: 0,
+				errorGrandChild: 0,
+				warningGrandChild: 0,
+				skipGrandChild: 3,
+				infoGrandChild: 0,
+			};
+			</script>
+		
+		<script>
+			var timeline = {
+			        "Using IOS 1":20.771
+			};
+		</script>
+		
+		  <script src='https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@ff53917fbbdb5ef820abbbe4d199a6942dc771ff/v3html/js/extent.js' type='text/javascript'></script>
+		
+		
+		<script type='text/javascript'>
+				
+		</script> 
+
+	</body>
+</html>

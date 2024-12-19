@@ -1,6 +1,5 @@
 package builds.actions;
 
-import builds.main.CucumberRun;
 import builds.utilities.BrowserInstance;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,11 +16,12 @@ import java.util.List;
 import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public class BrowserActions extends BrowserInstance{
+    private SoftAssert softAssert = new SoftAssert();
 
     public void browserSetup(String browserType){
         browserInit(browserType);
     }
-    private SoftAssert softAssert = new SoftAssert();
+
     public void assertElementDisplayed(WebElement element){
         softAssert.assertTrue(element.isDisplayed());
         highlightElement(element);

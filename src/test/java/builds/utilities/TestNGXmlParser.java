@@ -1,5 +1,6 @@
 package builds.utilities;
 
+import org.testng.annotations.BeforeSuite;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.testng.xml.internal.Parser;
@@ -9,23 +10,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TestNGXmlParser {
-
-    public List<Map<String, String>> filterXMLByTestName(String testName){
-        List<Map<String, String>> allTests = getXMLContent();
-        // Example usage: filter by test name
-        List<Map<String, String>> filteredTests = filterByTestName(allTests, testName);
-
-//        System.out.println("Filtered Tests for Test Name: " + testName);
-//        for (Map<String, String> testDetails : filteredTests) {
-//            System.out.println("========================================");
-//            for (Map.Entry<String, String> entry : testDetails.entrySet()) {
-//                System.out.println(entry.getKey() + ": " + entry.getValue());
-//            }
-//        }
-        return filteredTests;
-    }
-
-    public List<Map<String, String>> getGlobalParametersOnly() {
+    @BeforeSuite
+    protected List<Map<String, String>> getGlobalParameters() {
         String testngXmlPath = "testng.xml";
         List<Map<String, String>> globalParametersList = new ArrayList<>();
         try {
@@ -54,6 +40,24 @@ public class TestNGXmlParser {
         }
 
         return globalParametersList;
+    }
+
+    protected List<Map<String, String>> filterXMLByTestName(String testName){
+        List<Map<String, String>> allTests = getXMLContent();
+        // Example usage: filter by test name
+        List<Map<String, String>> filteredTests = filterByTestName(allTests, testName);
+        if(filteredTests.isEmpty()){
+            System.err.println("Please check the test name input is exist in testNG test tag name attribute value");
+            System.exit(1);
+        }
+//        System.out.println("Filtered Tests for Test Name: " + testName);
+//        for (Map<String, String> testDetails : filteredTests) {
+//            System.out.println("========================================");
+//            for (Map.Entry<String, String> entry : testDetails.entrySet()) {
+//                System.out.println(entry.getKey() + ": " + entry.getValue());
+//            }
+//        }
+        return filteredTests;
     }
 
     private List<Map<String, String>> getXMLContent() {

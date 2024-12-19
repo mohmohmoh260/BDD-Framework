@@ -1,7 +1,6 @@
 package builds.actions;
 
 import builds.utilities.MobileInstance;
-import builds.utilities.TestNGXmlParser;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
@@ -16,7 +15,6 @@ import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 
 import static workDirectory.stepDefinitions.Hooks.getScenario;
 
@@ -24,18 +22,20 @@ public class MobileActions extends MobileInstance{
     private SoftAssert softAssert = new SoftAssert();
 
     public void mobileSetup(String testName){
-        TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
-        List<Map<String, String>> filteredList = testNGXmlParser.filterXMLByTestName(testName);
-        mobileInit(filteredList.get(0).get("platformName"), filteredList.get(0).get("Global_appiumServerIP"), filteredList.get(0).get("port"), filteredList.get(0).get("udid"), filteredList.get(0).get("automationName"), filteredList.get(0).get("appPackage"), filteredList.get(0).get("appActivity"), filteredList.get(0).get("fullReset"), filteredList.get(0).get("noReset"), filteredList.get(0).get("apkPath"), filteredList.get(0).get("bundleID"), filteredList.get(0).get("deviceName"), filteredList.get(0).get("platformVersion"));
+        mobileInit(testName);
     }
 
     public By getBy(WebElement element){
+        System.out.println(element);
         By by = null;
         String type = element.toString();
         type = type.replace("Located by By.chained({AppiumBy.","");
+        type = type.replace("Located by By.chained({By.","");
         String[] getType = type.split(":");
         type = getType[0].trim();
         String xpath = getType[1].replace("})","").trim();
+        System.out.println("id: "+type);
+        System.out.println("xpath: "+xpath);
         if(type.equals("xpath")){
             by = By.xpath(xpath);
         }else if(type.equals("id")){
@@ -110,7 +110,7 @@ public class MobileActions extends MobileInstance{
     }
 
     public void waitElement(WebElement element) {
-        WebDriverWait wait = new WebDriverWait(getMobileDriver(), Duration.ofSeconds(Long.valueOf("30")));
+        WebDriverWait wait = new WebDriverWait(getMobileDriver(), Duration.ofSeconds(Long.valueOf(globalDeviceParameter.get(0).get("timeOut"))));
         wait.until(ExpectedConditions.visibilityOf(getMobileDriver().findElement(getBy(element))));
     }
 
@@ -119,9 +119,9 @@ public class MobileActions extends MobileInstance{
         getScenario().attach(screenshot, "image/png", "Screenshot");
     }
 
-    public  void pressEnter() {
+    public void pressEnter() {
         if(getMobileDriver().toString().contains("IOSDriver")){
-            getMobileDriver().findElement(By.name("Go")).click();
+            getMobileDriver().findElement(By.xpath("//XCUIElementTypeButton[@name=\"Go\"]")).click();
         }else{
             ((AndroidDriver) getMobileDriver()).pressKey(new KeyEvent(AndroidKey.ENTER));
         }
