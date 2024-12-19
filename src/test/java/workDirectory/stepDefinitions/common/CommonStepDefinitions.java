@@ -6,8 +6,8 @@ import io.cucumber.java.en.Given;
 
 public class CommonStepDefinitions {
 
-    @Given("I launch the Android Simulator {string}")
-    public void launchTheAndroidSimulator(String testName) {
+    @Given("I launch the Mobile Simulator {string}")
+    public void launchTheMobileSimulator(String testName) {
         MobileActions mobileActions = new MobileActions();
         mobileActions.mobileSetup(testName);
     }
