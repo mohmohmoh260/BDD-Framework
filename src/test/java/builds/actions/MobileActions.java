@@ -1,6 +1,7 @@
 package builds.actions;
 
 import builds.utilities.MobileInstance;
+import builds.utilities.TestNGXmlParser;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
@@ -19,6 +20,7 @@ import java.util.List;
 import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public class MobileActions extends MobileInstance{
+    TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
     private SoftAssert softAssert = new SoftAssert();
 
     public void mobileSetup(String testName){
@@ -110,7 +112,7 @@ public class MobileActions extends MobileInstance{
     }
 
     public void waitElement(WebElement element) {
-        WebDriverWait wait = new WebDriverWait(getMobileDriver(), Duration.ofSeconds(Long.valueOf(globalDeviceParameter.get(0).get("timeOut"))));
+        WebDriverWait wait = new WebDriverWait(getMobileDriver(), Duration.ofSeconds(Long.valueOf(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
         wait.until(ExpectedConditions.visibilityOf(getMobileDriver().findElement(getBy(element))));
     }
 

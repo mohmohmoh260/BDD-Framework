@@ -1,11 +1,11 @@
 package builds.actions;
 
 import builds.utilities.BrowserInstance;
+import builds.utilities.TestNGXmlParser;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.ITestContext;
 import org.testng.asserts.SoftAssert;
 import org.openqa.selenium.*;
 
@@ -16,6 +16,7 @@ import java.util.List;
 import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public class BrowserActions extends BrowserInstance{
+    private TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
     private SoftAssert softAssert = new SoftAssert();
 
     public void browserSetup(String browserType){
@@ -87,8 +88,8 @@ public class BrowserActions extends BrowserInstance{
         return element.getText();
     }
 
-    public void waitElement(WebElement element, ITestContext context) {
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(Long.valueOf(context.getCurrentXmlTest().getParameter("browserType"))));
+    public void waitElement(WebElement element) {
+        WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(Long.valueOf(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
         wait.until(ExpectedConditions.presenceOfElementLocated(getBy(element)));
         scrollToView(element);
     }

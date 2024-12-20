@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class TestNGXmlParser {
     @BeforeSuite
-    protected List<Map<String, String>> getGlobalParameters() {
+    public List<Map<String, String>> getGlobalParameters() {
         String testngXmlPath = "testng.xml";
         List<Map<String, String>> globalParametersList = new ArrayList<>();
         try {

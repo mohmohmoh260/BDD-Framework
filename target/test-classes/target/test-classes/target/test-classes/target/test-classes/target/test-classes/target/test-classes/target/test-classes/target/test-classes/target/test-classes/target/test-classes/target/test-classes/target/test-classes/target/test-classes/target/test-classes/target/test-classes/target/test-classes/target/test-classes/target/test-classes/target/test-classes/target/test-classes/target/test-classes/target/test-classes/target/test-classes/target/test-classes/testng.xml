@@ -9,9 +9,9 @@
     <parameter name="globalBrowserTypeState" value="false"></parameter>
     <parameter name="globalBrowserType" value="chrome"></parameter>
     <!-- Global Variable Mobile Settings -->
-    <parameter name="newCommandTimeout" value="300"></parameter>
-    <parameter name="serverLaunchTimeout" value="300"></parameter>
-    <parameter name="serverReadTimeout" value="300"></parameter>
+    <parameter name="newCommandTimeout" value="30000"></parameter>
+    <parameter name="serverLaunchTimeout" value="30000"></parameter>
+    <parameter name="serverReadTimeout" value="30000"></parameter>
     <parameter name="language" value="en"></parameter>
     <parameter name="locale" value="MY"></parameter>
     <parameter name="orientation" value="PORTRAIT"></parameter>
@@ -32,7 +32,7 @@
         <parameter name="username" value="autouat1"></parameter>
         <parameter name="password" value="Maybank@1"></parameter>
         <parameter name="udid" value="emulator-5554"></parameter>
-        <parameter name="port" value="4773"></parameter>
+        <parameter name="port" value="4723"></parameter>
         <parameter name="deviceName" value="Pixel 8"></parameter>
         <parameter name="platformVersion" value="13"></parameter>
         <parameter name="apkPath" value="Apk/NotePad.apk"></parameter>
@@ -42,8 +42,8 @@
         <parameter name="fullReset" value="false"></parameter>
         <parameter name="platformName" value="android"></parameter>
         <parameter name="automationName" value="uiautomator2"></parameter>
-        <parameter name="noSign" value="false"></parameter>
-        <parameter name="skipServerInstallation" value="false"></parameter>
+        <parameter name="noSign" value="true"></parameter>
+        <parameter name="skipServerInstallation" value="true"></parameter>
         <classes>
             <class name="builds.main.CucumberRun"/>
         </classes>

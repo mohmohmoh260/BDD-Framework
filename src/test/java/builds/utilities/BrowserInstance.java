@@ -1,9 +1,12 @@
 package builds.utilities;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.poi.ss.formula.functions.T;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 
-public class BrowserInstance extends PageFactoryInit{
+public class BrowserInstance{
     private static final ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
 
     protected void browserInit(String browserType){
@@ -23,7 +26,11 @@ public class BrowserInstance extends PageFactoryInit{
             System.out.println("Please check your browser.type values correctly in Global Variable properties file");
             System.exit(1);
         }
-        setWebPageFactory(getWebDriver());
+        PageFactoryInit pageFactoryInit = new PageFactoryInit();
+        pageFactoryInit.setWebPageFactory(getWebDriver());
+
+        TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
+        getWebDriver().get(testNGXmlParser.getGlobalParameters().get(0).get("url"));
     }
 
     public WebDriver getWebDriver(){
@@ -34,10 +41,13 @@ public class BrowserInstance extends PageFactoryInit{
         webDriver.set(driver);
     }
 
+    @AfterSuite @BeforeSuite
     public void quitWebDriver(){
         if (getWebDriver() != null) {
             getWebDriver().quit();
             webDriver.remove();
         }
     }
+
+
 }

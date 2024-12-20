@@ -7,24 +7,22 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
-import org.junit.After;
-import org.openqa.selenium.ScreenOrientation;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
 public class MobileInstance{
-    private static TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
-    private List<Map<String,String>> deviceParameters;
-    public static List<Map<String,String>> globalDeviceParameter = testNGXmlParser.getGlobalParameters();
     private static final ThreadLocal<AppiumDriver> mobileDriver = new ThreadLocal<>();
+    private AppiumDriverLocalService appiumDriverLocalService;
 
     protected void mobileInit(String testName) {
-        deviceParameters = testNGXmlParser.filterXMLByTestName(testName);
+        TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
+        List<Map<String, String>> deviceParameters = testNGXmlParser.filterXMLByTestName(testName);
+        List<Map<String,String>> globalDeviceParameter = testNGXmlParser.getGlobalParameters();
 
         String platformName = deviceParameters.get(0).get("platformName");
         String udid = deviceParameters.get(0).get("udid");
@@ -36,32 +34,21 @@ public class MobileInstance{
         String appActivity = deviceParameters.get(0).get("appActivity");
         String fullReset = deviceParameters.get(0).get("fullReset");
         String noReset = deviceParameters.get(0).get("noReset");
-        String noSign = deviceParameters.get(0).get("noSign");
-        String skipServerInstallation = deviceParameters.get(0).get("skipServerInstallation");
-        String newCommandTimeout = globalDeviceParameter.get(0).get("newCommandTimeout");
-        String serverLaunchTimeout = globalDeviceParameter.get(0).get("serverLaunchTimeout");
-        String serverReadTimeout = globalDeviceParameter.get(0).get("serverReadTimeout");
-        String language = globalDeviceParameter.get(0).get("language");
-        String locale = globalDeviceParameter.get(0).get("locale");
+        String useNewWDA = deviceParameters.get(0).get("useNewWDA");
         String autoGrantPermissions = globalDeviceParameter.get(0).get("autoGrantPermissions");
-        String skipDeviceInitialization = globalDeviceParameter.get(0).get("skipDeviceInitialization");
         String autoAcceptAlerts = globalDeviceParameter.get(0).get("autoAcceptAlerts");
         String autoDismissAlerts = globalDeviceParameter.get(0).get("autoDismissAlerts");
-
-        ScreenOrientation orientation;
-        if(globalDeviceParameter.get(0).get("orientation").equals("PORTRAIT")){
-            orientation = ScreenOrientation.PORTRAIT;
-        }else{
-            orientation = ScreenOrientation.LANDSCAPE;
-        }
-
         String appiumServerIP = globalDeviceParameter.get(0).get("appiumServerIP");
-        String port = deviceParameters.get(0).get("port");
+
+        int min = 5000;  // Minimum port number
+        int max = 65535; // Maximum port number
+        String port = String.valueOf((int) (Math.random() * (max - min + 1)) + min);
         startAppiumService(appiumServerIP, port);
 
         if (platformName.equalsIgnoreCase("android")) {
             UiAutomator2Options uiAutomator2Options = new UiAutomator2Options();
-            uiAutomator2Options.setUdid(udid)
+            uiAutomator2Options
+                    .setUdid(udid)
                     .setPlatformName(platformName)
                     .setAutomationName(automationName)
                     .setDeviceName(deviceName)
@@ -70,19 +57,7 @@ public class MobileInstance{
                     .setAppActivity(appActivity)
                     .setFullReset(Boolean.parseBoolean(fullReset))
                     .setNoReset(Boolean.parseBoolean(noReset))
-                    .setNoSign(Boolean.parseBoolean(noSign))
-                    .setSkipServerInstallation(Boolean.parseBoolean(skipServerInstallation))
-                    .setNewCommandTimeout(Duration.ofSeconds(Long.parseLong(newCommandTimeout)))
-                    //.setUiautomator2ServerLaunchTimeout(Duration.ofSeconds(Long.parseLong(serverLaunchTimeout)))
-                    //.setUiautomator2ServerReadTimeout(Duration.ofSeconds(Long.parseLong(serverReadTimeout)))
-                    .setLanguage(language)
-                    .setLocale(locale)
-                    .setAutoGrantPermissions(Boolean.parseBoolean(autoGrantPermissions))
-                    .setSkipDeviceInitialization(Boolean.parseBoolean(skipDeviceInitialization))
-                    .setOrientation(orientation);
-
-            uiAutomator2Options.setUiautomator2ServerLaunchTimeout(Duration.ofSeconds(600));  // Increase timeout
-            uiAutomator2Options.setUiautomator2ServerReadTimeout(Duration.ofSeconds(600));
+                    .setAutoGrantPermissions(Boolean.parseBoolean(autoGrantPermissions));
 
             uiAutomator2Options.setCapability("autoAcceptAlerts", Boolean.parseBoolean(autoAcceptAlerts));
             uiAutomator2Options.setCapability("autoDismissAlerts", Boolean.parseBoolean(autoDismissAlerts));
@@ -106,7 +81,8 @@ public class MobileInstance{
         } else if (platformName.equalsIgnoreCase("iOS")) {
             XCUITestOptions xcuiTestOptions = new XCUITestOptions();
 
-            xcuiTestOptions.setUdid(udid)
+            xcuiTestOptions
+                    .setUdid(udid)
                     .setPlatformName(platformName)
                     .setAutomationName(automationName)
                     .setDeviceName(deviceName)
@@ -114,17 +90,11 @@ public class MobileInstance{
                     .setBundleId(bundleID)
                     .setFullReset(Boolean.parseBoolean(fullReset))
                     .setNoReset(Boolean.parseBoolean(noReset))
-                    .setNewCommandTimeout(Duration.ofSeconds(Long.parseLong(newCommandTimeout)))
-                    .setLanguage(language)
-                    .setLocale(locale)
                     .setAutoDismissAlerts(Boolean.parseBoolean(autoDismissAlerts))
                     .setAutoAcceptAlerts(Boolean.parseBoolean(autoAcceptAlerts))
-                    .setOrientation(orientation);
+                    .setUseNewWDA(Boolean.parseBoolean(useNewWDA));
 
             xcuiTestOptions.setCapability("autoGrantPermissions", Boolean.parseBoolean(autoGrantPermissions));
-            xcuiTestOptions.setCapability("serverReadTimeout", Boolean.parseBoolean(serverReadTimeout));
-            xcuiTestOptions.setCapability("skipDeviceInitialization", Boolean.parseBoolean(skipDeviceInitialization));
-            xcuiTestOptions.setCapability("serverLaunchTimeout", Boolean.parseBoolean(serverLaunchTimeout));
 
             String apkPath = deviceParameters.get(0).get("apkPath");
             if(!apkPath.isEmpty()){
@@ -152,7 +122,6 @@ public class MobileInstance{
     }
 
     private void startAppiumService(String appiumIP, String port){
-        AppiumDriverLocalService appiumDriverLocalService;
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder();
         appiumServiceBuilder.withIPAddress(appiumIP);
         appiumServiceBuilder.usingPort(Integer.parseInt(port));
@@ -168,12 +137,14 @@ public class MobileInstance{
         mobileDriver.set(driver);
     }
 
-    @AfterSuite
-    private synchronized void quitMobileDriver(){
+    @AfterSuite @BeforeSuite
+    private void quitMobileDriverAfter() {
         if (getMobileDriver() != null) {
             getMobileDriver().quit();
             mobileDriver.remove();
         }
+        if (appiumDriverLocalService != null && appiumDriverLocalService.isRunning()) {
+            appiumDriverLocalService.stop();
+        }
     }
-
 }

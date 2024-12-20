@@ -1,6 +1,6 @@
 package builds.main;
 
-import io.cucumber.java.BeforeAll;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.AfterSuite;
@@ -20,7 +20,6 @@ public class CucumberRun {
 	)
 
 	public class TestRunner extends AbstractTestNGCucumberTests {
-
 		@DataProvider(parallel = true)
 		public Object[][] scenarios() {
 			return super.scenarios();
