@@ -63,7 +63,7 @@ public class BrowserActions extends BrowserInstance{
         }else if(type.equals("tagName")){
             by = By.tagName(xpath);
         }else{
-            System.err.println("Caught Exception: Check the xpath type in page object");
+            System.err.println("Caught Exception: Check the WebElement to be split properly: "+ element);
         }
         return by;
     }

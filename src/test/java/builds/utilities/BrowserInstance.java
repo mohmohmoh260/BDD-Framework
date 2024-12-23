@@ -1,35 +1,66 @@
 package builds.utilities;
 
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.poi.ss.formula.functions.T;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class BrowserInstance{
     private static final ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
 
     protected void browserInit(String browserType){
-        if(browserType.equalsIgnoreCase("chrome")){
-            setWebDriver(WebDriverManager.chromiumdriver().create());
-        }else if(browserType.equalsIgnoreCase("firefox")){
-            setWebDriver(WebDriverManager.firefoxdriver().create());
-        }else if(browserType.equalsIgnoreCase("edge")){
-            setWebDriver(WebDriverManager.edgedriver().create());
-        }else if(browserType.equalsIgnoreCase("chromium")){
-            setWebDriver(WebDriverManager.chromiumdriver().create());
-        }else if(browserType.equalsIgnoreCase("ie")){
-            setWebDriver(WebDriverManager.iedriver().create());
-        }else if(browserType.equalsIgnoreCase("safari")){
-            setWebDriver(WebDriverManager.safaridriver().create());
+        TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
+        List<Map<String,String>> globalDeviceParameter = testNGXmlParser.getGlobalParameters();
+
+        // Global Setup
+        if(globalDeviceParameter.get(0).get("globalBrowserTypeState").equalsIgnoreCase("false")){
+            if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("chrome")){
+                setWebDriver(WebDriverManager.chromiumdriver().create());
+            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("firefox")){
+                setWebDriver(WebDriverManager.firefoxdriver().create());
+            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("edge")){
+                setWebDriver(WebDriverManager.edgedriver().create());
+            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("chromium")){
+                setWebDriver(WebDriverManager.chromiumdriver().create());
+            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("ie")){
+                setWebDriver(WebDriverManager.iedriver().create());
+            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("safari")){
+                setWebDriver(WebDriverManager.safaridriver().create());
+            }else{
+                Logger logger = (Logger) LoggerFactory.getILoggerFactory();
+                logger.info("Selecting default browser (chrome) because browserType from <suite> in testNG.xml is incorrect");
+                setWebDriver(WebDriverManager.chromiumdriver().create());
+            }
+        // Test Setup
         }else{
-            System.out.println("Please check your browser.type values correctly in Global Variable properties file");
-            System.exit(1);
+            if(browserType.equalsIgnoreCase("chrome")){
+                setWebDriver(WebDriverManager.chromiumdriver().create());
+            }else if(browserType.equalsIgnoreCase("firefox")){
+                setWebDriver(WebDriverManager.firefoxdriver().create());
+            }else if(browserType.equalsIgnoreCase("edge")){
+                setWebDriver(WebDriverManager.edgedriver().create());
+            }else if(browserType.equalsIgnoreCase("chromium")){
+                setWebDriver(WebDriverManager.chromiumdriver().create());
+            }else if(browserType.equalsIgnoreCase("ie")){
+                setWebDriver(WebDriverManager.iedriver().create());
+            }else if(browserType.equalsIgnoreCase("safari")){
+                setWebDriver(WebDriverManager.safaridriver().create());
+            }else{
+                Logger logger = (Logger) LoggerFactory.getILoggerFactory();
+                logger.info("Selecting default browser (chrome) because browserType from <test> in testNG.xml is incorrect");
+                setWebDriver(WebDriverManager.chromiumdriver().create());
+            }
         }
+
         PageFactoryInit pageFactoryInit = new PageFactoryInit();
         pageFactoryInit.setWebPageFactory(getWebDriver());
-
-        TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
         getWebDriver().get(testNGXmlParser.getGlobalParameters().get(0).get("url"));
     }
 

@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import workDirectory.stepDefinitions.Hooks;
 
 import java.time.Duration;
 import java.util.List;
@@ -55,7 +56,7 @@ public class MobileActions extends MobileInstance{
         }else if(type.equals("tagName")){
             by = By.tagName(xpath);
         }else{
-            System.err.println("Caught Exception: Check the xpath type in page object");
+            System.err.println("Caught Exception: Check the WebElement to be split properly: "+ element);
         }
         return by;
     }
@@ -117,8 +118,13 @@ public class MobileActions extends MobileInstance{
     }
 
     public void screenshot() {
-        byte[] screenshot = ((TakesScreenshot) getMobileDriver()).getScreenshotAs(OutputType.BYTES);
-        getScenario().attach(screenshot, "image/png", "Screenshot");
+        try {
+            TakesScreenshot screenshotDriver = (TakesScreenshot) getMobileDriver();
+            byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
+            getScenario().attach(screenshot, "image/png", "Screenshot");
+        } catch (Exception e) {
+            getScenario().log("Screenshot failed: " + e.getMessage());
+        }
     }
 
     public void pressEnter() {

@@ -6,3 +6,10 @@ Feature: Using IOS 1
 
   Scenario: User To Test Search Bar Function
     Given I launch the browser and navigate to Google page with "chrome"
+    Then take screenshot
+
+  Scenario: Print Device Driver 1
+    Then print driver instance ID
+
+  Scenario: Print Device Driver 2
+    Then print driver instance ID

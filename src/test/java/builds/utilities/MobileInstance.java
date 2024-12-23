@@ -12,6 +12,7 @@ import org.testng.annotations.BeforeSuite;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,7 @@ public class MobileInstance{
                     .setAppActivity(appActivity)
                     .setFullReset(Boolean.parseBoolean(fullReset))
                     .setNoReset(Boolean.parseBoolean(noReset))
+                    .setNewCommandTimeout(Duration.ofSeconds(600))
                     .setAutoGrantPermissions(Boolean.parseBoolean(autoGrantPermissions));
 
             uiAutomator2Options.setCapability("autoAcceptAlerts", Boolean.parseBoolean(autoAcceptAlerts));
@@ -138,7 +140,7 @@ public class MobileInstance{
     }
 
     @AfterSuite @BeforeSuite
-    private void quitMobileDriverAfter() {
+    private void quitMobileDriver() {
         if (getMobileDriver() != null) {
             getMobileDriver().quit();
             mobileDriver.remove();

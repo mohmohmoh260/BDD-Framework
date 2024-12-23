@@ -2,6 +2,7 @@ package workDirectory.pages.notepad;
 
 import builds.actions.MobileActions;
 import workDirectory.pageObject.notepad.NotePadAppsPageObjects;
+import workDirectory.stepDefinitions.Hooks;
 
 public class NotePadAppPage extends MobileActions {
 
@@ -17,4 +18,8 @@ public class NotePadAppPage extends MobileActions {
         sendKeys( NotePadAppsPageObjects.noteBodyInput, text);
     }
 
+    public void printDriverInstanceID() {
+        Hooks.getScenario().log(String.valueOf(getMobileDriver().getSessionId()));
+        screenshot();
+    }
 }

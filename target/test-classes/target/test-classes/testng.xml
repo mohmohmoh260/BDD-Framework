@@ -25,7 +25,6 @@
         <parameter name="password" value="Maybank@1"></parameter>
         <parameter name="browserType" value="chrome"></parameter>
     </test>
-
     <!-- Device Option -->
     <test name="Android Device 1">
         <parameter name="username" value="autouat1"></parameter>
@@ -34,7 +33,7 @@
         <parameter name="deviceName" value="Pixel 8"></parameter>
         <parameter name="platformVersion" value="13"></parameter>
         <parameter name="apkPath" value=""></parameter>
-        <parameter name="appPackage" value="com.google.android.apps.chrome"></parameter>
+        <parameter name="appPackage" value="com.android.chrome"></parameter>
         <parameter name="appActivity" value="com.google.android.apps.chrome.Main"></parameter>
         <parameter name="noReset" value="true"></parameter>
         <parameter name="fullReset" value="false"></parameter>
