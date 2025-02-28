@@ -13,14 +13,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import workDirectory.stepDefinitions.Hooks;
 
 import java.time.Duration;
 import java.util.List;
 
+import static builds.utilities.ElementInstance.elements;
 import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public class MobileActions extends MobileInstance{
+
     TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
     private SoftAssert softAssert = new SoftAssert();
 
@@ -63,37 +64,37 @@ public class MobileActions extends MobileInstance{
 
     public void assertElementDisplayed(WebElement element) {
         waitElement(element);
-        Assert.assertTrue(getMobileDriver().findElement(getBy(element)).isDisplayed());
+        Assert.assertTrue(appiumDriver.get().findElement(getBy(element)).isDisplayed());
         screenshot();
     }
     
     public void assertPageTitle(String title) {
-        softAssert.assertTrue(getMobileDriver().getTitle().equals(title));
+        softAssert.assertTrue(appiumDriver.get().getTitle().equals(title));
     }
 
     public void click(WebElement element) {
         waitElement(element);
-        getMobileDriver().findElement(getBy(element)).click();
+        appiumDriver.get().findElement(getBy(element)).click();
     }
 
     public void sendKeys(WebElement element, String input) {
-        getMobileDriver().findElement(getBy(element)).sendKeys(input);
+        appiumDriver.get().findElement(getBy(element)).sendKeys(input);
     }
 
     public void close() {
-        getMobileDriver().close();
+        appiumDriver.get().close();
     }
 
     public void quit() {
-        getMobileDriver().quit();
+        appiumDriver.get().quit();
     }
 
     public  List<WebElement> findElements(WebElement element){
-        return getMobileDriver().findElements(getBy(element));
+        return appiumDriver.get().findElements(getBy(element));
     }
 
     public String getText(WebElement element){
-        return getMobileDriver().findElement(getBy(element)).getText();
+        return appiumDriver.get().findElement(getBy(element)).getText();
     }
 
 //    public  clear(WebElement element){
@@ -101,7 +102,7 @@ public class MobileActions extends MobileInstance{
 //    }
 
 //    public  hideKeyboard(){
-//        MobileInstance.getMobileDriver();
+//        MobileInstance.appiumDriver.get();
 //    }
 
      void scrollDownToElement(WebElement element){
@@ -113,13 +114,14 @@ public class MobileActions extends MobileInstance{
     }
 
     public void waitElement(WebElement element) {
-        WebDriverWait wait = new WebDriverWait(getMobileDriver(), Duration.ofSeconds(Long.valueOf(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
-        wait.until(ExpectedConditions.visibilityOf(getMobileDriver().findElement(getBy(element))));
+        WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.parseLong(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
+        wait.until(ExpectedConditions.presenceOfElementLocated(getBy(element)));
+        wait.until((ExpectedConditions.visibilityOf(element)));
     }
 
     public void screenshot() {
         try {
-            TakesScreenshot screenshotDriver = (TakesScreenshot) getMobileDriver();
+            TakesScreenshot screenshotDriver = (TakesScreenshot) appiumDriver.get();
             byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
             getScenario().attach(screenshot, "image/png", "Screenshot");
         } catch (Exception e) {
@@ -128,12 +130,15 @@ public class MobileActions extends MobileInstance{
     }
 
     public void pressEnter() {
-        if(getMobileDriver().toString().contains("IOSDriver")){
-            getMobileDriver().findElement(By.xpath("//XCUIElementTypeButton[@name=\"Go\"]")).click();
+        if(appiumDriver.get().toString().contains("IOSDriver")){
+            appiumDriver.get().findElement(By.xpath("//XCUIElementTypeButton[@name=\"Go\"]")).click();
         }else{
-            ((AndroidDriver) getMobileDriver()).pressKey(new KeyEvent(AndroidKey.ENTER));
+            ((AndroidDriver) appiumDriver.get()).pressKey(new KeyEvent(AndroidKey.ENTER));
         }
-
     }
 
+    public boolean verifyElementVisible(String s) {
+        System.out.println(elements.get().get(s));
+        return true;
+    }
 }

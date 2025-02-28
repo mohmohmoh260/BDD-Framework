@@ -30,7 +30,7 @@ public class BrowserActions extends BrowserInstance{
     }
 
     public void assertElementExist(WebElement element){
-        List<WebElement> elements = getWebDriver().findElements(getBy(element));
+        List<WebElement> elements = webDriver.get().findElements(getBy(element));
         if(!elements.isEmpty()){
             softAssert.assertTrue(true);
         }else{
@@ -69,19 +69,19 @@ public class BrowserActions extends BrowserInstance{
     }
 
     public void click(WebElement element) {
-       getWebDriver().findElement(getBy(element)).click();
+       webDriver.get().findElement(getBy(element)).click();
     }
 
     public void sendKeys(WebElement element, String input) {
-        getWebDriver().findElement(getBy(element)).sendKeys(input);
+        webDriver.get().findElement(getBy(element)).sendKeys(input);
     }
 
     public void close(){
-        getWebDriver().close();
+        webDriver.get().close();
     }
 
     public void quit(){
-        getWebDriver().quit();
+        webDriver.get().quit();
     }
 
     public String getText(WebElement element){
@@ -89,74 +89,75 @@ public class BrowserActions extends BrowserInstance{
     }
 
     public void waitElement(WebElement element) {
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(Long.valueOf(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
+        WebDriverWait wait = new WebDriverWait(webDriver.get(), Duration.ofSeconds(Long.parseLong(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
         wait.until(ExpectedConditions.presenceOfElementLocated(getBy(element)));
         scrollToView(element);
+        wait.until((ExpectedConditions.visibilityOf(element)));
     }
 
     public void scrollToView(WebElement element) {
-        JavascriptExecutor j = (JavascriptExecutor) getWebDriver();
+        JavascriptExecutor j = (JavascriptExecutor) webDriver.get();
         j.executeScript ("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})", element);
     }
 
     public void highlightElement(WebElement element){
         try{
-            ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].style.border='3px solid lime'", element);
+            ((JavascriptExecutor) webDriver.get()).executeScript("arguments[0].style.border='3px solid lime'", element);
         }catch (Exception e){
-            System.out.println(e.getCause());
+            System.err.println(e.getCause());
         }
     }
 
      public void unHighlightElement(WebElement element){
         try{
-            ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].style.removeProperty('border')", element);
+            ((JavascriptExecutor) webDriver.get()).executeScript("arguments[0].style.removeProperty('border')", element);
         }catch (Exception e){
             System.err.println(e.getCause());
         }
     }
 
      public void switchToTab(int tab){
-        ArrayList<String> newTb = new ArrayList<>(getWebDriver().getWindowHandles());
+        ArrayList<String> newTb = new ArrayList<>(webDriver.get().getWindowHandles());
         //switch to new tab
-        getWebDriver().switchTo().window(newTb.get(tab));
+        webDriver.get().switchTo().window(newTb.get(tab));
     }
 
      public void switchToMainTab(){
-        ArrayList<String> newTb = new ArrayList<>(getWebDriver().getWindowHandles());
-        getWebDriver().switchTo().window(newTb.get(0));
+        ArrayList<String> newTb = new ArrayList<>(webDriver.get().getWindowHandles());
+        webDriver.get().switchTo().window(newTb.get(0));
     }
 
     public void selectDropdownByText(WebElement element, String text){
-        Select select= new Select(getWebDriver().findElement(getBy(element)));
+        Select select= new Select(webDriver.get().findElement(getBy(element)));
         select.selectByVisibleText(text);
     }
 
     public void selectDropdownByIndex(WebElement element, int index){
-        Select select= new Select(getWebDriver().findElement(getBy(element)));
+        Select select= new Select(webDriver.get().findElement(getBy(element)));
         select.selectByIndex(index);
     }
 
     public void selectDropdownByValue(WebElement element, String text){
-        Select select= new Select(getWebDriver().findElement(getBy(element)));
+        Select select= new Select(webDriver.get().findElement(getBy(element)));
         select.selectByValue(text);
     }
 
     public void screenshot() {
-        byte[] screenshot = ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
+        byte[] screenshot = ((TakesScreenshot) webDriver.get()).getScreenshotAs(OutputType.BYTES);
         getScenario().attach(screenshot, "image/png", "Screenshot");
     }
 
     public void openURL(String url) {
-        getWebDriver().get(url);
+        webDriver.get().get(url);
     }
 
     public void pressEnter() {
-        Actions actions = new Actions(getWebDriver());
+        Actions actions = new Actions(webDriver.get());
         actions.sendKeys(Keys.ENTER);
         actions.perform();
     }
 
     public void assertPageTitle(String title) {
-        softAssert.assertTrue(getWebDriver().getTitle().equals(title));
+        softAssert.assertTrue(webDriver.get().getTitle().equals(title));
     }
 }

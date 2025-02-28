@@ -1,0 +1,12 @@
+{
+  "Google Input": {
+    "web": "//textarea[@title='Search']",
+    "android": "androidxpath",
+    "ios": "iosxpath"
+  },
+  "Button_Login": {
+    "web": "webxpath",
+    "android": "androidxpath",
+    "ios": "iosxpath"
+  }
+}

@@ -7,17 +7,14 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
-public class MobileInstance{
-    private static final ThreadLocal<AppiumDriver> mobileDriver = new ThreadLocal<>();
+public class MobileInstance extends DriverType{
+
     private AppiumDriverLocalService appiumDriverLocalService;
 
     protected void mobileInit(String testName) {
@@ -75,7 +72,10 @@ public class MobileInstance{
             }
 
             try {
-                setMobileDriver(new AndroidDriver(new URL("http://"+appiumServerIP + ":" + port), uiAutomator2Options));
+                appiumDriver.set(new AndroidDriver(new URL("http://"+appiumServerIP + ":" + port), uiAutomator2Options));
+                isWebDriver.set(false);
+                isAndroidDriver.set(true);
+                isIOSDriver.set(false);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
@@ -111,7 +111,10 @@ public class MobileInstance{
             xcuiTestOptions.setCapability("clearKeychains", true);
 
             try {
-                setMobileDriver(new IOSDriver(new URL("http://"+appiumServerIP + ":" + port), xcuiTestOptions));
+                appiumDriver.set(new IOSDriver(new URL("http://"+appiumServerIP + ":" + port), xcuiTestOptions));
+                isWebDriver.set(false);
+                isAndroidDriver.set(false);
+                isIOSDriver.set(true);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
@@ -119,8 +122,6 @@ public class MobileInstance{
         } else {
             System.err.println("Check the platformName value in testng.xml. The value should be either \"android\" or \"iOS\"");
         }
-        PageFactoryInit pageFactoryInit = new PageFactoryInit();
-        pageFactoryInit.setMobilePageFactory(getMobileDriver());
     }
 
     private void startAppiumService(String appiumIP, String port){
@@ -131,22 +132,17 @@ public class MobileInstance{
         appiumDriverLocalService.start();
     }
 
-    public AppiumDriver getMobileDriver(){
-        return mobileDriver.get();
-    }
-
-    private void setMobileDriver(AppiumDriver driver){
-        mobileDriver.set(driver);
-    }
-
-    @AfterSuite @BeforeSuite
-    private void quitMobileDriver() {
-        if (getMobileDriver() != null) {
-            getMobileDriver().quit();
-            mobileDriver.remove();
+    public void quitMobileDriver() {
+        if (appiumDriver.get() != null) {
+            appiumDriver.get().quit();
+            appiumDriver.remove();
         }
         if (appiumDriverLocalService != null && appiumDriverLocalService.isRunning()) {
             appiumDriverLocalService.stop();
         }
+    }
+
+    public AppiumDriver getMobileDriver(){
+        return appiumDriver.get();
     }
 }

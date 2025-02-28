@@ -31,7 +31,7 @@
         <parameter name="password" value="Maybank@1"></parameter>
         <parameter name="udid" value="emulator-5554"></parameter>
         <parameter name="deviceName" value="Pixel 8"></parameter>
-        <parameter name="platformVersion" value="13"></parameter>
+        <parameter name="platformVersion" value="14"></parameter>
         <parameter name="apkPath" value=""></parameter>
         <parameter name="appPackage" value="com.android.chrome"></parameter>
         <parameter name="appActivity" value="com.google.android.apps.chrome.Main"></parameter>
@@ -48,7 +48,7 @@
         <parameter name="password" value="Maybank@1"></parameter>
         <parameter name="udid" value="emulator-5556"></parameter>
         <parameter name="deviceName" value="Pixel 8 Pro"></parameter>
-        <parameter name="platformVersion" value="13"></parameter>
+        <parameter name="platformVersion" value="14"></parameter>
         <parameter name="apkPath" value="Apk/NotePad.apk"></parameter>
         <parameter name="appPackage" value="com.atomczak.notepat"></parameter>
         <parameter name="appActivity" value="com.atomczak.notepat.MainActivity"></parameter>

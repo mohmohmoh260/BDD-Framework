@@ -1,18 +1,21 @@
 package workDirectory.stepDefinitions;
 
-import builds.actions.MobileActions;
 import builds.utilities.BrowserInstance;
-import builds.utilities.TestNGXmlParser;
-import io.cucumber.java.*;
-import builds.actions.BrowserActions;
+import builds.utilities.MobileInstance;
+import builds.utilities.StepListener;
+import io.cucumber.java.AfterStep;
+import io.cucumber.java.BeforeStep;
+import io.cucumber.java.Scenario;
 
-public class Hooks{
-    private TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
+public class Hooks extends CommonMethods {
     private static final ThreadLocal<Scenario> threadLocalScenario = new ThreadLocal<>();
 
     @BeforeStep
-    public void setScenario(Scenario scenario) {
+    public void beforeStep(Scenario scenario) {
         threadLocalScenario.set(scenario);
+        if(!toExecute.get()){
+            System.out.println("Skipping test: "+ StepListener.gherkinStep.get());
+        }
     }
 
     public static Scenario getScenario() {
@@ -22,28 +25,13 @@ public class Hooks{
     @AfterStep
     public void takeScreenshotIfFailed(Scenario scenario) {
         if (scenario.isFailed()) {
-            MobileActions mobileActions = new MobileActions();
             BrowserInstance browserInstance = new BrowserInstance();
-            BrowserActions browserActions = new BrowserActions();
+            MobileInstance mobileInstance = new MobileInstance();
             if (browserInstance.getWebDriver()!=null) {
                 browserActions.screenshot();
-            } else {
+            } else if(mobileInstance.getMobileDriver()!=null){
                 mobileActions.screenshot();
             }
         }
     }
-
-//    @AfterStep
-//    public void takeScreenshotAfterStep(Scenario scenario) {
-//        if(testNGXmlParser.getGlobalParameters().get(0).get("screenshot").equals("true")){
-//            MobileActions mobileActions = new MobileActions();
-//            BrowserInstance browserInstance = new BrowserInstance();
-//            BrowserActions browserActions = new BrowserActions();
-//            if (browserInstance.getWebDriver()!=null) {
-//                browserActions.screenshot();
-//            } else {
-//                mobileActions.screenshot();
-//            }
-//        }
-//    }
 }
