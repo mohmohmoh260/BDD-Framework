@@ -1,38 +1,50 @@
 package workDirectory.stepDefinitions;
 
-import builds.main.CucumberRun;
+import builds.snippetClasses.GherkinDataTableExtractor;
+import builds.snippetClasses.GherkinStepRunner;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.testng.FeatureWrapper;
-import io.cucumber.testng.Pickle;
-import io.cucumber.testng.PickleWrapper;
-import io.cucumber.testng.TestNGCucumberRunner;
-import org.testng.annotations.DataProvider;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class CommonStepDefinitions extends CommonMethods{
 
-//    @Given("I launch the Mobile Simulator {string}")
-//    public void launchTheMobileSimulator(String testName) {
-//        mobileSetup(testName);
-//    }
-//
-//    @Given("I launch the browser and navigate to Google page with {string}")
-//    public void launchTheBrowserAndNavigateToGooglePage(String browserType) {
-//        browserSetup(browserType);
-//    }
-//
-//    @And("I take browser screenshot")
-//    public void iTakeBrowserScreenshot(){
-//        browserScreenshot();
-//    }
-//
-//    @And("I take mobile screenshot")
-//    public void iTakeMobileScreenshot(){
-//        mobileScreenshot();
-//    }
+    private final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
+    private static final ThreadLocal<Set<String>> executingScenarios = ThreadLocal.withInitial(HashSet::new);
+
+    @When("run snippet scenario {string}")
+    public void runSnippetScenario(String scenarioName) throws Exception {
+        Set<String> runningScenarios = executingScenarios.get();
+
+        // Prevent infinite recursion
+        if (runningScenarios.contains(scenarioName)) {
+            throw new IllegalStateException("Detected recursive scenario execution: " + scenarioName);
+        }
+
+        runningScenarios.add(scenarioName);
+        try {
+            List<String> steps = GherkinDataTableExtractor.getStepsFromScenario(scenarioName);
+            if (steps.isEmpty()) {
+                throw new IllegalArgumentException("Scenario not found: " + scenarioName);
+            }
+
+            System.out.println("Executing scenario: " + scenarioName);
+            for (String step : steps) {
+                DataTable dataTable = GherkinDataTableExtractor.getDataTableFromFeature(step);
+                stepRunner.executeStep(step, dataTable); // Pass DataTable if found
+            }
+        } finally {
+            runningScenarios.remove(scenarioName);
+        }
+    }
+
+    @ParameterType("true|false")
+    public Boolean booleanType(String value) {
+        return Boolean.parseBoolean(value);
+    }
 
     @And ("if {int} is bigger than {int}")
     public void ifNumberIsBiggerThanNumber(int firstValue, int secondValue){
@@ -46,7 +58,7 @@ public class CommonStepDefinitions extends CommonMethods{
 
     @And ("if {string} is not visible")
     public void ifElementIsNotVisible(String elementName){
-        addStatementCounter(new Object(){}.getClass().getEnclosingMethod().getName(), Arrays.asList(elementName));
+        addStatementCounter(new Object(){}.getClass().getEnclosingMethod().getName(), Collections.singletonList(elementName));
     }
 
     @And("end statement")
@@ -54,23 +66,27 @@ public class CommonStepDefinitions extends CommonMethods{
         endIf();
     }
 
-
     @And("I launch the browser and navigate to Google page with {string}")
-    public void i_launch_the_browser_and_navigate_to_google_page_with(String string) {
-        System.out.println(string);
+    public void i_launch_the_browser_and_navigate_to_google_page_with(String browserType) {
+        if(toExecute.get()){
+            browserActions.browserSetup(browserType);
+        }
     }
 
-    int i=0;
-    @Then("print driver instance ID")
-    public void printDriverInstanceID() {
-        System.out.println(i);
-        i++;
+    @Then("print from data table without header below")
+    public void printFromDataTableWithoutHeaderBelow(DataTable dataTable) {
+        System.out.println(dataTable.cells());
     }
 
+    @Then("print from data table with header below")
+    public void printFromDataTableWithHeaderBelow(DataTable dataTable) {
+        System.out.println(dataTable.cells());
+    }
 
-    @When("run snippet scenario {string}")
-    public void runSnippetScenario(String arg0) {
-        CucumberRun.TestRunner x = new CucumberRun.TestRunner();
-        x.runScenarioByName(arg0);
+    @Then("print string {string} {double} {booleanType}")
+    public void printString(String arg0, Double arg1, Boolean arg2) {
+        System.out.println(arg0);
+        System.out.println(arg1);
+        System.out.println(arg2);
     }
 }

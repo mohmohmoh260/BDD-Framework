@@ -2,7 +2,7 @@ package workDirectory.stepDefinitions;
 
 import builds.actions.BrowserActions;
 import builds.actions.MobileActions;
-import builds.main.CucumberRun;
+import builds.snippetClasses.GherkinStepRunner;
 import builds.utilities.ElementInstance;
 
 import java.util.*;
@@ -22,7 +22,6 @@ public class CommonMethods extends ElementInstance {
         switch (methodName){
             case "ifNumberIsBiggerThanNumber":
                 if((Integer) param.get(0)>(Integer) param.get(1)){
-                    System.out.println("masuk");
                     toExecute.set(true);
                 }else {
                     toExecute.set(false);
@@ -54,11 +53,6 @@ public class CommonMethods extends ElementInstance {
 
     protected void endIf(){
        toExecute.set(true);
-    }
-int i =0;
-    protected void print(){
-        System.out.println("print :"+i);
-        i++;
     }
 
 

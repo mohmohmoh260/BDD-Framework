@@ -4,7 +4,7 @@
     "android": "androidxpath",
     "ios": "iosxpath"
   },
-  "Google Input": {
+  "Button_Login": {
     "web": "webxpath",
     "android": "androidxpath",
     "ios": "iosxpath"
