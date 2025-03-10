@@ -3,17 +3,14 @@ package builds.main;
 import builds.utilities.BrowserInstance;
 import builds.utilities.ElementInstance;
 import builds.utilities.MobileInstance;
-import io.cucumber.core.cli.Main;
 import io.cucumber.testng.*;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class CucumberRun {
 	@CucumberOptions(
@@ -40,6 +37,12 @@ public class CucumberRun {
 			browserInstance.quitWebDriver();
 		}
 
+		@BeforeSuite
+		public void fetchData(){
+			ElementInstance elementInstance = new ElementInstance();
+			elementInstance.getAllElement();
+		}
+
 		@AfterSuite
 		public void afterSuite() throws IOException {
 			String OS = System.getProperty("os.name");
@@ -51,9 +54,5 @@ public class CucumberRun {
 			}
 		}
 
-		@BeforeSuite
-		public void fetchAllElements(){
-			ElementInstance.getAllElement();
-		}
 	}
 }

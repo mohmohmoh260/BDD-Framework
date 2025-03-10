@@ -15,12 +15,10 @@ import java.util.Map;
 
 public class MobileInstance extends DriverType{
 
-    private AppiumDriverLocalService appiumDriverLocalService;
+    private static final ThreadLocal<AppiumDriverLocalService> appiumDriverLocalService = new ThreadLocal<>();
 
     protected void mobileInit(String testName) {
-        TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
         List<Map<String, String>> deviceParameters = testNGXmlParser.filterXMLByTestName(testName);
-        List<Map<String,String>> globalDeviceParameter = testNGXmlParser.getGlobalParameters();
 
         String platformName = deviceParameters.get(0).get("platformName");
         String udid = deviceParameters.get(0).get("udid");
@@ -74,8 +72,9 @@ public class MobileInstance extends DriverType{
             try {
                 appiumDriver.set(new AndroidDriver(new URL("http://"+appiumServerIP + ":" + port), uiAutomator2Options));
                 isWebDriver.set(false);
-                isAndroidDriver.set(true);
-                isIOSDriver.set(false);
+                isAppiumDriver.set(true);
+                isAndroid.set(true);
+                isIOS.set(false);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
@@ -113,8 +112,9 @@ public class MobileInstance extends DriverType{
             try {
                 appiumDriver.set(new IOSDriver(new URL("http://"+appiumServerIP + ":" + port), xcuiTestOptions));
                 isWebDriver.set(false);
-                isAndroidDriver.set(false);
-                isIOSDriver.set(true);
+                isAppiumDriver.set(true);
+                isAndroid.set(false);
+                isIOS.set(true);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
@@ -128,8 +128,8 @@ public class MobileInstance extends DriverType{
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder();
         appiumServiceBuilder.withIPAddress(appiumIP);
         appiumServiceBuilder.usingPort(Integer.parseInt(port));
-        appiumDriverLocalService = AppiumDriverLocalService.buildService(appiumServiceBuilder);
-        appiumDriverLocalService.start();
+        appiumDriverLocalService.set(AppiumDriverLocalService.buildService(appiumServiceBuilder));
+        appiumDriverLocalService.get().start();
     }
 
     public void quitMobileDriver() {
@@ -137,8 +137,8 @@ public class MobileInstance extends DriverType{
             appiumDriver.get().quit();
             appiumDriver.remove();
         }
-        if (appiumDriverLocalService != null && appiumDriverLocalService.isRunning()) {
-            appiumDriverLocalService.stop();
+        if (appiumDriverLocalService.get() != null && appiumDriverLocalService.get().isRunning()) {
+            appiumDriverLocalService.get().stop();
         }
     }
 

@@ -15,7 +15,7 @@ public class ElementInstance {
 
     private static final Map<String, String> keyToFileMap = new HashMap<>(); // Stores key → file mapping
 
-    public static void getAllElement() {
+    public void getAllElement() {
         String directoryPath = "src/test/java/workDirectory/pageObject"; // Change this to your directory path
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -27,6 +27,16 @@ public class ElementInstance {
 
         // Recursively search for JSON files in all subdirectories
         searchJsonFiles(folder, objectMapper);
+    }
+
+    protected String getElementValue(String elementName, String platform) {
+        HashMap<String, HashMap<String, String>> elementsMap = ElementInstance.elements.get();
+
+        if (elementsMap.containsKey(elementName)) {
+            HashMap<String, String> platformData = elementsMap.get(elementName);
+            return platformData.getOrDefault(platform, "❌ Platform key not found");
+        }
+        return "❌ Element key not found";
     }
 
     private static void searchJsonFiles(File folder, ObjectMapper objectMapper) {

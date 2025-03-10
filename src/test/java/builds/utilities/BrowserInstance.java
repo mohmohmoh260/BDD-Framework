@@ -4,20 +4,15 @@ package builds.utilities;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.LoggerFactory;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class BrowserInstance extends DriverType{
 
     protected void browserInit(String browserType){
-        TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
-        List<Map<String,String>> globalDeviceParameter = testNGXmlParser.getGlobalParameters();
-
         // Global Setup
         if(globalDeviceParameter.get(0).get("globalBrowserTypeState").equalsIgnoreCase("false")){
             if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("chrome")){
-                webDriver.set(WebDriverManager.chromiumdriver().create());
+                webDriver.set(WebDriverManager.chromedriver().create());
             }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("firefox")){
                 webDriver.set(WebDriverManager.firefoxdriver().create());
             }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("edge")){
@@ -54,9 +49,9 @@ public class BrowserInstance extends DriverType{
             }
         }
         isWebDriver.set(true);
-        isAndroidDriver.set(false);
-        isIOSDriver.set(false);
-        webDriver.get().get(testNGXmlParser.getGlobalParameters().get(0).get("url"));
+        isAppiumDriver.set(false);
+        isAndroid.set(false);
+        isIOS.set(false);
     }
 
     public void quitWebDriver(){

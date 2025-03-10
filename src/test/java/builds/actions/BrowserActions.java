@@ -1,7 +1,6 @@
 package builds.actions;
 
 import builds.utilities.BrowserInstance;
-import builds.utilities.TestNGXmlParser;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -16,64 +15,50 @@ import java.util.List;
 import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public class BrowserActions extends BrowserInstance{
-    private TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
-    private SoftAssert softAssert = new SoftAssert();
+
+    private final SoftAssert softAssert = new SoftAssert();
 
     public void browserSetup(String browserType){
         browserInit(browserType);
     }
 
-    public void assertElementDisplayed(WebElement element){
-        softAssert.assertTrue(element.isDisplayed());
-        highlightElement(element);
-        unHighlightElement(element);
+    public String getPlatform(){
+        if(isWebDriver.get()){
+            return "web";
+        }else{
+            throw new RuntimeException("Check platform properly. Only allowed \"web\" if current session is web browser");
+        }
     }
 
-    public void assertElementExist(WebElement element){
-        List<WebElement> elements = webDriver.get().findElements(getBy(element));
+    public By fetchElement(String elementName){
+        return By.xpath(getElementValue(elementName, getPlatform()));
+    }
+
+    public List<WebElement> fetchElements(String elementName){
+        return appiumDriver.get().findElements(By.xpath(getElementValue(elementName, getPlatform())));
+    }
+
+    public void assertElementDisplayed(String elementName){
+        softAssert.assertTrue(webDriver.get().findElement(fetchElement(elementName)).isDisplayed());
+        highlightElement(elementName);
+        unHighlightElement(elementName);
+    }
+
+    public void assertElementExist(String elementName){
+        List<WebElement> elements = webDriver.get().findElements(fetchElement(elementName));
         if(!elements.isEmpty()){
             softAssert.assertTrue(true);
         }else{
-            softAssert.fail("Element is not Exist: "+getBy(element));
+            softAssert.fail("Element is not Exist: "+ fetchElement(elementName));
         }
     }
 
-    public By getBy(WebElement element){
-        By by = null;
-        String type = element.toString();
-        String[] split1 = type.split("\\.");
-        String[] split2 = type.split(":");
-        String[] split3 = split1[1].split(":");
-        String xpath = split2[1].trim();
-        type = split3[0].trim();
-        if(type.equals("xpath")){
-            by = By.xpath(xpath);
-        }else if(type.equals("id")){
-            by = By.id(xpath);
-        }else if(type.equals("css")){
-            by = By.cssSelector(xpath);
-        }else if(type.equals("className")){
-            by = By.className(xpath);
-        }else if(type.equals("linkText")){
-            by = By.linkText(xpath);
-        }else if(type.equals("name")){
-            by = By.name(xpath);
-        }else if(type.equals("partialLinkText")){
-            by = By.partialLinkText(xpath);
-        }else if(type.equals("tagName")){
-            by = By.tagName(xpath);
-        }else{
-            System.err.println("Caught Exception: Check the WebElement to be split properly: "+ element);
-        }
-        return by;
+    public void click(String elementName) {
+        webDriver.get().findElement(fetchElement(elementName)).click();
     }
 
-    public void click(WebElement element) {
-       webDriver.get().findElement(getBy(element)).click();
-    }
-
-    public void sendKeys(WebElement element, String input) {
-        webDriver.get().findElement(getBy(element)).sendKeys(input);
+    public void setText(String value, String elementName) {
+        webDriver.get().findElement(fetchElement(elementName)).sendKeys(value);
     }
 
     public void close(){
@@ -84,33 +69,33 @@ public class BrowserActions extends BrowserInstance{
         webDriver.get().quit();
     }
 
-    public String getText(WebElement element){
-        return element.getText();
+    public String getText(String elementName){
+        return webDriver.get().findElement(fetchElement(elementName)).getText();
     }
 
-    public void waitElement(WebElement element) {
+    public void waitElement(String elementName) {
         WebDriverWait wait = new WebDriverWait(webDriver.get(), Duration.ofSeconds(Long.parseLong(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
-        wait.until(ExpectedConditions.presenceOfElementLocated(getBy(element)));
-        scrollToView(element);
-        wait.until((ExpectedConditions.visibilityOf(element)));
+        wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
+        scrollToView(elementName);
+        wait.until((ExpectedConditions.visibilityOf(webDriver.get().findElement(fetchElement(elementName)))));
     }
 
-    public void scrollToView(WebElement element) {
+    public void scrollToView(String elementName) {
         JavascriptExecutor j = (JavascriptExecutor) webDriver.get();
-        j.executeScript ("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})", element);
+        j.executeScript ("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})", webDriver.get().findElement(fetchElement(elementName)));
     }
 
-    public void highlightElement(WebElement element){
+    public void highlightElement(String elementName){
         try{
-            ((JavascriptExecutor) webDriver.get()).executeScript("arguments[0].style.border='3px solid lime'", element);
+            ((JavascriptExecutor) webDriver.get()).executeScript("arguments[0].style.border='3px solid lime'", webDriver.get().findElement(fetchElement(elementName)));
         }catch (Exception e){
             System.err.println(e.getCause());
         }
     }
 
-     public void unHighlightElement(WebElement element){
+     public void unHighlightElement(String elementName){
         try{
-            ((JavascriptExecutor) webDriver.get()).executeScript("arguments[0].style.removeProperty('border')", element);
+            ((JavascriptExecutor) webDriver.get()).executeScript("arguments[0].style.removeProperty('border')", webDriver.get().findElement(fetchElement(elementName)));
         }catch (Exception e){
             System.err.println(e.getCause());
         }
@@ -127,18 +112,18 @@ public class BrowserActions extends BrowserInstance{
         webDriver.get().switchTo().window(newTb.get(0));
     }
 
-    public void selectDropdownByText(WebElement element, String text){
-        Select select= new Select(webDriver.get().findElement(getBy(element)));
+    public void selectDropdownByText(String elementName, String text){
+        Select select= new Select(webDriver.get().findElement(fetchElement(elementName)));
         select.selectByVisibleText(text);
     }
 
-    public void selectDropdownByIndex(WebElement element, int index){
-        Select select= new Select(webDriver.get().findElement(getBy(element)));
+    public void selectDropdownByIndex(String elementName, int index){
+        Select select= new Select(webDriver.get().findElement(fetchElement(elementName)));
         select.selectByIndex(index);
     }
 
-    public void selectDropdownByValue(WebElement element, String text){
-        Select select= new Select(webDriver.get().findElement(getBy(element)));
+    public void selectDropdownByValue(String elementName, String text){
+        Select select= new Select(webDriver.get().findElement(fetchElement(elementName)));
         select.selectByValue(text);
     }
 
@@ -159,5 +144,9 @@ public class BrowserActions extends BrowserInstance{
 
     public void assertPageTitle(String title) {
         softAssert.assertTrue(webDriver.get().getTitle().equals(title));
+    }
+
+    public void navigateToURL(String URL) {
+        webDriver.get().get(globalDeviceParameter.get(0).get(URL));
     }
 }

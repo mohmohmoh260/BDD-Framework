@@ -2,12 +2,11 @@ package workDirectory.stepDefinitions;
 
 import builds.actions.BrowserActions;
 import builds.actions.MobileActions;
-import builds.snippetClasses.GherkinStepRunner;
-import builds.utilities.ElementInstance;
+import builds.utilities.DriverType;
 
 import java.util.*;
 
-public class CommonMethods extends ElementInstance {
+public class CommonMethods extends DriverType {
 
     protected final MobileActions mobileActions = new MobileActions();
     protected final BrowserActions browserActions = new BrowserActions();
@@ -55,5 +54,24 @@ public class CommonMethods extends ElementInstance {
        toExecute.set(true);
     }
 
+    protected void startIOS(String testName){
+        mobileActions.mobileSetup(testName);
+    }
+
+    protected void setText(String value, String elementName){
+        if(isAppiumDriver.get()){
+            mobileActions.setText(value, elementName);
+        }else {
+            browserActions.setText(value, elementName);
+        }
+    }
+
+    protected void takeScreenshot(){
+        if(isAppiumDriver.get()){
+            mobileActions.screenshot();
+        }else {
+            browserActions.screenshot();
+        }
+    }
 
 }

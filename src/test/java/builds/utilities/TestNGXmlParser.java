@@ -1,6 +1,5 @@
 package builds.utilities;
 
-import org.testng.annotations.BeforeSuite;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.testng.xml.internal.Parser;
@@ -10,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TestNGXmlParser {
-    @BeforeSuite
+
     public List<Map<String, String>> getGlobalParameters() {
         String testngXmlPath = "testng.xml";
         List<Map<String, String>> globalParametersList = new ArrayList<>();
@@ -50,13 +49,6 @@ public class TestNGXmlParser {
             System.err.println("Please check the test name input is exist in testNG test tag name attribute value");
             System.exit(1);
         }
-//        System.out.println("Filtered Tests for Test Name: " + testName);
-//        for (Map<String, String> testDetails : filteredTests) {
-//            System.out.println("========================================");
-//            for (Map.Entry<String, String> entry : testDetails.entrySet()) {
-//                System.out.println(entry.getKey() + ": " + entry.getValue());
-//            }
-//        }
         return filteredTests;
     }
 
@@ -66,14 +58,6 @@ public class TestNGXmlParser {
 
         try {
             testDetailsList = parseTestNGXml(testngXmlPath);
-
-//            System.out.println("Extracted TestNG XML Details:");
-//            for (Map<String, String> testDetails : testDetailsList) {
-//                System.out.println("========================================");
-//                for (Map.Entry<String, String> entry : testDetails.entrySet()) {
-//                    System.out.println(entry.getKey() + ": " + entry.getValue());
-//                }
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,21 +1,13 @@
-
 Feature: Snippet Demo Feature
 
-  Scenario: Verify Statistics section in web browser 1
-   Then print string "abc" 123.00 true
-    Then print from data table without header below
-      |"123"|"abc"|
-      |"456"|"def"|
-    Then print from data table without header below
-      |"111"|"zzz"|
-      |"444"|"fff"|
-    Then print from data table with header below
-      |"name"|"age"|
-      | "Ali"|12   |
-      | "Abu"|14   |
+  @test
+  Scenario: Navigate to Practice Automation Website and Login
+    Given I navigate browser to "url1"
+    When I set text "abc" into "GooglePage_Username_Input"
+    When I click "Button_Login"
+    And take screenshot
 
-
-  Scenario: Verify Statistics section in web browser
+  Scenario: Verify Snippet Code Is Running
     Then print from data table without header below
       |"123"|"abc"|
       |"456"|"def"|

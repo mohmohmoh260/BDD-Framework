@@ -1,7 +1,6 @@
 package builds.actions;
 
 import builds.utilities.MobileInstance;
-import builds.utilities.TestNGXmlParser;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
@@ -17,54 +16,37 @@ import org.testng.asserts.SoftAssert;
 import java.time.Duration;
 import java.util.List;
 
-import static builds.utilities.ElementInstance.elements;
 import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public class MobileActions extends MobileInstance{
 
-    TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
-    private SoftAssert softAssert = new SoftAssert();
+    private static final SoftAssert softAssert = new SoftAssert();
 
     public void mobileSetup(String testName){
         mobileInit(testName);
     }
 
-    public By getBy(WebElement element){
-        System.out.println(element);
-        By by = null;
-        String type = element.toString();
-        type = type.replace("Located by By.chained({AppiumBy.","");
-        type = type.replace("Located by By.chained({By.","");
-        String[] getType = type.split(":");
-        type = getType[0].trim();
-        String xpath = getType[1].replace("})","").trim();
-        System.out.println("id: "+type);
-        System.out.println("xpath: "+xpath);
-        if(type.equals("xpath")){
-            by = By.xpath(xpath);
-        }else if(type.equals("id")){
-            by = By.id(xpath);
-        }else if(type.equals("css")){
-            by = By.cssSelector(xpath);
-        }else if(type.equals("className")){
-            by = By.className(xpath);
-        }else if(type.equals("linkText")){
-            by = By.linkText(xpath);
-        }else if(type.equals("name")){
-            by = By.name(xpath);
-        }else if(type.equals("partialLinkText")){
-            by = By.partialLinkText(xpath);
-        }else if(type.equals("tagName")){
-            by = By.tagName(xpath);
+    public String getPlatform(){
+        if(isAndroid.get()){
+            return "android";
+        }else if(isIOS.get()){
+            return "ios";
         }else{
-            System.err.println("Caught Exception: Check the WebElement to be split properly: "+ element);
+            throw new RuntimeException("Check platform properly. Only allowed \"android\" and \"ios\" if current session is mobile");
         }
-        return by;
     }
 
-    public void assertElementDisplayed(WebElement element) {
-        waitElement(element);
-        Assert.assertTrue(appiumDriver.get().findElement(getBy(element)).isDisplayed());
+    public By fetchElement(String elementName){
+        return By.xpath(getElementValue(elementName, getPlatform()));
+    }
+
+    public List<WebElement> fetchElements(String elementName){
+        return appiumDriver.get().findElements(By.xpath(getElementValue(elementName, getPlatform())));
+    }
+
+    public void assertElementDisplayed(String elementName) {
+        waitElement(fetchElement(elementName));
+        Assert.assertTrue(appiumDriver.get().findElement(fetchElement(elementName)).isDisplayed());
         screenshot();
     }
     
@@ -72,13 +54,15 @@ public class MobileActions extends MobileInstance{
         softAssert.assertTrue(appiumDriver.get().getTitle().equals(title));
     }
 
-    public void click(WebElement element) {
-        waitElement(element);
-        appiumDriver.get().findElement(getBy(element)).click();
+    public void click(String elementName) {
+        waitElement(fetchElement(elementName));
+        appiumDriver.get().findElement(fetchElement(elementName)).click();
     }
 
-    public void sendKeys(WebElement element, String input) {
-        appiumDriver.get().findElement(getBy(element)).sendKeys(input);
+    public void setText(String input, String elementName) {
+        waitElement(fetchElement(elementName));
+        appiumDriver.get().findElement(fetchElement(elementName)).clear();
+        appiumDriver.get().findElement(fetchElement(elementName)).sendKeys(input);
     }
 
     public void close() {
@@ -89,21 +73,21 @@ public class MobileActions extends MobileInstance{
         appiumDriver.get().quit();
     }
 
-    public  List<WebElement> findElements(WebElement element){
-        return appiumDriver.get().findElements(getBy(element));
+    public  List<WebElement> findElements(String elementName){
+        return fetchElements(elementName);
     }
 
-    public String getText(WebElement element){
-        return appiumDriver.get().findElement(getBy(element)).getText();
+    public String getText(String elementName){
+        return appiumDriver.get().findElement(fetchElement(elementName)).getText();
     }
 
-//    public  clear(WebElement element){
-//
-//    }
+    public void clear(String elementName){
+        appiumDriver.get().findElement(fetchElement(elementName)).clear();
+    }
 
-//    public  hideKeyboard(){
-//        MobileInstance.appiumDriver.get();
-//    }
+    public void hideKeyboard(){
+
+    }
 
      void scrollDownToElement(WebElement element){
         // ToDo
@@ -113,10 +97,36 @@ public class MobileActions extends MobileInstance{
         // ToDo
     }
 
-    public void waitElement(WebElement element) {
+    public void waitElement(By by) {
+//        By by = null;
+//        String type = element.toString();
+//        type = type.replace("Located by By.chained({AppiumBy.","");
+//        type = type.replace("Located by By.chained({By.","");
+//        String[] getType = type.split(":");
+//        type = getType[0].trim();
+//        String xpath = getType[1].replace("})","").trim();
+//        if(type.equals("xpath")){
+//            by = By.xpath(xpath);
+//        }else if(type.equals("id")){
+//            by = By.id(xpath);
+//        }else if(type.equals("css")){
+//            by = By.cssSelector(xpath);
+//        }else if(type.equals("className")){
+//            by = By.className(xpath);
+//        }else if(type.equals("linkText")){
+//            by = By.linkText(xpath);
+//        }else if(type.equals("name")){
+//            by = By.name(xpath);
+//        }else if(type.equals("partialLinkText")){
+//            by = By.partialLinkText(xpath);
+//        }else if(type.equals("tagName")){
+//            by = By.tagName(xpath);
+//        }else{
+//            System.err.println("Caught Exception: Check the WebElement to be split properly: "+ element);
+//        }
         WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.parseLong(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
-        wait.until(ExpectedConditions.presenceOfElementLocated(getBy(element)));
-        wait.until((ExpectedConditions.visibilityOf(element)));
+        wait.until(ExpectedConditions.presenceOfElementLocated(by));
+        wait.until((ExpectedConditions.visibilityOf(appiumDriver.get().findElement(by))));
     }
 
     public void screenshot() {
@@ -138,7 +148,10 @@ public class MobileActions extends MobileInstance{
     }
 
     public boolean verifyElementVisible(String s) {
-        System.out.println(elements.get().get(s));
         return true;
+    }
+
+    public void navigateToURL(String URL) {
+        appiumDriver.get().get(globalDeviceParameter.get(0).get(URL));
     }
 }

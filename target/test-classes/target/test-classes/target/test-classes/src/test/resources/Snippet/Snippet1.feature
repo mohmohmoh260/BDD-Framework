@@ -1,11 +1,12 @@
-
 Feature: Snippet Demo Feature
 
-  Scenario: Verify Statistics section in web browser 1
-   Then print string "abc" 123.00 true
+  @test
+  Scenario: Navigate to Practice Automation Website and Login
+    Given I navigate browser to "url1"
+    When I set text "abc" into "Username_Input"
+    And take screenshot
 
-
-  Scenario: Verify Statistics section in web browser
+  Scenario: Verify Snippet Code Is Running
     Then print from data table without header below
       |"123"|"abc"|
       |"456"|"def"|
