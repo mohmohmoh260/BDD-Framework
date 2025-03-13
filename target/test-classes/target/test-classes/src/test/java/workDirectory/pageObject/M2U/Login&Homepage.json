@@ -18,5 +18,10 @@
     "web": "//*[text()='YES']",
     "android": "",
     "ios": ""
+  },
+  "Password_input": {
+    "web": "//*[@id='password']",
+    "android": "",
+    "ios": ""
   }
 }

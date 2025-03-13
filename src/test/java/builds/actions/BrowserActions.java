@@ -6,20 +6,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.*;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import workDirectory.stepDefinitions.Hooks;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BrowserActions extends BrowserInstance{
-
-    SoftAssert softAssert = new SoftAssert();
-    
-    public void browserSetup(String browserType, String URL){
-        browserInit(browserType, URL);
-    }
 
     public String getPlatform(){
         if(isWebDriver.get()){
@@ -29,43 +25,73 @@ public class BrowserActions extends BrowserInstance{
         }
     }
 
-    public By fetchElement(String elementName){
-        return By.xpath(getElementValue(elementName, getPlatform()));
-    }
-
-    public List<WebElement> fetchElements(String elementName){
-        return appiumDriver.get().findElements(By.xpath(getElementValue(elementName, getPlatform())));
-    }
-
-    public boolean verifyElementVisible(String elementName){
+    public boolean waitElementExist(String elementName, Integer timeout) {
         try{
-            softAssert.assertTrue(waitElement(elementName), "Element "+elementName+" with locator: "+getElementValue(elementName, getPlatform()));
-            highlightElement(elementName);
-            unHighlightElement(elementName);
+            if (timeout == null) {
+                timeout = Integer.parseInt(globalDeviceParameter.get(0).get("timeOut"));
+            }
+            WebDriverWait wait = new WebDriverWait(webDriver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
             return true;
         }catch (Exception e){
             return false;
         }
     }
 
-    public boolean verifyElementExist(String elementName){
-        List<WebElement> elements = webDriver.get().findElements(fetchElement(elementName));
-        if(!elements.isEmpty()){
-            softAssert.assertTrue(true, "Element is Exist: "+ fetchElement(elementName));
+    public boolean waitElementVisible(String elementName, Integer timeout){
+        try{
+            if (timeout == null) {
+                timeout = Integer.parseInt(globalDeviceParameter.get(0).get("timeOut"));
+            }
+            WebDriverWait wait = new WebDriverWait(webDriver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
+            wait.until((ExpectedConditions.visibilityOf(webDriver.get().findElement(fetchElement(elementName)))));
             return true;
-        }else{
-            softAssert.fail("Element is not Exist: "+ fetchElement(elementName));
+        }catch (Exception e){
+            throw new RuntimeException(e.getLocalizedMessage());
+        }
+    }
+
+    public void browserSetup(String browserType, String URL){
+        browserInit(browserType, URL);
+    }
+
+    public By fetchElement(String elementName){
+        return By.xpath(getElementValue(elementName, getPlatform()));
+    }
+
+    public List<WebElement> findElements(String elementName, Integer timeout){
+        waitElementExist(elementName, timeout);
+        return appiumDriver.get().findElements(By.xpath(getElementValue(elementName, getPlatform())));
+    }
+
+    public boolean verifyElementVisible(String elementName, Integer timeout){
+        try{
+            Assert.assertTrue(waitElementVisible(elementName, timeout), "Element "+elementName+" with locator: "+getElementValue(elementName, getPlatform()));
+            highlightElement(elementName, timeout);
+            unHighlightElement(elementName, timeout);
+            return true;
+        }catch (Exception e){
+            throw new RuntimeException(e.getLocalizedMessage());
+        }
+    }
+
+    public boolean verifyElementExist(String elementName, Integer timeout){
+        try{
+            Assert.assertTrue(waitElementExist(elementName, timeout), "Element "+elementName+" with locator: "+getElementValue(elementName, getPlatform()));
+            return true;
+        }catch (Exception e){
             return false;
         }
     }
 
-    public void click(String elementName) {
-        waitElement(elementName);
+    public void click(String elementName, Integer timeout) {
+        waitElementVisible(elementName, timeout);
         webDriver.get().findElement(fetchElement(elementName)).click();
     }
 
-    public void setText(String value, String elementName) {
-        waitElement(elementName);
+    public void setText(String value, String elementName, Integer timeout) {
+        waitElementVisible(elementName, timeout);
         webDriver.get().findElement(fetchElement(elementName)).sendKeys(value);
     }
 
@@ -77,41 +103,32 @@ public class BrowserActions extends BrowserInstance{
         webDriver.get().quit();
     }
 
-    public String getText(String elementName){
+    public String getText(String elementName, Integer timeout){
+        waitElementExist(elementName, timeout);
         return webDriver.get().findElement(fetchElement(elementName)).getText();
     }
 
-    public boolean waitElement(String elementName) {
-        try{
-            WebDriverWait wait = new WebDriverWait(webDriver.get(), Duration.ofSeconds(Long.parseLong(globalDeviceParameter.get(0).get("timeOut"))));
-            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
-            scrollToView(elementName);
-            wait.until((ExpectedConditions.visibilityOf(webDriver.get().findElement(fetchElement(elementName)))));
-            return true;
-        }catch (Exception e){
-            softAssert.fail("Element is not visible or exist in DOM \n"+e.getMessage());
-            return false;
-        }
-    }
-
-    public void scrollToView(String elementName) {
+    public void scrollToView(String elementName, Integer timeout) {
+        waitElementExist(elementName, timeout);
         JavascriptExecutor j = (JavascriptExecutor) webDriver.get();
         j.executeScript ("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})", webDriver.get().findElement(fetchElement(elementName)));
     }
 
-    public void highlightElement(String elementName){
+    public void highlightElement(String elementName, Integer timeout){
         try{
+            scrollToView(elementName, timeout);
             ((JavascriptExecutor) webDriver.get()).executeScript("arguments[0].style.border='3px solid lime'", webDriver.get().findElement(fetchElement(elementName)));
-        }catch (Exception e){
-            System.err.println(e.getCause());
+        }catch (Exception ignored){
+
         }
     }
 
-     public void unHighlightElement(String elementName){
+     public void unHighlightElement(String elementName, Integer timeout){
         try{
+            scrollToView(elementName, timeout);
             ((JavascriptExecutor) webDriver.get()).executeScript("arguments[0].style.removeProperty('border')", webDriver.get().findElement(fetchElement(elementName)));
-        }catch (Exception e){
-            System.err.println(e.getCause());
+        }catch (Exception ignored){
+
         }
     }
 
@@ -146,10 +163,6 @@ public class BrowserActions extends BrowserInstance{
         Hooks.getScenario().attach(screenshot, "image/png", "Screenshot");
     }
 
-    public void openURL(String url) {
-        webDriver.get().get(url);
-    }
-
     public void pressEnter() {
         Actions actions = new Actions(webDriver.get());
         actions.sendKeys(Keys.ENTER);
@@ -157,7 +170,7 @@ public class BrowserActions extends BrowserInstance{
     }
 
     public void assertPageTitle(String title) {
-        softAssert.assertTrue(webDriver.get().getTitle().equals(title));
+        Assert.assertEquals(title, webDriver.get().getTitle());
     }
 
     public void navigateToURL(String URL) {

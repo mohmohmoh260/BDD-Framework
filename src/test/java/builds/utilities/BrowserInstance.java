@@ -50,7 +50,7 @@ public class BrowserInstance extends DriverType{
                 webDriver.set(WebDriverManager.chromiumdriver().create());
             }
         }
-        webDriver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(120));
+        webDriver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(Long.parseLong(globalDeviceParameter.get(0).get("implicitwait"))));
         webDriver.get().get(globalDeviceParameter.get(0).get(URL));
         isWebDriver.set(true);
         isAppiumDriver.set(false);

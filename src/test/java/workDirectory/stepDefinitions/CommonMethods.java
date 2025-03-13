@@ -4,6 +4,8 @@ import builds.actions.BrowserActions;
 import builds.actions.MobileActions;
 import builds.utilities.DriverType;
 import io.cucumber.java.Scenario;
+import io.cucumber.java.sl.In;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.util.*;
@@ -13,15 +15,10 @@ public class CommonMethods extends DriverType {
     protected static final ThreadLocal<Scenario> currentScenario = new ThreadLocal<>();
     protected static final ThreadLocal<Boolean> toExecute = ThreadLocal.withInitial(() -> true);
     private static final ThreadLocal<Map<String, String>> variables = ThreadLocal.withInitial(HashMap::new);
-    private static final SoftAssert softAssert = new SoftAssert();
     protected final MobileActions mobileActions = new MobileActions();
     protected final BrowserActions browserActions = new BrowserActions();
 
-    protected void addStatementCounter(String methodName, List<Object> param){
-        toExecuteChecker(methodName , param);
-    }
-
-    protected void toExecuteChecker(String methodName, List<Object> param){
+    protected void toExecuteChecker(String methodName, List<Object> param, Integer timeout){
         System.out.println(methodName);
         switch (methodName){
             case "ifNumberIsBiggerThanNumber":
@@ -39,13 +36,13 @@ public class CommonMethods extends DriverType {
                 }
                 break;
             case "ifElementIsNotVisible":
-                if(!mobileActions.verifyElementVisible((String) param.get(0))){
+                if(!mobileActions.verifyElementVisible((String) param.get(0), timeout)){
                     toExecute.set(true);
                 }else {
                     toExecute.set(false);
                 }
             case "ifElementIsVisible":
-                if(mobileActions.verifyElementVisible((String) param.get(0))){
+                if(mobileActions.verifyElementVisible((String) param.get(0), timeout)){
                     toExecute.set(true);
                 }else {
                     toExecute.set(false);
@@ -69,9 +66,9 @@ public class CommonMethods extends DriverType {
 
     protected void setText(String value, String elementName){
         if(isAppiumDriver.get()){
-            mobileActions.setText(value, elementName);
+            mobileActions.setText(value, elementName, null);
         }else {
-            browserActions.setText(value, elementName);
+            browserActions.setText(value, elementName, null);
         }
     }
 
@@ -93,32 +90,40 @@ public class CommonMethods extends DriverType {
 
     protected void click(String elementName){
         if(isAppiumDriver.get()){
-            mobileActions.click(elementName);
+            mobileActions.click(elementName, null);
         }else {
-            browserActions.click(elementName);
+            browserActions.click(elementName, null);
         }
     }
 
-    protected void verifyElementVisible(String elementName){
+    protected void verifyElementVisible(String elementName, Integer timeout){
         if(isAppiumDriver.get()){
-            mobileActions.verifyElementVisible(elementName);
+            mobileActions.verifyElementVisible(elementName, timeout);
         }else {
-            browserActions.verifyElementVisible(elementName);
+            browserActions.verifyElementVisible(elementName, timeout);
         }
     }
 
-    protected void getTextFromAndSetIntoVariable(String elementName, String variableName){
+    protected void waitElementVisible(String elementName, Integer timeout){
         if(isAppiumDriver.get()){
-            variables.get().put(variableName, mobileActions.getText(elementName));
-            currentScenario.get().log("Text :"+mobileActions.getText(elementName)+" is set into variable "+variableName);
+            mobileActions.waitElementVisible(elementName, timeout);
         }else {
-            variables.get().put(variableName, browserActions.getText(elementName));
-            currentScenario.get().log("Text :"+browserActions.getText(elementName)+" is set into variable "+variableName);
+            browserActions.waitElementVisible(elementName, timeout);
+        }
+    }
+
+    protected void getTextFromAndSetIntoVariable(String elementName, String variableName, Integer timeout){
+        if(isAppiumDriver.get()){
+            variables.get().put(variableName, mobileActions.getText(elementName, timeout));
+            currentScenario.get().log("Text :"+mobileActions.getText(elementName, timeout)+" is set into variable "+variableName);
+        }else {
+            variables.get().put(variableName, browserActions.getText(elementName, timeout));
+            currentScenario.get().log("Text :"+browserActions.getText(elementName, timeout)+" is set into variable "+variableName);
         }
     }
 
     protected void verifyTextIsEqualsToVariable(String expectedText, String variableName){
-        softAssert.assertEquals(expectedText, variables.get().get(variableName), "Expected text "+expectedText+" is not equals to actual text "+variables.get().get(variableName));
+        Assert.assertEquals(expectedText, variables.get().get(variableName), "Expected text "+expectedText+" is not equals to actual text "+variables.get().get(variableName));
     }
 
 }

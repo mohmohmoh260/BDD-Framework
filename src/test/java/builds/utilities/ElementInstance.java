@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ElementInstance {
 
@@ -34,39 +36,56 @@ public class ElementInstance {
 
         if (elementsMap.containsKey(elementName)) {
             HashMap<String, String> platformData = elementsMap.get(elementName);
-            return platformData.getOrDefault(platform, "❌ Platform key not found");
+            return platformData.getOrDefault(platform, "❌ Platform name not found");
         }
-        return "❌ Element key not found";
+        return "❌ Element name not found";
     }
 
     private static void searchJsonFiles(File folder, ObjectMapper objectMapper) {
-        for (File file : folder.listFiles()) {
+        for (File file : Objects.requireNonNull(folder.listFiles())) {
             if (file.isDirectory()) {
-                // If it's a directory, recurse into it
                 searchJsonFiles(file, objectMapper);
             } else if (file.isFile() && file.getName().endsWith(".json")) {
                 try {
-                    // Read JSON file and convert to HashMap<String, HashMap<String, String>>
+                    // Read JSON as a raw string to check for duplicate top-level keys
+                    String fileContent = new String(Files.readAllBytes(file.toPath()));
+
+                    // Extract top-level keys only (not nested ones)
+                    Pattern pattern = Pattern.compile("\"(\\w+)\"\\s*:\\s*\\{");
+                    Matcher matcher = pattern.matcher(fileContent);
+
+                    HashSet<String> localKeys = new HashSet<>();
+                    StringBuilder duplicateKeysInSameFile = new StringBuilder();
+
+                    while (matcher.find()) {
+                        String key = matcher.group(1); // Extract only top-level keys
+                        if (!localKeys.add(key)) {
+                            duplicateKeysInSameFile.append("\nDuplicate name: ").append(key);
+                        }
+                    }
+
+                    // If duplicates are found in the same file, throw an error
+                    if (duplicateKeysInSameFile.length() > 0) {
+                        throw new RuntimeException("❌ Duplicate name found in the same file: " + file.getAbsolutePath() +
+                                duplicateKeysInSameFile);
+                    }
+
+                    // Parse JSON and check for duplicates across multiple files
                     HashMap<String, HashMap<String, String>> data = objectMapper.readValue(
                             file, new TypeReference<HashMap<String, HashMap<String, String>>>() {});
 
-                    // Check for duplicate keys
                     for (String key : data.keySet()) {
                         if (keyToFileMap.containsKey(key)) {
-                            throw new RuntimeException("❌ Duplicate key found: \"" + key +
-                                    "\" in files: \n  - " + keyToFileMap.get(key) +
+                            throw new RuntimeException("❌ Duplicate name found across multiple files: \"" + key +
+                                    "\"\n  - " + keyToFileMap.get(key) +
                                     "\n  - " + file.getAbsolutePath());
                         }
-                        keyToFileMap.put(key, file.getAbsolutePath()); // Store first occurrence
+                        keyToFileMap.put(key, file.getAbsolutePath());
                     }
 
-                    // Store the data in ThreadLocal elements
                     elements.get().putAll(data);
 
-                    // Print the JSON file name and its content
                     System.out.println("✅ File processed: " + file.getAbsolutePath());
-                    System.out.println(data);
-                    System.out.println("----------------------");
 
                 } catch (IOException e) {
                     System.err.println("❌ Error reading file: " + file.getAbsolutePath());

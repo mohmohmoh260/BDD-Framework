@@ -14,7 +14,7 @@ public class GherkinStepRunner {
     }
 
     public boolean executeStep(String gherkinStep, DataTable dataTable) throws Exception {
-        String cleanedStep = gherkinStep.replaceFirst("^(Given|When|Then|And)\\s+", "").trim();
+        String cleanedStep = gherkinStep.replaceFirst("^(Given|When|Then|And|\\$)\\s+", "").trim();
 
         for (Class<?> clazz : stepDefinitionClasses) {
             for (Method method : clazz.getDeclaredMethods()) {
@@ -40,14 +40,9 @@ public class GherkinStepRunner {
                     }
 
                     // Invoke the method
-                    try {
-                        //System.out.println("Executing snippet step: " + gherkinStep);
-                        method.invoke(instance, params);
-                        return true;
-                    } catch (Exception e) {
-                        //throw new RuntimeException("Step execution failed: " + gherkinStep, e);
-                        return false;
-                    }
+                    System.out.println("Executing snippet step: " + gherkinStep);
+                    method.invoke(instance, params);
+                    return true;
                 }
             }
         }
@@ -64,18 +59,14 @@ public class GherkinStepRunner {
 
     private Pattern buildRegexPattern(String stepDefinition) {
         String regex = stepDefinition
-                .replaceAll("\\{string\\}", "\"([^\"]*)\"")   // Matches quoted strings
-                .replaceAll("\\{int\\}", "(-?\\\\d+)")          // Matches integers (positive/negative)
-                .replaceAll("\\{double\\}", "(-?\\\\d+\\\\.\\\\d+)") // Matches doubles// Matches floats
-                .replaceAll("\\{booleanType\\}", "(true|false)")  // Matches booleans
-                + "$"; // Ensure full match
-        return Pattern.compile("^" + regex);
+                .replaceAll("\\{boolean\\}", "(true|false)") // Matches booleans
+                .replaceAll("\\(\\\\d\\+\\)", "(\\\\d+)");    // Matches (\\d+)
+        return Pattern.compile("^" + regex + "$");
     }
 
     private Object convertParameter(Class<?> type, String value) {
         if (type.equals(int.class) || type.equals(Integer.class)) return Integer.parseInt(value);
         if (type.equals(double.class) || type.equals(Double.class)) return Double.parseDouble(value);
-        if (type.equals(float.class) || type.equals(Float.class)) return Float.parseFloat(value);
         if (type.equals(boolean.class) || type.equals(Boolean.class)) return Boolean.parseBoolean(value);
         return value;
     }

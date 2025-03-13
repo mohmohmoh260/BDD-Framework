@@ -3,10 +3,13 @@ Feature: Snippet Demo Feature
   Scenario Outline: User login to M2U
     Then print string "<username>" 123.00 true
     Then print string "<password>" 345.00 false
+    Then print string "<test data1>" 12.00 false
     Examples:
-    |username|password|
-    |autouat1|Maybank@1|
-    |sunrise |bc       |
+    |username|password|test data1|
+    |hakim   | abc    | rm200    |
+    |moh     | 123    | rm100    |
+    |zxc     | vbn    | ghj    |
+
 
   Scenario: Verify Snippet Code Is Running
     Then print from data table without header below

@@ -18,5 +18,19 @@
     "web": "//*[text()='YES']",
     "android": "",
     "ios": ""
-  }
+  },
+  "Password_input": {
+    "web": "//*[@id='password']",
+    "android": "",
+    "ios": ""
+  },
+  "Password_input": {
+    "web": "//*[@id='password']",
+    "android": "",
+    "ios": ""
+  },"Yes_btn": {
+  "web": "//*[text()='YES']",
+  "android": "",
+  "ios": ""
+}
 }

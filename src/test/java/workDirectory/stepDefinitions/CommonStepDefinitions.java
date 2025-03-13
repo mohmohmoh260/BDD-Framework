@@ -2,9 +2,7 @@ package workDirectory.stepDefinitions;
 
 import builds.snippet.GherkinDataTableExtractor;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.Before;
 import io.cucumber.java.ParameterType;
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -18,19 +16,14 @@ public class CommonStepDefinitions extends CommonMethods{
 
     GherkinDataTableExtractor gherkinDataTableExtractor = new GherkinDataTableExtractor();
 
-    @Before
-    public void beforeScenario(Scenario scenario) {
-        currentScenario.set(scenario); // Capture the scenario instance before each scenario runs
-    }
-
-    @When("run snippet scenario {string}")
+    @When("^run snippet scenario \"([^\"]+)\"$")
     public void runSnippetScenario(String scenarioName) throws Exception {
-        List<Path> featureFiles = GherkinDataTableExtractor.getFeatureFiles();
+        List<Path> featureFiles = gherkinDataTableExtractor.getFeatureFiles();
         Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
 
         for (Path featureFile : featureFiles) {
             // Fetch examples for the Scenario Outline
-            List<Map<String, String>> exampleDataList = GherkinDataTableExtractor.getExamplesFromScenarioOutline(featureFile, scenarioName);
+            List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.getExamplesFromScenarioOutline(featureFile, scenarioName);
 
             if (!exampleDataList.isEmpty()) {
                 for (Map<String, String> exampleData : exampleDataList) {
@@ -39,7 +32,7 @@ public class CommonStepDefinitions extends CommonMethods{
                         continue;
                     }
 
-                    List<List<String>> scenarioStepsForExample = Collections.singletonList(GherkinDataTableExtractor.extractStepsFromFeature(featureFile, scenarioName, exampleData));
+                    List<List<String>> scenarioStepsForExample = Collections.singletonList(gherkinDataTableExtractor.extractStepsFromFeature(featureFile, scenarioName, exampleData));
 
                     String formattedExampleData = exampleData.entrySet().stream()
                             .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
@@ -55,7 +48,7 @@ public class CommonStepDefinitions extends CommonMethods{
             }
 
             // ✅ If no examples exist, run the scenario normally
-            List<List<String>> scenarioSteps = GherkinDataTableExtractor.getStepsFromScenario(scenarioName);
+            List<List<String>> scenarioSteps = gherkinDataTableExtractor.getStepsFromScenario(scenarioName);
             if (!scenarioSteps.isEmpty()) {
                 currentScenario.get().log("🔹 Running Scenario: **" + scenarioName + "** (No Examples)");
 
@@ -76,19 +69,9 @@ public class CommonStepDefinitions extends CommonMethods{
         return Boolean.parseBoolean(value);
     }
 
-    @And ("if {int} is bigger than {int}")
-    public void ifNumberIsBiggerThanNumber(int firstValue, int secondValue){
-       addStatementCounter(new Object(){}.getClass().getEnclosingMethod().getName(), Arrays.asList(firstValue,secondValue));
-    }
-
-    @And ("if {int} is smaller than {int}")
-    public void ifNumberIsSmallerThanNumber(int firstValue, int secondValue){
-        addStatementCounter(new Object(){}.getClass().getEnclosingMethod().getName(), Arrays.asList(firstValue,secondValue));
-    }
-
-    @And ("if {string} is not visible")
-    public void ifElementIsNotVisible(String elementName){
-        addStatementCounter(new Object(){}.getClass().getEnclosingMethod().getName(), Collections.singletonList(elementName));
+    @And ("^if \"([^\"]+)\" is not visible(?: within (\\d+) seconds)?$")
+    public void ifElementIsNotVisible(String elementName, Integer timeout){
+        toExecuteChecker(new Object(){}.getClass().getEnclosingMethod().getName(), Collections.singletonList(elementName), timeout);
     }
 
     @And("end statement")
@@ -96,84 +79,73 @@ public class CommonStepDefinitions extends CommonMethods{
         endIf();
     }
 
-    @Then("print from data table without header below")
-    public void printFromDataTableWithoutHeaderBelow(DataTable dataTable) {
-        System.out.println(dataTable.cells());
-    }
-
-    @Then("print from data table with header below")
-    public void printFromDataTableWithHeaderBelow(DataTable dataTable) {
-        System.out.println(dataTable.cells());
-    }
-
-    @Then("print string {string} {double} {booleanType}")
-    public void printString(String arg0, Double arg1, Boolean arg2) {
+    @And("take screenshot")
+    public void takeAScreenshot() {
         if(toExecute.get()){
-            System.out.println(arg0);
+            takeScreenshot();
         }
-
     }
 
-    @Given("I launch the Mobile Simulator {string}")
+    @Given("^launch the Mobile Simulator \"([^\"]+)\"$")
     public void iLaunchTheMobileSimulator(String variableURL) {
         if(toExecute.get()){
             mobileSetup(variableURL);
         }
     }
 
-    @Given("I navigate mobile browser to {string}")
+    @Given("^launch \"([^\"]+)\" browser and navigate to \"([^\"]+)\"$")
+    public void iLaunchTheBrowserAndNavigateTo(String browserType, String URL) {
+        if(toExecute.get()){
+            browserSetup(browserType, URL);
+        }
+    }
+
+    @And("^navigate mobile browser to \"([^\"]+)\"$")
     public void iNavigateMobileBrowserTo(String URL) {
         if(toExecute.get()) {
             navigateToURL(URL);
         }
     }
 
-    @When("I set text {string} into {string}")
+    @When("^click \"([^\"]+)\"$")
+    public void iClick(String elementName) {
+        if(toExecute.get()){
+            click(elementName);
+        }
+    }
+
+    @When("^set text \"([^\"]+)\" into \"([^\"]+)\"$")
     public void iSetTextInto(String value, String elementName) {
         if(toExecute.get()){
             setText(value, elementName);
         }
     }
 
-    @And("take screenshot")
-    public void takeAScreenshot() {
-        if(toExecute.get()){
-           takeScreenshot();
-        }
-    }
-
-    @Given("I launch {string} browser and navigate to {string}")
-    public void iLaunchTheBrowserAndNavigateTo(String browserType, String URL) {
-        if(toExecute.get()){
-           browserSetup(browserType, URL);
-        }
-    }
-
-    @When("I click {string}")
-    public void iClick(String elementName) {
-        if(toExecute.get()){
-           click(elementName);
-        }
-    }
-
-    @Then("I verify element {string} is visible")
-    public void iVerifyElementIsVisible(String elementName) {
-        if(toExecute.get()) {
-            verifyElementVisible(elementName);
-        }
-    }
-
-    @Then("I get text from {string} and set into variable {string}")
+    @Then("^get text from \"([^\"]+)\" and set into variable \"([^\"]+)\"$")
     public void iGetTextFromAndSetIntoVariable(String elementName, String variableName) {
         if(toExecute.get()) {
-            getTextFromAndSetIntoVariable(elementName, variableName);
+            getTextFromAndSetIntoVariable(elementName, variableName, Integer.parseInt(globalDeviceParameter.get(0).get("timeOut")));
         }
     }
 
-    @Then("I verify text {string} is equals to variable {string}")
+    @Then("^verify text \"([^\"]+)\" is equals to variable \"([^\"]+)\"$")
     public void iVerifyTextIsEqualsToVariable(String expectedText, String variableName) {
         if(toExecute.get()) {
             verifyTextIsEqualsToVariable(expectedText, variableName);
+        }
+    }
+
+    @Then("^verify element \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
+    public void iVerifyElementIsVisible(String elementName, Integer timeout) {
+        if(toExecute.get()) {
+            verifyElementVisible(elementName, timeout);
+        }
+    }
+
+    @And("^wait for element \"([^\"]+)\" to be visible(?: within (\\d+) seconds)?$")
+    public void waitForElementToBeVisible(String elementName, Integer timeout) {
+        if(toExecute.get()) {
+            waitElementVisible(elementName, timeout);
         }
     }
 }

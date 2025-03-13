@@ -12,7 +12,7 @@ public class GherkinDataTableExtractor {
 
     private final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
 
-    public static List<Map<String, String>> getExamplesFromScenarioOutline(Path featureFile, String scenarioName) throws IOException {
+    public List<Map<String, String>> getExamplesFromScenarioOutline(Path featureFile, String scenarioName) throws IOException {
         List<String> lines = Files.readAllLines(featureFile);
         boolean foundScenario = false;
         boolean foundExamples = false;
@@ -56,7 +56,7 @@ public class GherkinDataTableExtractor {
         return exampleData;
     }
 
-    public static List<List<String>> getStepsFromScenario(String scenarioName) throws IOException {
+    public List<List<String>> getStepsFromScenario(String scenarioName) throws IOException {
         List<Path> featureFiles = getFeatureFiles();
 
         for (Path featureFile : featureFiles) {
@@ -66,7 +66,7 @@ public class GherkinDataTableExtractor {
         return Collections.emptyList();
     }
 
-    public static List<Path> getFeatureFiles() throws IOException {
+    public List<Path> getFeatureFiles() throws IOException {
         try (var paths = Files.walk(Paths.get("src/test/resources/Snippet"))) {
             return paths.filter(path -> {
                 boolean isFile = Files.isRegularFile(path);
@@ -75,7 +75,7 @@ public class GherkinDataTableExtractor {
         }
     }
 
-    public static List<String> extractStepsFromFeature(Path featureFile, String scenarioName, Map<String, String> exampleData) throws IOException {
+    public List<String> extractStepsFromFeature(Path featureFile, String scenarioName, Map<String, String> exampleData) throws IOException {
         List<String> lines = Files.readAllLines(featureFile);
         boolean isScenarioOutline = false;
         boolean foundScenario = false;
@@ -131,21 +131,21 @@ public class GherkinDataTableExtractor {
         for (Map<String, String> row : examplesList) {
             if (row.equals(exampleData)) {
                 return stepTemplate.stream()
-                        .map(step -> replacePlaceholders(step, row))
+                        .map(step -> this.replacePlaceholders(step, row))
                         .toList();
             }
         }
         throw new IllegalArgumentException("No matching example row found for data: " + exampleData);
     }
 
-    private static List<String> extractTableRow(String line) {
+    private List<String> extractTableRow(String line) {
         return Arrays.stream(line.split("\\|"))
                 .map(String::trim)
                 .filter(cell -> !cell.isEmpty()) // Removes any accidental empty entries
                 .toList();
     }
 
-    public static String replacePlaceholders(String step, Map<String, String> exampleValues) {
+    private String replacePlaceholders(String step, Map<String, String> exampleValues) {
         for (Map.Entry<String, String> entry : exampleValues.entrySet()) {
             step = step.replace(entry.getKey(), entry.getValue());
         }

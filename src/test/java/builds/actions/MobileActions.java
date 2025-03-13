@@ -39,12 +39,13 @@ public class MobileActions extends MobileInstance{
         return By.xpath(getElementValue(elementName, getPlatform()));
     }
 
-    public List<WebElement> fetchElements(String elementName){
+    public List<WebElement> findElements(String elementName, Integer timeout){
+        waitElementExist(elementName, timeout);
         return appiumDriver.get().findElements(By.xpath(getElementValue(elementName, getPlatform())));
     }
 
-    public void assertElementDisplayed(String elementName) {
-        waitElement(elementName);
+    public void assertElementDisplayed(String elementName, Integer timeout) {
+        waitElementVisible(elementName, timeout);
         softAssert.assertTrue(appiumDriver.get().findElement(fetchElement(elementName)).isDisplayed());
         screenshot();
     }
@@ -53,13 +54,13 @@ public class MobileActions extends MobileInstance{
         softAssert.assertEquals(title, appiumDriver.get().getTitle());
     }
 
-    public void click(String elementName) {
-        waitElement(elementName);
+    public void click(String elementName, Integer timeout) {
+        waitElementVisible(elementName, timeout);
         appiumDriver.get().findElement(fetchElement(elementName)).click();
     }
 
-    public void setText(String input, String elementName) {
-        waitElement(elementName);
+    public void setText(String input, String elementName, Integer timeout) {
+        waitElementVisible(elementName, timeout);
         appiumDriver.get().findElement(fetchElement(elementName)).clear();
         appiumDriver.get().findElement(fetchElement(elementName)).sendKeys(input);
     }
@@ -72,12 +73,8 @@ public class MobileActions extends MobileInstance{
         appiumDriver.get().quit();
     }
 
-    public  List<WebElement> findElements(String elementName){
-        return fetchElements(elementName);
-    }
-
-    public String getText(String elementName){
-        waitElement(elementName);
+    public String getText(String elementName, Integer timeout){
+        waitElementVisible(elementName, timeout);
         return appiumDriver.get().findElement(fetchElement(elementName)).getText();
     }
 
@@ -97,35 +94,25 @@ public class MobileActions extends MobileInstance{
         // ToDo
     }
 
-    public boolean waitElement(String elementName) {
-//        By by = null;
-//        String type = element.toString();
-//        type = type.replace("Located by By.chained({AppiumBy.","");
-//        type = type.replace("Located by By.chained({By.","");
-//        String[] getType = type.split(":");
-//        type = getType[0].trim();
-//        String xpath = getType[1].replace("})","").trim();
-//        if(type.equals("xpath")){
-//            by = By.xpath(xpath);
-//        }else if(type.equals("id")){
-//            by = By.id(xpath);
-//        }else if(type.equals("css")){
-//            by = By.cssSelector(xpath);
-//        }else if(type.equals("className")){
-//            by = By.className(xpath);
-//        }else if(type.equals("linkText")){
-//            by = By.linkText(xpath);
-//        }else if(type.equals("name")){
-//            by = By.name(xpath);
-//        }else if(type.equals("partialLinkText")){
-//            by = By.partialLinkText(xpath);
-//        }else if(type.equals("tagName")){
-//            by = By.tagName(xpath);
-//        }else{
-//            System.err.println("Caught Exception: Check the WebElement to be split properly: "+ element);
-//        }
+    public boolean waitElementExist(String elementName, Integer timeout) {
         try{
-            WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.parseLong(globalDeviceParameter.get(0).get("timeOut"))));
+            if (timeout == null) {
+                timeout = Integer.parseInt(globalDeviceParameter.get(0).get("timeOut"));
+            }
+            WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean waitElementVisible(String elementName, Integer timeout){
+        try{
+            if (timeout == null) {
+                timeout = Integer.parseInt(globalDeviceParameter.get(0).get("timeOut"));
+            }
+            WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
             wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
             wait.until((ExpectedConditions.visibilityOf(appiumDriver.get().findElement(fetchElement(elementName)))));
             return true;
@@ -152,9 +139,9 @@ public class MobileActions extends MobileInstance{
         }
     }
 
-    public boolean verifyElementVisible(String elementName) {
+    public boolean verifyElementVisible(String elementName, Integer timeout) {
         try{
-            softAssert.assertTrue(waitElement(elementName), "Element "+elementName+" with locator: "+getElementValue(elementName, getPlatform()));
+            softAssert.assertTrue(waitElementVisible(elementName, timeout), "Element "+elementName+" with locator: "+getElementValue(elementName, getPlatform()));
             return true;
         }catch (Exception e){
             return false;

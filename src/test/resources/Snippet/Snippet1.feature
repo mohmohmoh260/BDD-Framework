@@ -1,15 +1,18 @@
 Feature: Snippet Demo Feature
 
   Scenario Outline: User login to M2U
-    Then print string "<username>" 123.00 true
-    Then print string "<password>" 345.00 false
-    Then print string "<test data1>" 12.00 false
+    Then set text "<username>" into "Username_Input"
+    And click "Button_Login"
+    And wait for element "SecurityPhrase" to be visible within 30 seconds
+    And get text from "SecurityPhrase" and set into variable "security"
+    Then verify text "<securityPhrase>" is equals to variable "security"
+    And take screenshot
+    When click "Yes_btn"
+    And set text "<password>" into "Password_input"
+    And click "Button_Login"
     Examples:
-    |username|password|test data1|
-    |hakim   | abc    | rm200    |
-    |moh     | 123    | rm100    |
-    |zxc     | vbn    | ghj    |
-
+    |username|password|securityPhrase|
+    |autouat1   | Maybank@1    | Automation Only ?       |
 
   Scenario: Verify Snippet Code Is Running
     Then print from data table without header below
