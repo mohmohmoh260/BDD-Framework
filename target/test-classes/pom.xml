@@ -192,5 +192,11 @@
             <artifactId>jakarta.mail</artifactId>
             <version>LATEST</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,6 +1,0 @@
-{  "Password_input": {
-  "web": "//*[@id='password']",
-  "android": "",
-  "ios": ""
-}
-}

@@ -1,19 +1,17 @@
 package builds.actions;
 
-import builds.utilities.BrowserInstance;
+import builds.driver.BrowserInstance;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.*;
 import org.testng.Assert;
-import org.testng.asserts.SoftAssert;
 import workDirectory.stepDefinitions.Hooks;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class BrowserActions extends BrowserInstance{
 
@@ -53,7 +51,7 @@ public class BrowserActions extends BrowserInstance{
     }
 
     public void browserSetup(String browserType, String URL){
-        browserInit(browserType, URL);
+        setupBrowserDriver(browserType, URL);
     }
 
     public By fetchElement(String elementName){

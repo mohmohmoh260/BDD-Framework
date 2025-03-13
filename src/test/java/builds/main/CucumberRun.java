@@ -1,9 +1,9 @@
 package builds.main;
 
 import builds.extent.ExtentManager;
-import builds.utilities.BrowserInstance;
-import builds.utilities.ElementInstance;
-import builds.utilities.MobileInstance;
+import builds.driver.BrowserInstance;
+import builds.elements.ElementInstance;
+import builds.driver.MobileInstance;
 import com.aventstack.extentreports.ExtentReports;
 import io.cucumber.testng.*;
 import org.testng.annotations.AfterSuite;

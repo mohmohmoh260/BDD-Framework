@@ -1,5 +1,0 @@
-builds/actions/MobileActions.class
-builds/actions/BrowserActions.class
-workDirectory/pages/google/GooglePage.class
-builds/main/CucumberRun$TestRunner.class
-builds/main/CucumberRun.class

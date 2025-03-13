@@ -1,6 +1,6 @@
 package builds.actions;
 
-import builds.utilities.MobileInstance;
+import builds.driver.MobileInstance;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
@@ -22,7 +22,7 @@ public class MobileActions extends MobileInstance{
     SoftAssert softAssert = new SoftAssert();
     
     public void mobileSetup(String testName){
-        mobileInit(testName);
+        setupMobileDriver(testName);
     }
 
     public String getPlatform(){

@@ -23,10 +23,5 @@
     "web": "//*[@id='password']",
     "android": "",
     "ios": ""
-  },
-  "Password_input": {
-    "web": "//*[@id='password']",
-    "android": "",
-    "ios": ""
   }
 }

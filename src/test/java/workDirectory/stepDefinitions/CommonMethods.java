@@ -2,11 +2,9 @@ package workDirectory.stepDefinitions;
 
 import builds.actions.BrowserActions;
 import builds.actions.MobileActions;
-import builds.utilities.DriverType;
+import builds.driver.DriverType;
 import io.cucumber.java.Scenario;
-import io.cucumber.java.sl.In;
 import org.testng.Assert;
-import org.testng.asserts.SoftAssert;
 
 import java.util.*;
 

@@ -10,21 +10,11 @@ Feature: Snippet Demo Feature
     When click "Yes_btn"
     And set text "<password>" into "Password_input"
     And click "Button_Login"
+    And take screenshot
     Examples:
     |username|password|securityPhrase|
     |autouat1   | Maybank@1    | Automation Only ?       |
 
-  Scenario: Verify Snippet Code Is Running
-    Then print from data table without header below
-      |"123"|"abc"|
-      |"456"|"def"|
-    Then print from data table without header below
-      |"111"|"zzz"|
-      |"444"|"fff"|
-    Then print from data table with header below
-      |"name"|"age"|
-      | "Ali"|12   |
-      | "Abu"|14   |
 
 
 

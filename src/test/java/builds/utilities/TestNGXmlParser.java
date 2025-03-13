@@ -41,7 +41,7 @@ public class TestNGXmlParser {
         return globalParametersList;
     }
 
-    protected List<Map<String, String>> filterXMLByTestName(String testName){
+    public List<Map<String, String>> filterXMLByTestName(String testName){
         List<Map<String, String>> allTests = getXMLContent();
         // Example usage: filter by test name
         List<Map<String, String>> filteredTests = filterByTestName(allTests, testName);

@@ -1,7 +1,5 @@
 package workDirectory.stepDefinitions;
 
-import builds.utilities.BrowserInstance;
-import builds.utilities.MobileInstance;
 import builds.utilities.StepListener;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.BeforeStep;
