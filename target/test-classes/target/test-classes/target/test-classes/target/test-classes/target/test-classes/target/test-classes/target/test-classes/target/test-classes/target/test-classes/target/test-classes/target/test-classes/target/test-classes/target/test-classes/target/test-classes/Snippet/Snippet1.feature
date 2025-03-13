@@ -1,9 +1,13 @@
 Feature: Snippet Demo Feature
 
-  @test
-  Scenario: Navigate to Practice Automation Website and Login
-    Given I navigate mobile browser to "url1"
-    When I set text "abc" into "Username_Input"
+  Scenario Outline: User login to M2U
+    Then print string "<username>" 123.00 true
+    Then print string "<password>" 345.00 false
+    Examples:
+    |username|password|
+    |hakim   | abc    |
+    |moh     | 123    |
+
 
   Scenario: Verify Snippet Code Is Running
     Then print from data table without header below

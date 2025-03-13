@@ -4,11 +4,13 @@ package builds.utilities;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
 import java.util.logging.Logger;
 
 public class BrowserInstance extends DriverType{
 
-    protected void browserInit(String browserType){
+    protected void browserInit(String browserType, String URL){
         // Global Setup
         if(globalDeviceParameter.get(0).get("globalBrowserTypeState").equalsIgnoreCase("false")){
             if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("chrome")){
@@ -48,6 +50,8 @@ public class BrowserInstance extends DriverType{
                 webDriver.set(WebDriverManager.chromiumdriver().create());
             }
         }
+        webDriver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(120));
+        webDriver.get().get(globalDeviceParameter.get(0).get(URL));
         isWebDriver.set(true);
         isAppiumDriver.set(false);
         isAndroid.set(false);

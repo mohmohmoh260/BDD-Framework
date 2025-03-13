@@ -22,7 +22,6 @@ public class MobileInstance extends DriverType{
 
         String platformName = deviceParameters.get(0).get("platformName");
         String udid = deviceParameters.get(0).get("udid");
-        String automationName = deviceParameters.get(0).get("automationName");
         String deviceName = deviceParameters.get(0).get("deviceName");
         String platformVersion = deviceParameters.get(0).get("platformVersion");
         String bundleID = deviceParameters.get(0).get("bundleID");
@@ -30,23 +29,18 @@ public class MobileInstance extends DriverType{
         String appActivity = deviceParameters.get(0).get("appActivity");
         String fullReset = deviceParameters.get(0).get("fullReset");
         String noReset = deviceParameters.get(0).get("noReset");
-        String useNewWDA = deviceParameters.get(0).get("useNewWDA");
-        String autoGrantPermissions = globalDeviceParameter.get(0).get("autoGrantPermissions");
-        String autoAcceptAlerts = globalDeviceParameter.get(0).get("autoAcceptAlerts");
-        String autoDismissAlerts = globalDeviceParameter.get(0).get("autoDismissAlerts");
-        String appiumServerIP = globalDeviceParameter.get(0).get("appiumServerIP");
 
         int min = 5000;  // Minimum port number
         int max = 65535; // Maximum port number
         String port = String.valueOf((int) (Math.random() * (max - min + 1)) + min);
-        startAppiumService(appiumServerIP, port);
+        startAppiumService(port);
 
         if (platformName.equalsIgnoreCase("android")) {
             UiAutomator2Options uiAutomator2Options = new UiAutomator2Options();
             uiAutomator2Options
                     .setUdid(udid)
                     .setPlatformName(platformName)
-                    .setAutomationName(automationName)
+                    .setAutomationName("UiAutomator2")
                     .setDeviceName(deviceName)
                     .setPlatformVersion(platformVersion)
                     .setAppPackage(appPackage)
@@ -54,10 +48,10 @@ public class MobileInstance extends DriverType{
                     .setFullReset(Boolean.parseBoolean(fullReset))
                     .setNoReset(Boolean.parseBoolean(noReset))
                     .setNewCommandTimeout(Duration.ofSeconds(600))
-                    .setAutoGrantPermissions(Boolean.parseBoolean(autoGrantPermissions));
+                    .setAutoGrantPermissions(true);
 
-            uiAutomator2Options.setCapability("autoAcceptAlerts", Boolean.parseBoolean(autoAcceptAlerts));
-            uiAutomator2Options.setCapability("autoDismissAlerts", Boolean.parseBoolean(autoDismissAlerts));
+            uiAutomator2Options.setCapability("autoAcceptAlerts", true);
+            uiAutomator2Options.setCapability("autoDismissAlerts", true);
 
             String apkPath = deviceParameters.get(0).get("apkPath");
             if(!apkPath.isEmpty()){
@@ -70,7 +64,7 @@ public class MobileInstance extends DriverType{
             }
 
             try {
-                appiumDriver.set(new AndroidDriver(new URL("http://"+appiumServerIP + ":" + port), uiAutomator2Options));
+                appiumDriver.set(new AndroidDriver(new URL("http://127.0.0.1:" + port), uiAutomator2Options));
                 isWebDriver.set(false);
                 isAppiumDriver.set(true);
                 isAndroid.set(true);
@@ -85,17 +79,17 @@ public class MobileInstance extends DriverType{
             xcuiTestOptions
                     .setUdid(udid)
                     .setPlatformName(platformName)
-                    .setAutomationName(automationName)
+                    .setAutomationName("XCUITest")
                     .setDeviceName(deviceName)
                     .setPlatformVersion(platformVersion)
                     .setBundleId(bundleID)
                     .setFullReset(Boolean.parseBoolean(fullReset))
                     .setNoReset(Boolean.parseBoolean(noReset))
-                    .setAutoDismissAlerts(Boolean.parseBoolean(autoDismissAlerts))
-                    .setAutoAcceptAlerts(Boolean.parseBoolean(autoAcceptAlerts))
-                    .setUseNewWDA(Boolean.parseBoolean(useNewWDA));
+                    .setAutoDismissAlerts(true)
+                    .setAutoAcceptAlerts(true)
+                    .setUseNewWDA(true);
 
-            xcuiTestOptions.setCapability("autoGrantPermissions", Boolean.parseBoolean(autoGrantPermissions));
+            xcuiTestOptions.setCapability("autoGrantPermissions", true);
 
             String apkPath = deviceParameters.get(0).get("apkPath");
             if(!apkPath.isEmpty()){
@@ -110,7 +104,7 @@ public class MobileInstance extends DriverType{
             xcuiTestOptions.setCapability("clearKeychains", true);
 
             try {
-                appiumDriver.set(new IOSDriver(new URL("http://"+appiumServerIP + ":" + port), xcuiTestOptions));
+                appiumDriver.set(new IOSDriver(new URL("http://127.0.0.1:" + port), xcuiTestOptions));
                 isWebDriver.set(false);
                 isAppiumDriver.set(true);
                 isAndroid.set(false);
@@ -122,11 +116,13 @@ public class MobileInstance extends DriverType{
         } else {
             System.err.println("Check the platformName value in testng.xml. The value should be either \"android\" or \"iOS\"");
         }
+
+        appiumDriver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(120));
     }
 
-    private void startAppiumService(String appiumIP, String port){
+    private void startAppiumService(String port){
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder();
-        appiumServiceBuilder.withIPAddress(appiumIP);
+        appiumServiceBuilder.withIPAddress("127.0.0.1");
         appiumServiceBuilder.usingPort(Integer.parseInt(port));
         appiumDriverLocalService.set(AppiumDriverLocalService.buildService(appiumServiceBuilder));
         appiumDriverLocalService.get().start();

@@ -1,11 +1,14 @@
-
 Feature: Snippet Demo Feature
 
-  Scenario: Verify Statistics section in web browser 1
-   Then print string "abc" 123
+  Scenario Outline: User login to M2U
+    Then print string "<username>" 123.00 true
+    Then print string "<password>" 345.00 false
+    Examples:
+    |username|password|
+    |autouat1|Maybank@1|
+    |sunrise |bc       |
 
-
-  Scenario: Verify Statistics section in web browser
+  Scenario: Verify Snippet Code Is Running
     Then print from data table without header below
       |"123"|"abc"|
       |"456"|"def"|

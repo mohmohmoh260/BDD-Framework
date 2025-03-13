@@ -10,7 +10,6 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -20,8 +19,8 @@ import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public class MobileActions extends MobileInstance{
 
-    private static final SoftAssert softAssert = new SoftAssert();
-
+    SoftAssert softAssert = new SoftAssert();
+    
     public void mobileSetup(String testName){
         mobileInit(testName);
     }
@@ -45,22 +44,22 @@ public class MobileActions extends MobileInstance{
     }
 
     public void assertElementDisplayed(String elementName) {
-        waitElement(fetchElement(elementName));
-        Assert.assertTrue(appiumDriver.get().findElement(fetchElement(elementName)).isDisplayed());
+        waitElement(elementName);
+        softAssert.assertTrue(appiumDriver.get().findElement(fetchElement(elementName)).isDisplayed());
         screenshot();
     }
     
     public void assertPageTitle(String title) {
-        softAssert.assertTrue(appiumDriver.get().getTitle().equals(title));
+        softAssert.assertEquals(title, appiumDriver.get().getTitle());
     }
 
     public void click(String elementName) {
-        waitElement(fetchElement(elementName));
+        waitElement(elementName);
         appiumDriver.get().findElement(fetchElement(elementName)).click();
     }
 
     public void setText(String input, String elementName) {
-        waitElement(fetchElement(elementName));
+        waitElement(elementName);
         appiumDriver.get().findElement(fetchElement(elementName)).clear();
         appiumDriver.get().findElement(fetchElement(elementName)).sendKeys(input);
     }
@@ -78,6 +77,7 @@ public class MobileActions extends MobileInstance{
     }
 
     public String getText(String elementName){
+        waitElement(elementName);
         return appiumDriver.get().findElement(fetchElement(elementName)).getText();
     }
 
@@ -97,7 +97,7 @@ public class MobileActions extends MobileInstance{
         // ToDo
     }
 
-    public void waitElement(By by) {
+    public boolean waitElement(String elementName) {
 //        By by = null;
 //        String type = element.toString();
 //        type = type.replace("Located by By.chained({AppiumBy.","");
@@ -124,9 +124,14 @@ public class MobileActions extends MobileInstance{
 //        }else{
 //            System.err.println("Caught Exception: Check the WebElement to be split properly: "+ element);
 //        }
-        WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.parseLong(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
-        wait.until(ExpectedConditions.presenceOfElementLocated(by));
-        wait.until((ExpectedConditions.visibilityOf(appiumDriver.get().findElement(by))));
+        try{
+            WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.parseLong(globalDeviceParameter.get(0).get("timeOut"))));
+            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
+            wait.until((ExpectedConditions.visibilityOf(appiumDriver.get().findElement(fetchElement(elementName)))));
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public void screenshot() {
@@ -147,8 +152,13 @@ public class MobileActions extends MobileInstance{
         }
     }
 
-    public boolean verifyElementVisible(String s) {
-        return true;
+    public boolean verifyElementVisible(String elementName) {
+        try{
+            softAssert.assertTrue(waitElement(elementName), "Element "+elementName+" with locator: "+getElementValue(elementName, getPlatform()));
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public void navigateToURL(String URL) {

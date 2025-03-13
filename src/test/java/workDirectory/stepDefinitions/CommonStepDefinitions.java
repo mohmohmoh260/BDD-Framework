@@ -1,46 +1,73 @@
 package workDirectory.stepDefinitions;
 
-import builds.snippetClasses.GherkinDataTableExtractor;
-import builds.snippetClasses.GherkinStepRunner;
+import builds.snippet.GherkinDataTableExtractor;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.Before;
 import io.cucumber.java.ParameterType;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CommonStepDefinitions extends CommonMethods{
 
-    private final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
-    private static final ThreadLocal<Set<String>> executingScenarios = ThreadLocal.withInitial(HashSet::new);
+    GherkinDataTableExtractor gherkinDataTableExtractor = new GherkinDataTableExtractor();
 
-    // Method to handle snippet
+    @Before
+    public void beforeScenario(Scenario scenario) {
+        currentScenario.set(scenario); // Capture the scenario instance before each scenario runs
+    }
+
     @When("run snippet scenario {string}")
     public void runSnippetScenario(String scenarioName) throws Exception {
-        Set<String> runningScenarios = executingScenarios.get();
+        List<Path> featureFiles = GherkinDataTableExtractor.getFeatureFiles();
+        Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
 
-        // Prevent infinite recursion
-        if (runningScenarios.contains(scenarioName)) {
-            throw new IllegalStateException("Detected recursive scenario execution: " + scenarioName);
+        for (Path featureFile : featureFiles) {
+            // Fetch examples for the Scenario Outline
+            List<Map<String, String>> exampleDataList = GherkinDataTableExtractor.getExamplesFromScenarioOutline(featureFile, scenarioName);
+
+            if (!exampleDataList.isEmpty()) {
+                for (Map<String, String> exampleData : exampleDataList) {
+                    // ✅ Prevent duplicate execution of the same example
+                    if (executedExamples.contains(exampleData)) {
+                        continue;
+                    }
+
+                    List<List<String>> scenarioStepsForExample = Collections.singletonList(GherkinDataTableExtractor.extractStepsFromFeature(featureFile, scenarioName, exampleData));
+
+                    String formattedExampleData = exampleData.entrySet().stream()
+                            .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
+                            .collect(Collectors.joining(", "));
+
+                    currentScenario.get().log("🔹 Running Scenario: **" + scenarioName + "** with Example Data: {" + formattedExampleData + "}");
+
+                    gherkinDataTableExtractor.executeScenarioWithExampleData(scenarioStepsForExample, exampleData, currentScenario.get());
+
+                    executedExamples.add(exampleData); // ✅ Mark this example as executed
+                }
+                return; // Exit after executing Scenario Outline examples
+            }
+
+            // ✅ If no examples exist, run the scenario normally
+            List<List<String>> scenarioSteps = GherkinDataTableExtractor.getStepsFromScenario(scenarioName);
+            if (!scenarioSteps.isEmpty()) {
+                currentScenario.get().log("🔹 Running Scenario: **" + scenarioName + "** (No Examples)");
+
+                try {
+                    gherkinDataTableExtractor.executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap(), currentScenario.get());
+                } catch (Exception e) {
+                    currentScenario.get().log("❌ Scenario Failed: **" + scenarioName + "** | Error: " + e.getMessage());
+                    throw e;
+                }
+                return; // Exit after executing the scenario
+            }
         }
-
-        runningScenarios.add(scenarioName);
-
-            List<String> steps = GherkinDataTableExtractor.getStepsFromScenario(scenarioName);
-            if (steps.isEmpty()) {
-                throw new IllegalArgumentException("Scenario not found: " + scenarioName);
-            }
-
-            for (String step : steps) {
-                System.out.println("Executing scenario: " + step);
-                DataTable dataTable = GherkinDataTableExtractor.getDataTableFromFeature(step);
-                stepRunner.executeStep(step, dataTable); // Pass DataTable if found
-            }
-
-            runningScenarios.remove(scenarioName);
-
     }
 
     // Adding addition parameter for gherkin
@@ -81,29 +108,23 @@ public class CommonStepDefinitions extends CommonMethods{
 
     @Then("print string {string} {double} {booleanType}")
     public void printString(String arg0, Double arg1, Boolean arg2) {
-        System.out.println(arg0);
-        System.out.println(arg1);
-        System.out.println(arg2);
+        if(toExecute.get()){
+            System.out.println(arg0);
+        }
+
     }
 
     @Given("I launch the Mobile Simulator {string}")
     public void iLaunchTheMobileSimulator(String variableURL) {
         if(toExecute.get()){
-            startIOS(variableURL);
+            mobileSetup(variableURL);
         }
     }
 
     @Given("I navigate mobile browser to {string}")
-    public void iNavigateMobileBrowserTo(String arg0) {
+    public void iNavigateMobileBrowserTo(String URL) {
         if(toExecute.get()) {
-            mobileActions.navigateToURL(arg0);
-        }
-    }
-
-    @Given("I navigate browser to {string}")
-    public void iNavigateBrowserTo(String URL) {
-        if(toExecute.get()) {
-            browserActions.navigateToURL(URL);
+            navigateToURL(URL);
         }
     }
 
@@ -121,15 +142,38 @@ public class CommonStepDefinitions extends CommonMethods{
         }
     }
 
-    @Given("I launch the browser and navigate to {string}")
-    public void iLaunchTheBrowserAndNavigateTo(String credential) {
+    @Given("I launch {string} browser and navigate to {string}")
+    public void iLaunchTheBrowserAndNavigateTo(String browserType, String URL) {
         if(toExecute.get()){
-            browserActions.browserSetup(credential);
+           browserSetup(browserType, URL);
         }
     }
 
     @When("I click {string}")
     public void iClick(String elementName) {
+        if(toExecute.get()){
+           click(elementName);
+        }
+    }
 
+    @Then("I verify element {string} is visible")
+    public void iVerifyElementIsVisible(String elementName) {
+        if(toExecute.get()) {
+            verifyElementVisible(elementName);
+        }
+    }
+
+    @Then("I get text from {string} and set into variable {string}")
+    public void iGetTextFromAndSetIntoVariable(String elementName, String variableName) {
+        if(toExecute.get()) {
+            getTextFromAndSetIntoVariable(elementName, variableName);
+        }
+    }
+
+    @Then("I verify text {string} is equals to variable {string}")
+    public void iVerifyTextIsEqualsToVariable(String expectedText, String variableName) {
+        if(toExecute.get()) {
+            verifyTextIsEqualsToVariable(expectedText, variableName);
+        }
     }
 }

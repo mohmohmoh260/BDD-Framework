@@ -5,21 +5,20 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.asserts.SoftAssert;
 import org.openqa.selenium.*;
+import org.testng.asserts.SoftAssert;
+import workDirectory.stepDefinitions.Hooks;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static workDirectory.stepDefinitions.Hooks.getScenario;
-
 public class BrowserActions extends BrowserInstance{
 
-    private final SoftAssert softAssert = new SoftAssert();
-
-    public void browserSetup(String browserType){
-        browserInit(browserType);
+    SoftAssert softAssert = new SoftAssert();
+    
+    public void browserSetup(String browserType, String URL){
+        browserInit(browserType, URL);
     }
 
     public String getPlatform(){
@@ -38,26 +37,35 @@ public class BrowserActions extends BrowserInstance{
         return appiumDriver.get().findElements(By.xpath(getElementValue(elementName, getPlatform())));
     }
 
-    public void assertElementDisplayed(String elementName){
-        softAssert.assertTrue(webDriver.get().findElement(fetchElement(elementName)).isDisplayed());
-        highlightElement(elementName);
-        unHighlightElement(elementName);
+    public boolean verifyElementVisible(String elementName){
+        try{
+            softAssert.assertTrue(waitElement(elementName), "Element "+elementName+" with locator: "+getElementValue(elementName, getPlatform()));
+            highlightElement(elementName);
+            unHighlightElement(elementName);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
-    public void assertElementExist(String elementName){
+    public boolean verifyElementExist(String elementName){
         List<WebElement> elements = webDriver.get().findElements(fetchElement(elementName));
         if(!elements.isEmpty()){
-            softAssert.assertTrue(true);
+            softAssert.assertTrue(true, "Element is Exist: "+ fetchElement(elementName));
+            return true;
         }else{
             softAssert.fail("Element is not Exist: "+ fetchElement(elementName));
+            return false;
         }
     }
 
     public void click(String elementName) {
+        waitElement(elementName);
         webDriver.get().findElement(fetchElement(elementName)).click();
     }
 
     public void setText(String value, String elementName) {
+        waitElement(elementName);
         webDriver.get().findElement(fetchElement(elementName)).sendKeys(value);
     }
 
@@ -73,11 +81,17 @@ public class BrowserActions extends BrowserInstance{
         return webDriver.get().findElement(fetchElement(elementName)).getText();
     }
 
-    public void waitElement(String elementName) {
-        WebDriverWait wait = new WebDriverWait(webDriver.get(), Duration.ofSeconds(Long.parseLong(testNGXmlParser.getGlobalParameters().get(0).get("timeOut"))));
-        wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
-        scrollToView(elementName);
-        wait.until((ExpectedConditions.visibilityOf(webDriver.get().findElement(fetchElement(elementName)))));
+    public boolean waitElement(String elementName) {
+        try{
+            WebDriverWait wait = new WebDriverWait(webDriver.get(), Duration.ofSeconds(Long.parseLong(globalDeviceParameter.get(0).get("timeOut"))));
+            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
+            scrollToView(elementName);
+            wait.until((ExpectedConditions.visibilityOf(webDriver.get().findElement(fetchElement(elementName)))));
+            return true;
+        }catch (Exception e){
+            softAssert.fail("Element is not visible or exist in DOM \n"+e.getMessage());
+            return false;
+        }
     }
 
     public void scrollToView(String elementName) {
@@ -129,7 +143,7 @@ public class BrowserActions extends BrowserInstance{
 
     public void screenshot() {
         byte[] screenshot = ((TakesScreenshot) webDriver.get()).getScreenshotAs(OutputType.BYTES);
-        getScenario().attach(screenshot, "image/png", "Screenshot");
+        Hooks.getScenario().attach(screenshot, "image/png", "Screenshot");
     }
 
     public void openURL(String url) {

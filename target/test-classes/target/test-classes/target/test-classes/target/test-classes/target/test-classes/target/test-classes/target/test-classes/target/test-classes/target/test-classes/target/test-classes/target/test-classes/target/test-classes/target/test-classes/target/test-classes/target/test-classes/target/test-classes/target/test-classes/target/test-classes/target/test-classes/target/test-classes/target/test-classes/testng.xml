@@ -2,33 +2,17 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="BDDWithParallel" parallel="tests" thread-count="4">
     <!-- Global Variable General Settings -->
-    <parameter name="timeOut" value="30"></parameter>
-    <parameter name="screenshot" value="true"></parameter>
+    <parameter name="timeOut" value="30"></parameter><!-- time to wait for element -->
+    <parameter name="screenshotEveryStep" value="false"></parameter>
     <!-- Global Variable Browser Settings -->
-    <parameter name="url" value="https://www.google.com/"></parameter>
-    <parameter name="appiumServerIP" value="127.0.0.1"></parameter>
-    <parameter name="globalBrowserTypeState" value="false"></parameter>
-    <parameter name="globalBrowserType" value="chrome"></parameter>
-    <!-- Global Variable Mobile Settings -->
-    <parameter name="autoAcceptAlerts" value="true"></parameter>
-    <parameter name="autoGrantPermissions" value="true"></parameter>
-    <parameter name="autoDismissAlerts" value="true"></parameter>
-    <!-- Browser Option -->
-    <!-- options for browser types are: - chrome - firefox - edge - chromium - ie - safari-->
-    <test name="Credential 1">
-        <parameter name="username" value="autouat1"></parameter>
-        <parameter name="password" value="Maybank@1"></parameter>
-        <parameter name="browserType" value="chrome"></parameter>
-    </test>
-    <test name="Credential 2">
-        <parameter name="username" value="autouat2"></parameter>
-        <parameter name="password" value="Maybank@1"></parameter>
-        <parameter name="browserType" value="chrome"></parameter>
-    </test>
+    <parameter name="M2U_RSA" value="https://m2umobilesit.maybank.com.my/cgi-bin/bvRSA2/m2u/common/login.do"></parameter>
+    <parameter name="M2U_UIUX2" value="https://m2umobilesit.maybank.com.my/cgi-bin/bvUIUX2/m2u/common/login.do"></parameter>
+
+    <parameter name="globalBrowserTypeState" value="false"></parameter><!-- Setup for global browser type -->
+    <parameter name="globalBrowserType" value="chrome"></parameter><!-- type of global browser setup -->
+
     <!-- Device Option -->
     <test name="Android Device 1">
-        <parameter name="username" value="autouat1"></parameter>
-        <parameter name="password" value="Maybank@1"></parameter>
         <parameter name="udid" value="emulator-5554"></parameter>
         <parameter name="deviceName" value="Pixel 8"></parameter>
         <parameter name="platformVersion" value="14"></parameter>
@@ -38,14 +22,11 @@
         <parameter name="noReset" value="true"></parameter>
         <parameter name="fullReset" value="false"></parameter>
         <parameter name="platformName" value="android"></parameter>
-        <parameter name="automationName" value="uiautomator2"></parameter>
         <classes>
             <class name="builds.main.CucumberRun"/>
         </classes>
     </test>
     <test name="Android Device 2">
-        <parameter name="username" value="samuat01"></parameter>
-        <parameter name="password" value="Maybank@1"></parameter>
         <parameter name="udid" value="emulator-5556"></parameter>
         <parameter name="deviceName" value="Pixel 8 Pro"></parameter>
         <parameter name="platformVersion" value="14"></parameter>
@@ -55,7 +36,6 @@
         <parameter name="noReset" value="true"></parameter>
         <parameter name="fullReset" value="false"></parameter>
         <parameter name="platformName" value="android"></parameter>
-        <parameter name="automationName" value="uiautomator2"></parameter>
         <classes>
             <class name="builds.main.CucumberRun"/>
         </classes>
@@ -70,7 +50,6 @@
         <parameter name="bundleID" value="com.apple.mobilesafari"></parameter>
         <parameter name="noReset" value="false"></parameter>
         <parameter name="fullReset" value="false"></parameter>
-        <parameter name="useNewWDA" value="true"></parameter>
         <classes>
             <class name="builds.main.CucumberRun"/>
         </classes>
@@ -85,7 +64,6 @@
         <parameter name="bundleID" value="com.apple.mobilesafari"></parameter>
         <parameter name="noReset" value="false"></parameter>
         <parameter name="fullReset" value="false"></parameter>
-        <parameter name="useNewWDA" value="true"></parameter>
         <classes>
             <class name="builds.main.CucumberRun"/>
         </classes>

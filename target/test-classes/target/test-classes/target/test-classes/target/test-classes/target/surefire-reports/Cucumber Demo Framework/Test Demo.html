@@ -1,0 +1,367 @@
+<html>
+<head>
+<title>TestNG:  Test Demo</title>
+<link href="../testng.css" rel="stylesheet" type="text/css" />
+<link href="../my-testng.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+.log { display: none;} 
+.stack-trace { display: none;} 
+</style>
+<script type="text/javascript">
+<!--
+function flip(e) {
+  current = e.style.display;
+  if (current == 'block') {
+    e.style.display = 'none';
+    return 0;
+  }
+  else {
+    e.style.display = 'block';
+    return 1;
+  }
+}
+
+function toggleBox(szDivId, elem, msg1, msg2)
+{
+  var res = -1;  if (document.getElementById) {
+    res = flip(document.getElementById(szDivId));
+  }
+  else if (document.all) {
+    // this is the way old msie versions work
+    res = flip(document.all[szDivId]);
+  }
+  if(elem) {
+    if(res == 0) elem.innerHTML = msg1; else elem.innerHTML = msg2;
+  }
+
+}
+
+function toggleAllBoxes() {
+  if (document.getElementsByTagName) {
+    d = document.getElementsByTagName('div');
+    for (i = 0; i < d.length; i++) {
+      if (d[i].className == 'log') {
+        flip(d[i]);
+      }
+    }
+  }
+}
+
+// -->
+</script>
+
+</head>
+<body>
+<h2 align='center'>Test Demo</h2><table border='1' align="center">
+<tr>
+<td>Tests passed/Failed/Skipped:</td><td>0/5/0</td>
+</tr><tr>
+<td>Started on:</td><td>Tue Dec 10 14:37:05 MYT 2024</td>
+</tr>
+<tr><td>Total time:</td><td>128 seconds (128750 ms)</td>
+</tr><tr>
+<td>Included groups:</td><td></td>
+</tr><tr>
+<td>Excluded groups:</td><td></td>
+</tr>
+</table><p/>
+<small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='builds.main.CucumberRun$TestRunner.runScenario()'><b>runScenario</b><br>Test class: builds.main.CucumberRun$TestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Verify notepad in mobile is able to write", "Optional[Demo Feature]"</td>
+<td><div><pre>org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: Could not find a connected Android device in 20097ms. 
+Host info: host: &apos;00131018s-MacBook-Pro.local&apos;, ip: &apos;2001:d08:d4:8a64:4969:4d39:a596:c8a0%en0&apos;
+Build info: version: &apos;4.27.0&apos;, revision: &apos;d6e718d134&apos;
+System info: os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.16&apos;, java.version: &apos;15.0.2&apos;
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [null, newSession {capabilities=[Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}]}]
+Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:114)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:75)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:61)
+	at io.appium.java_client.remote.AppiumCommandExecutor.createSession(AppiumCommandExecutor.java:176)
+	at io.appium.java_client.remote.AppiumCommandExecutor.execute(AppiumCommandExecutor.java:237)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:545)
+	at io.appium.java_client.AppiumDriver.startSession(AppiumDriver.java:270)
+	at org.openqa.selenium.remote.RemoteWebDriver.&lt;init&gt;(RemoteWebDriver.java:174)
+	at io.appium.java_client.AppiumDriver.&lt;init&gt;(AppiumDriver.java:91)
+	at io.appium.java_client.AppiumDriver.&lt;init&gt;(AppiumDriver.java:103)
+	at io.appium.java_client.android.AndroidDriver.&lt;init&gt;(AndroidDriver.java:109)
+	at builds.utilities.BaseTest.androidSetup(BaseTest.java:83)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.NotePadStepDefinitions(NotePadStepDefinitions.java:27)
+	at ✽.launch the mobile apps and open notepad(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:18)
+</pre></div><a href='#' onClick='toggleBox("stack-trace2092382837", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace2092382837'><pre>org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: Could not find a connected Android device in 20097ms. 
+Host info: host: &apos;00131018s-MacBook-Pro.local&apos;, ip: &apos;2001:d08:d4:8a64:4969:4d39:a596:c8a0%en0&apos;
+Build info: version: &apos;4.27.0&apos;, revision: &apos;d6e718d134&apos;
+System info: os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.16&apos;, java.version: &apos;15.0.2&apos;
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [null, newSession {capabilities=[Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}]}]
+Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:114)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:75)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:61)
+	at io.appium.java_client.remote.AppiumCommandExecutor.createSession(AppiumCommandExecutor.java:176)
+	at io.appium.java_client.remote.AppiumCommandExecutor.execute(AppiumCommandExecutor.java:237)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:545)
+	at io.appium.java_client.AppiumDriver.startSession(AppiumDriver.java:270)
+	at org.openqa.selenium.remote.RemoteWebDriver.&lt;init&gt;(RemoteWebDriver.java:174)
+	at io.appium.java_client.AppiumDriver.&lt;init&gt;(AppiumDriver.java:91)
+	at io.appium.java_client.AppiumDriver.&lt;init&gt;(AppiumDriver.java:103)
+	at io.appium.java_client.android.AndroidDriver.&lt;init&gt;(AndroidDriver.java:109)
+	at builds.utilities.BaseTest.androidSetup(BaseTest.java:83)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.NotePadStepDefinitions(NotePadStepDefinitions.java:27)
+	at ✽.launch the mobile apps and open notepad(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:18)
+</pre></div></td>
+<td>21</td>
+<td>builds.main.CucumberRun$TestRunner@57a3af25</td></tr>
+<tr>
+<td title='builds.main.CucumberRun$TestRunner.runScenario()'><b>runScenario</b><br>Test class: builds.main.CucumberRun$TestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Verify Browser & App Login", "Optional[Demo Feature]"</td>
+<td><div><pre>java.lang.AssertionError: expected [covid-19 stats malaysia - Google Search] but found [covid-19 stats malaysiacovid-19 stats malaysia - Google Search]
+	at builds.actions.BrowserActions.assertPageTitle(BrowserActions.java:139)
+	at workDirectory.stepDefinitions.GooglePageStepDefinition.assertPageTitleIs(GooglePageStepDefinition.java:32)
+	at ✽.assert page title is &quot;covid-19 stats malaysia - Google Search&quot;(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:48)
+... Removed 6 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1622283008", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1622283008'><pre>java.lang.AssertionError: expected [covid-19 stats malaysia - Google Search] but found [covid-19 stats malaysiacovid-19 stats malaysia - Google Search]
+	at org.testng.Assert.fail(Assert.java:111)
+	at org.testng.Assert.failNotEquals(Assert.java:1578)
+	at org.testng.Assert.assertEqualsImpl(Assert.java:150)
+	at org.testng.Assert.assertEquals(Assert.java:132)
+	at org.testng.Assert.assertEquals(Assert.java:656)
+	at org.testng.Assert.assertEquals(Assert.java:666)
+	at builds.actions.BrowserActions.assertPageTitle(BrowserActions.java:139)
+	at workDirectory.stepDefinitions.GooglePageStepDefinition.assertPageTitleIs(GooglePageStepDefinition.java:32)
+	at ✽.assert page title is &quot;covid-19 stats malaysia - Google Search&quot;(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:48)
+</pre></div></td>
+<td>105</td>
+<td>builds.main.CucumberRun$TestRunner@57a3af25</td></tr>
+<tr>
+<td title='builds.main.CucumberRun$TestRunner.runScenario()'><b>runScenario</b><br>Test class: builds.main.CucumberRun$TestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Verify Statistics section in web browser", "Optional[Demo Feature]"</td>
+<td><div><pre>java.lang.AssertionError: expected [covid-19 stats malaysia - Google Search] but found [covid-19 stats malaysiacovid-19 stats malaysia - Google Search]
+	at builds.actions.BrowserActions.assertPageTitle(BrowserActions.java:139)
+	at workDirectory.stepDefinitions.GooglePageStepDefinition.assertPageTitleIs(GooglePageStepDefinition.java:32)
+	at ✽.assert page title is &quot;covid-19 stats malaysia - Google Search&quot;(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:8)
+... Removed 6 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace35773556", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace35773556'><pre>java.lang.AssertionError: expected [covid-19 stats malaysia - Google Search] but found [covid-19 stats malaysiacovid-19 stats malaysia - Google Search]
+	at org.testng.Assert.fail(Assert.java:111)
+	at org.testng.Assert.failNotEquals(Assert.java:1578)
+	at org.testng.Assert.assertEqualsImpl(Assert.java:150)
+	at org.testng.Assert.assertEquals(Assert.java:132)
+	at org.testng.Assert.assertEquals(Assert.java:656)
+	at org.testng.Assert.assertEquals(Assert.java:666)
+	at builds.actions.BrowserActions.assertPageTitle(BrowserActions.java:139)
+	at workDirectory.stepDefinitions.GooglePageStepDefinition.assertPageTitleIs(GooglePageStepDefinition.java:32)
+	at ✽.assert page title is &quot;covid-19 stats malaysia - Google Search&quot;(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:8)
+</pre></div></td>
+<td>104</td>
+<td>builds.main.CucumberRun$TestRunner@57a3af25</td></tr>
+<tr>
+<td title='builds.main.CucumberRun$TestRunner.runScenario()'><b>runScenario</b><br>Test class: builds.main.CucumberRun$TestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Verify notepad in mobile is able to write", "Optional[Demo Feature]"</td>
+<td><div><pre>org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: Could not find a connected Android device in 20064ms. 
+Host info: host: &apos;00131018s-MacBook-Pro.local&apos;, ip: &apos;2001:d08:d4:8a64:4969:4d39:a596:c8a0%en0&apos;
+Build info: version: &apos;4.27.0&apos;, revision: &apos;d6e718d134&apos;
+System info: os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.16&apos;, java.version: &apos;15.0.2&apos;
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [null, newSession {capabilities=[Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}]}]
+Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:114)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:75)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:61)
+	at io.appium.java_client.remote.AppiumCommandExecutor.createSession(AppiumCommandExecutor.java:176)
+	at io.appium.java_client.remote.AppiumCommandExecutor.execute(AppiumCommandExecutor.java:237)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:545)
+	at io.appium.java_client.AppiumDriver.startSession(AppiumDriver.java:270)
+	at org.openqa.selenium.remote.RemoteWebDriver.&lt;init&gt;(RemoteWebDriver.java:174)
+	at io.appium.java_client.AppiumDriver.&lt;init&gt;(AppiumDriver.java:91)
+	at io.appium.java_client.AppiumDriver.&lt;init&gt;(AppiumDriver.java:103)
+	at io.appium.java_client.android.AndroidDriver.&lt;init&gt;(AndroidDriver.java:109)
+	at builds.utilities.BaseTest.androidSetup(BaseTest.java:83)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.NotePadStepDefinitions(NotePadStepDefinitions.java:27)
+	at ✽.launch the mobile apps and open notepad(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:32)
+</pre></div><a href='#' onClick='toggleBox("stack-trace126073669", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace126073669'><pre>org.openqa.selenium.SessionNotCreatedException: Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: Could not find a connected Android device in 20064ms. 
+Host info: host: &apos;00131018s-MacBook-Pro.local&apos;, ip: &apos;2001:d08:d4:8a64:4969:4d39:a596:c8a0%en0&apos;
+Build info: version: &apos;4.27.0&apos;, revision: &apos;d6e718d134&apos;
+System info: os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.16&apos;, java.version: &apos;15.0.2&apos;
+Driver info: io.appium.java_client.android.AndroidDriver
+Command: [null, newSession {capabilities=[Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}]}]
+Capabilities {appium:app: /Users/00131018amirulhakim/..., appium:appActivity: com.atomczak.notepat.MainAc..., appium:appPackage: com.atomczak.notepat, appium:automationName: uiautomator2, appium:fullReset: true, appium:newCommandTimeout: 300, appium:noReset: false, appium:resetKeyboard: true, appium:udid: emulator-5554, appium:uiautomator2ServerLaunchTimeout: 300000, appium:unicodeKeyboard: true, platformName: ANDROID}
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:114)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:75)
+	at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:61)
+	at io.appium.java_client.remote.AppiumCommandExecutor.createSession(AppiumCommandExecutor.java:176)
+	at io.appium.java_client.remote.AppiumCommandExecutor.execute(AppiumCommandExecutor.java:237)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:545)
+	at io.appium.java_client.AppiumDriver.startSession(AppiumDriver.java:270)
+	at org.openqa.selenium.remote.RemoteWebDriver.&lt;init&gt;(RemoteWebDriver.java:174)
+	at io.appium.java_client.AppiumDriver.&lt;init&gt;(AppiumDriver.java:91)
+	at io.appium.java_client.AppiumDriver.&lt;init&gt;(AppiumDriver.java:103)
+	at io.appium.java_client.android.AndroidDriver.&lt;init&gt;(AndroidDriver.java:109)
+	at builds.utilities.BaseTest.androidSetup(BaseTest.java:83)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.NotePadStepDefinitions(NotePadStepDefinitions.java:27)
+	at ✽.launch the mobile apps and open notepad(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:32)
+</pre></div></td>
+<td>21</td>
+<td>builds.main.CucumberRun$TestRunner@57a3af25</td></tr>
+<tr>
+<td title='builds.main.CucumberRun$TestRunner.runScenario()'><b>runScenario</b><br>Test class: builds.main.CucumberRun$TestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "To Test IOS Simulator with Page Factory Approach", "Optional[Demo Feature]"</td>
+<td><div><pre>org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of Located by By.chained({By.xpath: //XCUIElementTypeButton[@name=&quot;Allow While Using App&quot;]}) (tried for 30 second(s) with 500 milliseconds interval)
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at builds.actions.MobileActions.waitElement(MobileActions.java:76)
+	at builds.actions.MobileActions.click(MobileActions.java:34)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.clickAllowAccess(NotePadStepDefinitions.java:95)
+	at ✽.click Allow Access(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:14)
+Caused by: org.openqa.selenium.NoSuchElementException: Can&apos;t locate an element by this strategy: By.chained({By.xpath: //XCUIElementTypeButton[@name=&quot;Allow While Using App&quot;]})
+	at io.appium.java_client.pagefactory.AppiumElementLocator.findElement(AppiumElementLocator.java:166)
+	at io.appium.java_client.pagefactory.interceptors.InterceptorOfASingleElement.call(InterceptorOfASingleElement.java:75)
+	at io.appium.java_client.proxy.Interceptor.intercept(Interceptor.java:78)
+	at org.openqa.selenium.remote.RemoteWebElement$ByteBuddy$0jVDhYtk.isDisplayed(Unknown Source)
+	at org.openqa.selenium.support.ui.ExpectedConditions.elementIfVisible(ExpectedConditions.java:304)
+	at org.openqa.selenium.support.ui.ExpectedConditions$10.apply(ExpectedConditions.java:290)
+	at org.openqa.selenium.support.ui.ExpectedConditions$10.apply(ExpectedConditions.java:287)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:203)
+	at builds.actions.MobileActions.waitElement(MobileActions.java:76)
+	at builds.actions.MobileActions.click(MobileActions.java:34)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.clickAllowAccess(NotePadStepDefinitions.java:95)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:63)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:86)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:57)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:95)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.testng.TestNGCucumberRunner.lambda$runScenario$1(TestNGCucumberRunner.java:132)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$3(CucumberExecutionContext.java:151)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:151)
+	at io.cucumber.testng.TestNGCucumberRunner.runScenario(TestNGCucumberRunner.java:129)
+	at io.cucumber.testng.AbstractTestNGCucumberTests.runScenario(AbstractTestNGCucumberTests.java:35)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.base/java.lang.Thread.run(Thread.java:832)
+Caused by: org.openqa.selenium.TimeoutException: Expected condition failed: waiting for io.appium.java_client.pagefactory.AppiumElementLocator$WaitingFunction@24eff323 (tried for 30 second(s) with 500 milliseconds interval)
+	at org.openqa.selenium.support.ui.FluentWait.timeoutException(FluentWait.java:265)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at io.appium.java_client.pagefactory.AppiumElementLocator.waitFor(AppiumElementLocator.java:135)
+	at io.appium.java_client.pagefactory.AppiumElementLocator.findElement(AppiumElementLocator.java:160)
+	... 44 more
+Caused by: org.openqa.selenium.NoSuchElementException: Cannot locate an element using By.chained({By.xpath: //XCUIElementTypeButton[@name=&quot;Allow While Using App&quot;]})
+For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Build info: version: &apos;4.27.0&apos;, revision: &apos;d6e718d134&apos;
+System info: os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.16&apos;, java.version: &apos;15.0.2&apos;
+Driver info: driver.version: RemoteWebDriver
+	at io.appium.java_client.pagefactory.bys.builder.ByChained.findElement(ByChained.java:74)
+	at org.openqa.selenium.remote.ElementLocation$ElementFinder$1.findElement(ElementLocation.java:139)
+	at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:59)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:368)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:362)
+	at io.appium.java_client.pagefactory.bys.ContentMappedBy.findElement(ContentMappedBy.java:54)
+	at org.openqa.selenium.remote.ElementLocation$ElementFinder$1.findElement(ElementLocation.java:139)
+	at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:59)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:368)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:362)
+	at io.appium.java_client.pagefactory.AppiumElementLocator.lambda$findElement$1(AppiumElementLocator.java:160)
+	at io.appium.java_client.pagefactory.AppiumElementLocator$WaitingFunction.apply(AppiumElementLocator.java:217)
+	at io.appium.java_client.pagefactory.AppiumElementLocator$WaitingFunction.apply(AppiumElementLocator.java:210)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:203)
+	... 46 more
+... Removed 13 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace482103397", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace482103397'><pre>org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of Located by By.chained({By.xpath: //XCUIElementTypeButton[@name=&quot;Allow While Using App&quot;]}) (tried for 30 second(s) with 500 milliseconds interval)
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at builds.actions.MobileActions.waitElement(MobileActions.java:76)
+	at builds.actions.MobileActions.click(MobileActions.java:34)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.clickAllowAccess(NotePadStepDefinitions.java:95)
+	at ✽.click Allow Access(file:///Users/00131018amirulhakim/Documents/com.test%202.framework/src/test/resources/features/Demo%20Features/Demo.feature:14)
+Caused by: org.openqa.selenium.NoSuchElementException: Can&apos;t locate an element by this strategy: By.chained({By.xpath: //XCUIElementTypeButton[@name=&quot;Allow While Using App&quot;]})
+	at io.appium.java_client.pagefactory.AppiumElementLocator.findElement(AppiumElementLocator.java:166)
+	at io.appium.java_client.pagefactory.interceptors.InterceptorOfASingleElement.call(InterceptorOfASingleElement.java:75)
+	at io.appium.java_client.proxy.Interceptor.intercept(Interceptor.java:78)
+	at org.openqa.selenium.remote.RemoteWebElement$ByteBuddy$0jVDhYtk.isDisplayed(Unknown Source)
+	at org.openqa.selenium.support.ui.ExpectedConditions.elementIfVisible(ExpectedConditions.java:304)
+	at org.openqa.selenium.support.ui.ExpectedConditions$10.apply(ExpectedConditions.java:290)
+	at org.openqa.selenium.support.ui.ExpectedConditions$10.apply(ExpectedConditions.java:287)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:203)
+	at builds.actions.MobileActions.waitElement(MobileActions.java:76)
+	at builds.actions.MobileActions.click(MobileActions.java:34)
+	at workDirectory.stepDefinitions.NotePadStepDefinitions.clickAllowAccess(NotePadStepDefinitions.java:95)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:64)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:63)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:86)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:57)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:95)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:75)
+	at io.cucumber.testng.TestNGCucumberRunner.lambda$runScenario$1(TestNGCucumberRunner.java:132)
+	at io.cucumber.core.runtime.CucumberExecutionContext.lambda$runTestCase$3(CucumberExecutionContext.java:151)
+	at io.cucumber.core.runtime.RethrowingThrowableCollector.executeAndThrow(RethrowingThrowableCollector.java:23)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:151)
+	at io.cucumber.testng.TestNGCucumberRunner.runScenario(TestNGCucumberRunner.java:129)
+	at io.cucumber.testng.AbstractTestNGCucumberTests.runScenario(AbstractTestNGCucumberTests.java:35)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:64)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.TestMethodWithDataProviderMethodWorker.call(TestMethodWithDataProviderMethodWorker.java:81)
+	at org.testng.internal.thread.Async$AsyncTask.run(Async.java:34)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.base/java.lang.Thread.run(Thread.java:832)
+Caused by: org.openqa.selenium.TimeoutException: Expected condition failed: waiting for io.appium.java_client.pagefactory.AppiumElementLocator$WaitingFunction@24eff323 (tried for 30 second(s) with 500 milliseconds interval)
+	at org.openqa.selenium.support.ui.FluentWait.timeoutException(FluentWait.java:265)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at io.appium.java_client.pagefactory.AppiumElementLocator.waitFor(AppiumElementLocator.java:135)
+	at io.appium.java_client.pagefactory.AppiumElementLocator.findElement(AppiumElementLocator.java:160)
+	... 44 more
+Caused by: org.openqa.selenium.NoSuchElementException: Cannot locate an element using By.chained({By.xpath: //XCUIElementTypeButton[@name=&quot;Allow While Using App&quot;]})
+For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Build info: version: &apos;4.27.0&apos;, revision: &apos;d6e718d134&apos;
+System info: os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.16&apos;, java.version: &apos;15.0.2&apos;
+Driver info: driver.version: RemoteWebDriver
+	at io.appium.java_client.pagefactory.bys.builder.ByChained.findElement(ByChained.java:74)
+	at org.openqa.selenium.remote.ElementLocation$ElementFinder$1.findElement(ElementLocation.java:139)
+	at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:59)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:368)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:362)
+	at io.appium.java_client.pagefactory.bys.ContentMappedBy.findElement(ContentMappedBy.java:54)
+	at org.openqa.selenium.remote.ElementLocation$ElementFinder$1.findElement(ElementLocation.java:139)
+	at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:59)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:368)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:362)
+	at io.appium.java_client.pagefactory.AppiumElementLocator.lambda$findElement$1(AppiumElementLocator.java:160)
+	at io.appium.java_client.pagefactory.AppiumElementLocator$WaitingFunction.apply(AppiumElementLocator.java:217)
+	at io.appium.java_client.pagefactory.AppiumElementLocator$WaitingFunction.apply(AppiumElementLocator.java:210)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:203)
+	... 46 more
+</pre></div></td>
+<td>117</td>
+<td>builds.main.CucumberRun$TestRunner@57a3af25</td></tr>
+</table><p>
+</body>
+</html>

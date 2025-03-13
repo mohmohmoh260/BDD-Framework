@@ -1,13 +1,15 @@
 Feature: Snippet Demo Feature
 
-  @test
-  Scenario: Navigate to Practice Automation Website and Login
-    Given I navigate browser to "url1"
-    When I set text "abc" into "GooglePage_Username_Input"
-    | username |
-    | student  |
-    When I set text {string} into {string}
-    And take screenshot
+  Scenario Outline: User login to M2U
+    Then print string "<username>" 123.00 true
+    Then print string "<password>" 345.00 false
+    Then print string "<test data1>" 12.00 false
+    Examples:
+    |username|password|test data1|
+    |hakim   | abc    | rm200    |
+    |moh     | 123    | rm100    |
+    |zxc     | vbn    | ghj    |
+
 
   Scenario: Verify Snippet Code Is Running
     Then print from data table without header below

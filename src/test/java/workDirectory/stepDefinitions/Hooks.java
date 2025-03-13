@@ -8,29 +8,32 @@ import io.cucumber.java.BeforeStep;
 import io.cucumber.java.Scenario;
 
 public class Hooks extends CommonMethods {
-    private static final ThreadLocal<Scenario> threadLocalScenario = new ThreadLocal<>();
 
     @BeforeStep
     public void beforeStep(Scenario scenario) {
-        threadLocalScenario.set(scenario);
+        currentScenario.set(scenario);
         if(!toExecute.get()){
             System.out.println("Skipping test: "+ StepListener.gherkinStep.get());
         }
     }
 
     public static Scenario getScenario() {
-        return threadLocalScenario.get();
+        return currentScenario.get();
     }
 
     @AfterStep
     public void takeScreenshotIfFailed(Scenario scenario) {
-        if (scenario.isFailed()) {
-            BrowserInstance browserInstance = new BrowserInstance();
-            MobileInstance mobileInstance = new MobileInstance();
-            if (browserInstance.getWebDriver()!=null) {
-                browserActions.screenshot();
-            } else if(mobileInstance.getMobileDriver()!=null){
+        if(globalDeviceParameter.get(0).get("screenshotEveryStep").equals("true")){
+            if(isAppiumDriver.get()){
                 mobileActions.screenshot();
+            }else{
+                browserActions.screenshot();
+            }
+        }else if (scenario.isFailed()) {
+            if(isAppiumDriver.get()){
+                mobileActions.screenshot();
+            }else{
+                browserActions.screenshot();
             }
         }
     }

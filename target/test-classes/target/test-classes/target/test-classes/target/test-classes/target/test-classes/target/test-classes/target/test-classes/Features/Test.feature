@@ -1,11 +1,15 @@
+@regression
 Feature: Reuse Scenarios
 
- Background: User to Open Safari Browser IOS Device "iOS Device 1"
-  Given I launch the Mobile Simulator "iOS Device 1"
+  #options for browser types are: - chrome - firefox - edge - chromium - ie - safari
+  Background: User to Open Safari Browser IOS Device "iOS Device 1"
+    #Given I launch "chrome" browser and navigate to "M2U_RSA"
 
-@test
+   @test
   Scenario: Print Device Driver 2
-  When run snippet scenario "Navigate to Practice Automation Website and Login"
+    When run snippet scenario "User login to M2U"
+
+
 
 
 

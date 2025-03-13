@@ -1,7 +1,0 @@
-{
-  "Username_Input": {
-    "web": "webxpath",
-    "android": "androidxpath",
-    "ios": "iosxpath"
-  }
-}
