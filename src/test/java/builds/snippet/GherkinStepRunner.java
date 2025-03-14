@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.regex.*;
 
 public class GherkinStepRunner {
+
     private final List<Class<?>> stepDefinitionClasses;
 
     public GherkinStepRunner(List<Class<?>> stepDefinitionClasses) {

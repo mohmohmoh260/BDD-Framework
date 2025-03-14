@@ -31,7 +31,7 @@ public class ElementInstance {
         searchJsonFiles(folder, objectMapper);
     }
 
-    protected String getElementValue(String elementName, String platform) {
+    public String getElementValue(String elementName, String platform) {
         HashMap<String, HashMap<String, String>> elementsMap = ElementInstance.elements.get();
 
         if (elementsMap.containsKey(elementName)) {
@@ -65,7 +65,7 @@ public class ElementInstance {
                     }
 
                     // If duplicates are found in the same file, throw an error
-                    if (duplicateKeysInSameFile.length() > 0) {
+                    if (!duplicateKeysInSameFile.isEmpty()) {
                         throw new RuntimeException("❌ Duplicate name found in the same file: " + file.getAbsolutePath() +
                                 duplicateKeysInSameFile);
                     }

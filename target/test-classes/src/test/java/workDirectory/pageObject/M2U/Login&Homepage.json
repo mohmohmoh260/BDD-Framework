@@ -20,7 +20,7 @@
     "ios": ""
   },
   "Password_input": {
-    "web": "//*[@id='password']",
+    "web": "//*[@id='my-password-input']",
     "android": "",
     "ios": ""
   }

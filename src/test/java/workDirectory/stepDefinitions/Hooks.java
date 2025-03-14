@@ -1,11 +1,14 @@
 package workDirectory.stepDefinitions;
 
+import builds.actions.MainActions;
 import builds.utilities.StepListener;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.BeforeStep;
 import io.cucumber.java.Scenario;
 
-public class Hooks extends CommonMethods {
+public class Hooks extends MainActions {
+
+    private static final ThreadLocal<Scenario> currentScenario = new ThreadLocal<>();
 
     @BeforeStep
     public void beforeStep(Scenario scenario) {
@@ -22,17 +25,7 @@ public class Hooks extends CommonMethods {
     @AfterStep
     public void takeScreenshotIfFailed(Scenario scenario) {
         if(globalDeviceParameter.get(0).get("screenshotEveryStep").equals("true")){
-            if(isAppiumDriver.get()){
-                mobileActions.screenshot();
-            }else{
-                browserActions.screenshot();
-            }
-        }else if (scenario.isFailed()) {
-            if(isAppiumDriver.get()){
-                mobileActions.screenshot();
-            }else{
-                browserActions.screenshot();
-            }
+            screenshot();
         }
     }
 }

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class TestNGXmlParser {
 
-    public List<Map<String, String>> getGlobalParameters() {
+    public static List<Map<String, String>> getGlobalParameters() {
         String testngXmlPath = "testng.xml";
         List<Map<String, String>> globalParametersList = new ArrayList<>();
         try {

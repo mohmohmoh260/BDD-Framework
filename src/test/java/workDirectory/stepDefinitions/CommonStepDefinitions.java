@@ -1,29 +1,34 @@
 package workDirectory.stepDefinitions;
 
+import builds.actions.MainActions;
+import builds.driver.MainDriver;
 import builds.snippet.GherkinDataTableExtractor;
-import io.cucumber.datatable.DataTable;
+import builds.utilities.IfStatementHandler;
 import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.testng.Assert;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CommonStepDefinitions extends CommonMethods{
+public class CommonStepDefinitions extends MainActions {
 
-    GherkinDataTableExtractor gherkinDataTableExtractor = new GherkinDataTableExtractor();
+    private static final ThreadLocal<GherkinDataTableExtractor> gherkinDataTableExtractor = ThreadLocal.withInitial(GherkinDataTableExtractor::new);
+    private static final ThreadLocal<IfStatementHandler> ifStatementHandler = ThreadLocal.withInitial(IfStatementHandler::new);
 
     @When("^run snippet scenario \"([^\"]+)\"$")
     public void runSnippetScenario(String scenarioName) throws Exception {
-        List<Path> featureFiles = gherkinDataTableExtractor.getFeatureFiles();
+        List<Path> featureFiles = gherkinDataTableExtractor.get().getFeatureFiles();
         Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
 
         for (Path featureFile : featureFiles) {
             // Fetch examples for the Scenario Outline
-            List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.getExamplesFromScenarioOutline(featureFile, scenarioName);
+            List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.get().getExamplesFromScenarioOutline(featureFile, scenarioName);
 
             if (!exampleDataList.isEmpty()) {
                 for (Map<String, String> exampleData : exampleDataList) {
@@ -32,15 +37,15 @@ public class CommonStepDefinitions extends CommonMethods{
                         continue;
                     }
 
-                    List<List<String>> scenarioStepsForExample = Collections.singletonList(gherkinDataTableExtractor.extractStepsFromFeature(featureFile, scenarioName, exampleData));
+                    List<List<String>> scenarioStepsForExample = Collections.singletonList(gherkinDataTableExtractor.get().extractStepsFromFeature(featureFile, scenarioName, exampleData));
 
                     String formattedExampleData = exampleData.entrySet().stream()
                             .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
                             .collect(Collectors.joining(", "));
 
-                    currentScenario.get().log("🔹 Running Scenario: **" + scenarioName + "** with Example Data: {" + formattedExampleData + "}");
+                    Hooks.getScenario().log("🔹 Running Scenario: **" + scenarioName + "** with Example Data: {" + formattedExampleData + "}");
 
-                    gherkinDataTableExtractor.executeScenarioWithExampleData(scenarioStepsForExample, exampleData, currentScenario.get());
+                    gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioStepsForExample, exampleData, Hooks.getScenario());
 
                     executedExamples.add(exampleData); // ✅ Mark this example as executed
                 }
@@ -48,14 +53,14 @@ public class CommonStepDefinitions extends CommonMethods{
             }
 
             // ✅ If no examples exist, run the scenario normally
-            List<List<String>> scenarioSteps = gherkinDataTableExtractor.getStepsFromScenario(scenarioName);
+            List<List<String>> scenarioSteps = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
             if (!scenarioSteps.isEmpty()) {
-                currentScenario.get().log("🔹 Running Scenario: **" + scenarioName + "** (No Examples)");
+                Hooks.getScenario().log("🔹 Running Scenario: **" + scenarioName + "** (No Examples)");
 
                 try {
-                    gherkinDataTableExtractor.executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap(), currentScenario.get());
+                    gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap(), Hooks.getScenario());
                 } catch (Exception e) {
-                    currentScenario.get().log("❌ Scenario Failed: **" + scenarioName + "** | Error: " + e.getMessage());
+                    Hooks.getScenario().log("❌ Scenario Failed: **" + scenarioName + "** | Error: " + e.getMessage());
                     throw e;
                 }
                 return; // Exit after executing the scenario
@@ -71,32 +76,39 @@ public class CommonStepDefinitions extends CommonMethods{
 
     @And ("^if \"([^\"]+)\" is not visible(?: within (\\d+) seconds)?$")
     public void ifElementIsNotVisible(String elementName, Integer timeout){
-        toExecuteChecker(new Object(){}.getClass().getEnclosingMethod().getName(), Collections.singletonList(elementName), timeout);
+        ifStatementHandler.get().toExecuteChecker(new Object(){}.getClass().getEnclosingMethod().getName(), Collections.singletonList(elementName), timeout);
     }
 
     @And("end statement")
     public void endIfStatement(){
-        endIf();
+        ifStatementHandler.get().endIf();
     }
 
     @And("take screenshot")
     public void takeAScreenshot() {
         if(toExecute.get()){
-            takeScreenshot();
-        }
-    }
-
-    @Given("^launch the Mobile Simulator \"([^\"]+)\"$")
-    public void iLaunchTheMobileSimulator(String variableURL) {
-        if(toExecute.get()){
-            mobileSetup(variableURL);
+            screenshot();
         }
     }
 
     @Given("^launch \"([^\"]+)\" browser and navigate to \"([^\"]+)\"$")
     public void iLaunchTheBrowserAndNavigateTo(String browserType, String URL) {
         if(toExecute.get()){
-            browserSetup(browserType, URL);
+            browserDriverSetup(browserType, URL);
+        }
+    }
+
+    @Given("^launch web remote browser and navigate to \"([^\"]+)\"$")
+    public void launchWebRemoteBrowserAndNavigateTo(String URL) throws IOException {
+        if(toExecute.get()) {
+            remoteDriverSetup("web", URL);
+        }
+    }
+
+    @Given("^launch the Mobile Simulator \"([^\"]+)\"$")
+    public void iLaunchTheMobileSimulator(String variableURL) {
+        if(toExecute.get()){
+            mobileDriverSetup(variableURL);
         }
     }
 
@@ -110,28 +122,29 @@ public class CommonStepDefinitions extends CommonMethods{
     @When("^click \"([^\"]+)\"$")
     public void iClick(String elementName) {
         if(toExecute.get()){
-            click(elementName);
+            click(elementName, null);
         }
     }
 
     @When("^set text \"([^\"]+)\" into \"([^\"]+)\"$")
     public void iSetTextInto(String value, String elementName) {
         if(toExecute.get()){
-            setText(value, elementName);
+            setText(value, elementName, null);
         }
     }
 
     @Then("^get text from \"([^\"]+)\" and set into variable \"([^\"]+)\"$")
     public void iGetTextFromAndSetIntoVariable(String elementName, String variableName) {
         if(toExecute.get()) {
-            getTextFromAndSetIntoVariable(elementName, variableName, Integer.parseInt(globalDeviceParameter.get(0).get("timeOut")));
+            variables.get().put(variableName, getText(elementName, null));
+            Hooks.getScenario().log("Text :"+getText(elementName, null)+" is set into variable "+variableName);
         }
     }
 
     @Then("^verify text \"([^\"]+)\" is equals to variable \"([^\"]+)\"$")
     public void iVerifyTextIsEqualsToVariable(String expectedText, String variableName) {
         if(toExecute.get()) {
-            verifyTextIsEqualsToVariable(expectedText, variableName);
+            Assert.assertEquals(expectedText, variables.get().get(variableName), "Expected text "+expectedText+" is not equals to actual text "+variables.get().get(variableName));
         }
     }
 
@@ -147,5 +160,11 @@ public class CommonStepDefinitions extends CommonMethods{
         if(toExecute.get()) {
             waitElementVisible(elementName, timeout);
         }
+    }
+
+
+    @Then("^print \"([^\"]+)\" and \"([^\"]+)\"$")
+    public void printAnd(String arg0, String arg1) {
+        System.out.println(arg0+" "+arg1);
     }
 }

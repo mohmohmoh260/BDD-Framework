@@ -1,154 +1,109 @@
 package builds.actions;
 
-import builds.driver.MobileInstance;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
+import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.asserts.SoftAssert;
+import org.openqa.selenium.interactions.PointerInput;
+import org.openqa.selenium.interactions.Sequence;
 
 import java.time.Duration;
-import java.util.List;
+import java.util.Collections;
 
-import static workDirectory.stepDefinitions.Hooks.getScenario;
-
-public class MobileActions extends MobileInstance{
-
-    SoftAssert softAssert = new SoftAssert();
-    
-    public void mobileSetup(String testName){
-        setupMobileDriver(testName);
-    }
-
-    public String getPlatform(){
-        if(isAndroid.get()){
-            return "android";
-        }else if(isIOS.get()){
-            return "ios";
-        }else{
-            throw new RuntimeException("Check platform properly. Only allowed \"android\" and \"ios\" if current session is mobile");
-        }
-    }
-
-    public By fetchElement(String elementName){
-        return By.xpath(getElementValue(elementName, getPlatform()));
-    }
-
-    public List<WebElement> findElements(String elementName, Integer timeout){
-        waitElementExist(elementName, timeout);
-        return appiumDriver.get().findElements(By.xpath(getElementValue(elementName, getPlatform())));
-    }
-
-    public void assertElementDisplayed(String elementName, Integer timeout) {
-        waitElementVisible(elementName, timeout);
-        softAssert.assertTrue(appiumDriver.get().findElement(fetchElement(elementName)).isDisplayed());
-        screenshot();
-    }
-    
-    public void assertPageTitle(String title) {
-        softAssert.assertEquals(title, appiumDriver.get().getTitle());
-    }
-
-    public void click(String elementName, Integer timeout) {
-        waitElementVisible(elementName, timeout);
-        appiumDriver.get().findElement(fetchElement(elementName)).click();
-    }
-
-    public void setText(String input, String elementName, Integer timeout) {
-        waitElementVisible(elementName, timeout);
-        appiumDriver.get().findElement(fetchElement(elementName)).clear();
-        appiumDriver.get().findElement(fetchElement(elementName)).sendKeys(input);
-    }
-
-    public void close() {
-        appiumDriver.get().close();
-    }
-
-    public void quit() {
-        appiumDriver.get().quit();
-    }
-
-    public String getText(String elementName, Integer timeout){
-        waitElementVisible(elementName, timeout);
-        return appiumDriver.get().findElement(fetchElement(elementName)).getText();
-    }
-
-    public void clear(String elementName){
-        appiumDriver.get().findElement(fetchElement(elementName)).clear();
-    }
+public class MobileActions extends MainActions {
 
     public void hideKeyboard(){
-
-    }
-
-     void scrollDownToElement(WebElement element){
-        // ToDo
-    }
-
-     void scrollUPToElement(WebElement element){
-        // ToDo
-    }
-
-    public boolean waitElementExist(String elementName, Integer timeout) {
-        try{
-            if (timeout == null) {
-                timeout = Integer.parseInt(globalDeviceParameter.get(0).get("timeOut"));
-            }
-            WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
-            return true;
-        }catch (Exception e){
-            return false;
+        if (driver.get() instanceof AndroidDriver) {
+            ((AndroidDriver) driver.get()).hideKeyboard();
+        } else if (driver.get() instanceof IOSDriver) {
+            ((IOSDriver) driver.get()).hideKeyboard();
+        } else {
+            System.out.println("Driver is not an instance of AndroidDriver or IOSDriver.");
         }
     }
 
-    public boolean waitElementVisible(String elementName, Integer timeout){
-        try{
-            if (timeout == null) {
-                timeout = Integer.parseInt(globalDeviceParameter.get(0).get("timeOut"));
-            }
-            WebDriverWait wait = new WebDriverWait(appiumDriver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
-            wait.until((ExpectedConditions.visibilityOf(appiumDriver.get().findElement(fetchElement(elementName)))));
-            return true;
-        }catch (Exception e){
-            return false;
-        }
+    public enum SwipeDirection {
+        UP, DOWN, LEFT, RIGHT
     }
 
-    public void screenshot() {
-        try {
-            TakesScreenshot screenshotDriver = (TakesScreenshot) appiumDriver.get();
-            byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
-            getScenario().attach(screenshot, "image/png", "Screenshot");
-        } catch (Exception e) {
-            getScenario().log("Screenshot failed: " + e.getMessage());
+    public static void swipe(SwipeDirection direction, int percentage) {
+        int screenWidth = driver.get().manage().window().getSize().width;
+        int screenHeight = driver.get().manage().window().getSize().height;
+
+        int startX, startY, endX, endY;
+
+        switch (direction) {
+            case UP:
+                startX = screenWidth / 2;
+                startY = (int) (screenHeight * (1 - (percentage / 100.0)));
+                endX = startX;
+                endY = (int) (screenHeight * 0.1);  // Near the top
+                break;
+
+            case DOWN:
+                startX = screenWidth / 2;
+                startY = (int) (screenHeight * (percentage / 100.0));
+                endX = startX;
+                endY = (int) (screenHeight * 0.9);  // Near the bottom
+                break;
+
+            case LEFT:
+                startX = (int) (screenWidth * (1 - (percentage / 100.0)));
+                startY = screenHeight / 2;
+                endX = (int) (screenWidth * 0.1);
+                endY = startY;
+                break;
+
+            case RIGHT:
+                startX = (int) (screenWidth * (percentage / 100.0));
+                startY = screenHeight / 2;
+                endX = (int) (screenWidth * 0.9);
+                endY = startY;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid swipe direction! Use: UP, DOWN, LEFT, or RIGHT.");
         }
+
+        performSwipe(startX, startY, endX, endY);
+    }
+
+    private static void performSwipe(int startX, int startY, int endX, int endY) {
+        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+        Sequence swipe = new Sequence(finger, 1);
+
+        swipe.addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, startY));
+        swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(600), PointerInput.Origin.viewport(), endX, endY));
+        swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+        ((AppiumDriver) driver.get()).perform((Collections.singletonList(swipe)));
+    }
+
+     void swipeDownToElement(String elementName, Integer timeout){
+        boolean found = false;
+        while(!found){
+
+//           if(verifyElementVisible(elementName, timeout)==false){
+//
+//           }
+        }
+
+    }
+
+     void swipeUpToElement(String elementName, Integer timeout){
+
     }
 
     public void pressEnter() {
-        if(appiumDriver.get().toString().contains("IOSDriver")){
-            appiumDriver.get().findElement(By.xpath("//XCUIElementTypeButton[@name=\"Go\"]")).click();
-        }else{
-            ((AndroidDriver) appiumDriver.get()).pressKey(new KeyEvent(AndroidKey.ENTER));
+        if(driver.get() instanceof IOSDriver){
+            driver.get().findElement(By.xpath("//XCUIElementTypeButton[@name=\"Go\"]")).click();
+        }else if (driver.get() instanceof AndroidDriver){
+            ((AndroidDriver) driver.get()).pressKey(new KeyEvent(AndroidKey.ENTER));
+        }else {
+            System.out.println("Driver is not an instance of AndroidDriver or IOSDriver.");
         }
-    }
-
-    public boolean verifyElementVisible(String elementName, Integer timeout) {
-        try{
-            softAssert.assertTrue(waitElementVisible(elementName, timeout), "Element "+elementName+" with locator: "+getElementValue(elementName, getPlatform()));
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
-
-    public void navigateToURL(String URL) {
-        appiumDriver.get().get(globalDeviceParameter.get(0).get(URL));
     }
 }

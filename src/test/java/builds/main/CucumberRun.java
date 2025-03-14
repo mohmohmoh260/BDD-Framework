@@ -1,9 +1,9 @@
 package builds.main;
 
 import builds.extent.ExtentManager;
-import builds.driver.BrowserInstance;
+import builds.driver.BrowserDriver;
 import builds.elements.ElementInstance;
-import builds.driver.MobileInstance;
+import builds.driver.MobileDriver;
 import com.aventstack.extentreports.ExtentReports;
 import io.cucumber.testng.*;
 import org.testng.annotations.AfterSuite;
@@ -24,21 +24,10 @@ public class CucumberRun {
 
 	public static class TestRunner extends AbstractTestNGCucumberTests {
 
-		private static final ExtentReports extent = ExtentManager.createInstance();
-
 		@Override
 		@DataProvider(parallel = false)
 		public Object[][] scenarios() {
 			return super.scenarios();
-		}
-
-		@BeforeSuite
-		public void clearDriverInstance(){
-			MobileInstance mobileInstance = new MobileInstance();
-			mobileInstance.quitMobileDriver();
-
-			BrowserInstance browserInstance = new BrowserInstance();
-			browserInstance.quitWebDriver();
 		}
 
 		@BeforeSuite
@@ -48,7 +37,7 @@ public class CucumberRun {
 		}
 
 		@AfterSuite
-		public void afterSuite() throws IOException {
+		public void navigateToReportFolder() throws IOException {
 			String OS = System.getProperty("os.name");
 
 			if(!OS.contains("Mac OS")){
@@ -59,9 +48,8 @@ public class CucumberRun {
 		}
 
 		@AfterSuite
-		public void tearDown() {
-			extent.flush();  // Ensure the report is finalized
+		public void flushExtentReport() {
+			//ExtentManager.getInstance().flush(); // Ensure the report is finalized
 		}
-
 	}
 }
