@@ -37,7 +37,10 @@ public class CommonStepDefinitions extends MainActions {
                         continue;
                     }
 
-                    List<List<String>> scenarioStepsForExample = Collections.singletonList(gherkinDataTableExtractor.get().extractStepsFromFeature(featureFile, scenarioName, exampleData));
+                    // Extract steps for the specific example only
+                    List<List<String>> scenarioStepsForExample = Collections.singletonList(
+                            gherkinDataTableExtractor.get().extractStepsFromFeature(featureFile, scenarioName, exampleData)
+                    );
 
                     String formattedExampleData = exampleData.entrySet().stream()
                             .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
@@ -49,10 +52,10 @@ public class CommonStepDefinitions extends MainActions {
 
                     executedExamples.add(exampleData); // ✅ Mark this example as executed
                 }
-                return; // Exit after executing Scenario Outline examples
+                return; // ✅ Exit after executing Scenario Outline examples
             }
 
-            // ✅ If no examples exist, run the scenario normally
+            // ✅ If no examples exist, run the scenario normally (single execution)
             List<List<String>> scenarioSteps = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
             if (!scenarioSteps.isEmpty()) {
                 Hooks.getScenario().log("🔹 Running Scenario: **" + scenarioName + "** (No Examples)");
@@ -63,7 +66,7 @@ public class CommonStepDefinitions extends MainActions {
                     Hooks.getScenario().log("❌ Scenario Failed: **" + scenarioName + "** | Error: " + e.getMessage());
                     throw e;
                 }
-                return; // Exit after executing the scenario
+                return; // ✅ Exit after executing the scenario
             }
         }
     }

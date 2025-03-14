@@ -19,46 +19,45 @@ public class GherkinDataTableExtractor {
         List<String> headers = new ArrayList<>();
         List<Map<String, String>> exampleData = new ArrayList<>();
 
-        for (String line : lines) {
-            line = line.trim();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i).trim();
+
+            // ✅ Detect scenario outline start
             if (line.startsWith("Scenario Outline:") && line.contains(scenarioName)) {
                 foundScenario = true;
                 continue;
             }
-            if (foundScenario) {
-                if (line.startsWith("Scenario:") || line.startsWith("Feature:")) {
-                    break; // Stop when a new scenario starts
-                }
-                if (line.startsWith("Examples:")) {
-                    foundExamples = true;
-                    continue;
-                }
-                if (foundExamples) {
-                    if (line.startsWith("|")) {
-                        List<String> values = Arrays.asList(line.split("\\|"));
-                        values = values.stream().map(String::trim).filter(s -> !s.isEmpty()).toList();
 
-                        if (headers.isEmpty()) {
-                            headers = values.stream()
-                                    .map(header -> "<" + header + ">") // Ensure placeholders retain "< >"
-                                    .toList();
-                        } else {
-                            if (values.size() > headers.size()) {
-                                values = values.subList(0, headers.size()); // ✅ Trim extra values
-                            } else if (values.size() < headers.size()) {
-                                throw new IllegalStateException("❌ Mismatch: headers size (" + headers.size() + ") vs values size (" + values.size() + ") in " + featureFile);
-                            }
+            // ✅ Stop processing when encountering a new scenario or feature
+            if (foundScenario && (line.startsWith("Scenario:") || line.startsWith("Scenario Outline:") || line.startsWith("Feature:"))) {
+                break; // 🔴 EXIT to avoid processing another scenario's examples
+            }
 
-                            Map<String, String> rowData = new HashMap<>();
-                            for (int i = 0; i < values.size(); i++) {
-                                rowData.put(headers.get(i), values.get(i)); // Assign values correctly
-                            }
-                            exampleData.add(rowData);
-                        }
+            // ✅ Detect and process Examples table
+            if (foundScenario && line.startsWith("Examples:")) {
+                foundExamples = true;
+                i++; // Move to headers row
+                headers = extractTableRow(lines.get(i++));
+
+                while (i < lines.size() && lines.get(i).trim().startsWith("|")) {
+                    List<String> values = extractTableRow(lines.get(i++));
+
+                    if (values.size() != headers.size()) {
+                        throw new IllegalStateException(
+                                "❌ Mismatch: headers size (" + headers.size() + ") vs values size (" + values.size() + ") in " + featureFile
+                        );
                     }
+
+                    Map<String, String> rowData = new HashMap<>();
+                    for (int j = 0; j < headers.size(); j++) {
+                        rowData.put("<" + headers.get(j) + ">", values.get(j));
+                    }
+                    exampleData.add(rowData);
                 }
+                break; // ✅ STOP after processing correct Examples table
             }
         }
+
         return exampleData;
     }
 
@@ -92,49 +91,55 @@ public class GherkinDataTableExtractor {
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i).trim();
 
-            // Detect the start of the correct scenario
+            // ✅ Detect correct scenario
             if (line.startsWith("Scenario Outline:") && line.contains(scenarioName)) {
                 foundScenario = true;
                 isScenarioOutline = true;
-                foundExamples = false; // Reset flag to ensure only this scenario's examples are read
+                foundExamples = false;
                 stepTemplate.clear();
                 examplesList.clear();
                 continue;
-            } else if (line.startsWith("Scenario:") || line.startsWith("Scenario Outline:") || line.startsWith("Feature:")) {
-                if (foundScenario) {
-                    break; // Stop reading when a new scenario or feature starts
-                }
+            }
+            else if (line.startsWith("Scenario:") || line.startsWith("Scenario Outline:") || line.startsWith("Feature:")) {
+                if (foundScenario) break; // ✅ STOP at the next scenario
             }
 
-            // Capture steps if inside the correct scenario
+            // ✅ Capture steps for the intended scenario
             if (foundScenario && line.matches("^(Given|When|Then|And)\\s+.*")) {
                 stepTemplate.add(line);
             }
 
-            // Read Examples **only for the correct Scenario Outline**
+            // ✅ Stop when "Examples:" for another scenario appears
             if (foundScenario && isScenarioOutline && line.startsWith("Examples:")) {
-                foundExamples = true; // Start reading examples
+                foundExamples = true;
                 i++; // Move to headers row
                 List<String> headers = extractTableRow(lines.get(i++));
 
                 while (i < lines.size() && lines.get(i).trim().startsWith("|")) {
                     List<String> values = extractTableRow(lines.get(i++));
+
+                    if (values.size() != headers.size()) {  // ✅ ADD THIS CHECK
+                        throw new IllegalStateException(
+                                "❌ Mismatch: headers size (" + headers.size() + ") vs values size (" + values.size() + ") in " + featureFile
+                        );
+                    }
+
                     Map<String, String> rowData = new HashMap<>();
-                    for (int j = 0; j < headers.size() && j < values.size(); j++) {
-                        rowData.put("<" + headers.get(j) + ">", values.get(j)); // Keep placeholder format
+                    for (int j = 0; j < headers.size(); j++) {
+                        rowData.put("<" + headers.get(j) + ">", values.get(j));
                     }
                     examplesList.add(rowData);
                 }
-                break; // ✅ Stop reading after the correct Examples section
+                break; // ✅ STOP after processing the correct "Examples:"
             }
         }
 
-        // ✅ If it's a normal scenario (not an outline), return steps as-is
+        // ✅ Handle normal scenarios (not outlines)
         if (!isScenarioOutline) {
             return stepTemplate;
         }
 
-        // ✅ Ensure the correct example data is used
+        // ✅ Ensure only the correct example row is used
         for (Map<String, String> row : examplesList) {
             if (row.equals(exampleData)) {
                 return stepTemplate.stream()

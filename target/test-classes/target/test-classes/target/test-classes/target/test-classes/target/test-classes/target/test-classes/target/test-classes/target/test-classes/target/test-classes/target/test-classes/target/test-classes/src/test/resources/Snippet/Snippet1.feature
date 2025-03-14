@@ -1,5 +1,8 @@
 Feature: Snippet Demo Feature
 
+
+
+
   Scenario Outline: User login to M2U
     Then set text "<username>" into "Username_Input"
     And click "Button_Login"
@@ -19,12 +22,6 @@ Feature: Snippet Demo Feature
     Then print "<data>" and "<data2>"
     Then print "<data3>" and "<data4>"
     Examples:
-    |data|data2|data3|data4|
-    |123 |abc  |aaaa |bbbb |
-    |456 |def  | cccc|dddd |
-
-
-
-
-
-
+      |data|data2|data3|data4|
+      |123 |abc  |aaaa |bbbb |
+      |456 |def  | cccc|dddd |

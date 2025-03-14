@@ -5,9 +5,9 @@ Feature: Snippet Demo Feature
     Then print "<data>" and "<data2>"
     Then print "<data3>" and "<data4>"
     Examples:
-      |data|data2|data3|data4|
-      |123 |abc  |aaaa |bbbb |
-      |456 |def  | cccc|dddd |
+      |data  |data2 |data3  |data4 |
+      |123   |abc   |aaaa   |bbbb  |
+      |456   |def   |cccc   |dddd  |
 
   Scenario Outline: User login to M2U
     Then set text "<username>" into "Username_Input"
@@ -23,4 +23,3 @@ Feature: Snippet Demo Feature
     Examples:
     |username|password|securityPhrase|
     |autouat1|Maybank@1|automation ONLY?|
-
