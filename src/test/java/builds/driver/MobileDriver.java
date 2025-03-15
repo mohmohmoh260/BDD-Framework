@@ -1,6 +1,5 @@
 package builds.driver;
 
-import builds.utilities.TestNGXmlParser;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.ios.IOSDriver;
@@ -17,10 +16,9 @@ import java.util.Map;
 public class MobileDriver extends MainDriver {
 
     private static final ThreadLocal<AppiumDriverLocalService> appiumDriverLocalService = new ThreadLocal<>();
-    private static final TestNGXmlParser testNGXmlParser = new TestNGXmlParser();
 
     public void setupMobileDriver(String testName) {
-        List<Map<String, String>> deviceParameters = testNGXmlParser.filterXMLByTestName(testName);
+        List<Map<String, String>> deviceParameters = filterXMLByTestName(testName);
 
         String platformName = deviceParameters.get(0).get("platformName");
         String udid = deviceParameters.get(0).get("udid");

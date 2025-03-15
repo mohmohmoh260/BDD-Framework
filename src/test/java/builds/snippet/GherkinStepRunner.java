@@ -2,6 +2,8 @@ package builds.snippet;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
+
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.*;
@@ -14,7 +16,7 @@ public class GherkinStepRunner {
         this.stepDefinitionClasses = stepDefinitionClasses;
     }
 
-    public boolean executeStep(String gherkinStep, DataTable dataTable) throws Exception {
+    public boolean executeStep(String gherkinStep, DataTable dataTable) throws Throwable {
         String cleanedStep = gherkinStep.replaceFirst("^(Given|When|Then|And|\\$)\\s+", "").trim();
 
         for (Class<?> clazz : stepDefinitionClasses) {
@@ -41,8 +43,13 @@ public class GherkinStepRunner {
                     }
 
                     // Invoke the method
-                    // System.out.println("Executing snippet step: " + gherkinStep);
-                    method.invoke(instance, params);
+                    try {
+                        method.invoke(instance, params);
+                    } catch (InvocationTargetException e) {
+                        System.err.println("Error invoking method: " + method.getName());
+                        e.getCause().printStackTrace(); // Print root cause
+                        throw e.getCause(); // Re-throw the actual cause
+                    }
                     return true;
                 }
             }

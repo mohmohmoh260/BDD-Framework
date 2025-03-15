@@ -84,7 +84,6 @@ public class GherkinDataTableExtractor {
         List<String> lines = Files.readAllLines(featureFile);
         boolean isScenarioOutline = false;
         boolean foundScenario = false;
-        boolean foundExamples = false;
         List<String> stepTemplate = new ArrayList<>();
         List<Map<String, String>> examplesList = new ArrayList<>();
 
@@ -95,9 +94,7 @@ public class GherkinDataTableExtractor {
             if (line.startsWith("Scenario Outline:") && line.contains(scenarioName)) {
                 foundScenario = true;
                 isScenarioOutline = true;
-                foundExamples = false;
                 stepTemplate.clear();
-                examplesList.clear();
                 continue;
             }
             else if (line.startsWith("Scenario:") || line.startsWith("Scenario Outline:") || line.startsWith("Feature:")) {
@@ -110,8 +107,7 @@ public class GherkinDataTableExtractor {
             }
 
             // ✅ Stop when "Examples:" for another scenario appears
-            if (foundScenario && isScenarioOutline && line.startsWith("Examples:")) {
-                foundExamples = true;
+            if (foundScenario && line.startsWith("Examples:")) {
                 i++; // Move to headers row
                 List<String> headers = extractTableRow(lines.get(i++));
 
@@ -165,7 +161,7 @@ public class GherkinDataTableExtractor {
         return step;
     }
 
-    public void executeScenarioWithExampleData(List<List<String>> scenarioStepsForExample, Map<String, String> exampleData, Scenario scenario) throws Exception {
+    public void executeScenarioWithExampleData(List<List<String>> scenarioStepsForExample, Map<String, String> exampleData, Scenario scenario) throws Throwable {
         for (List<String> steps : scenarioStepsForExample) {
             for (String step : steps) {
                 // Execute only once with final replaced step

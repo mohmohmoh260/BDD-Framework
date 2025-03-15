@@ -1,5 +1,6 @@
 package builds.elements;
 
+import builds.utilities.TestNGXmlParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,19 +11,16 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ElementInstance {
+public class ElementInstance extends TestNGXmlParser {
 
-    public static final ThreadLocal<HashMap<String, HashMap<String, String>>> elements = ThreadLocal.withInitial(HashMap::new);
-    private static final ThreadLocal<Map<String, String>> keyToFileMap = ThreadLocal.withInitial(HashMap::new); // Stores key → file mapping
+    private final ThreadLocal<HashMap<String, HashMap<String, String>>> elements = ThreadLocal.withInitial(HashMap::new);
+    private final ThreadLocal<Map<String, String>> keyToFileMap = ThreadLocal.withInitial(HashMap::new); // Stores key → file mapping
 
-    public ElementInstance(){
-        getAllElement();
+    public ElementInstance() {
+        getAllElement(); // Ensures each thread initializes its own elements map
     }
 
-    private void getAllElement() {
-        elements.get().clear(); // Clear before loading to avoid duplicates
-        keyToFileMap.get().clear();
-
+    private synchronized void getAllElement() {
         String directoryPath = "src/test/java/workDirectory/pageObject"; // Adjust path if needed
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -35,17 +33,27 @@ public class ElementInstance {
         searchJsonFiles(folder, objectMapper);
     }
 
-    public String getElementValue(String elementName, String platform) {
-        HashMap<String, HashMap<String, String>> elementsMap = ElementInstance.elements.get();
+    protected String getElementValue(String elementName, String platform) {
+        // Ensure elements are loaded before using them
+        if (elements.get().isEmpty()) {
+            getAllElement();
+        }
+
+        HashMap<String, HashMap<String, String>> elementsMap = elements.get();
 
         if (elementsMap.containsKey(elementName)) {
             HashMap<String, String> platformData = elementsMap.get(elementName);
-            return platformData.getOrDefault(platform, "❌ Platform name not found");
+            String locator = platformData.get(platform);
+
+            if (locator == null || locator.isEmpty()) {
+                throw new RuntimeException("❌ Element found, but no locator for platform: " + platform);
+            }
+            return locator;
         }
-        return "❌ Element name not found";
+        throw new RuntimeException("❌ Element name not found: " + elementName);
     }
 
-    private void searchJsonFiles(File folder, ObjectMapper objectMapper) {
+    private synchronized void searchJsonFiles(File folder, ObjectMapper objectMapper) {
         for (File file : Objects.requireNonNull(folder.listFiles())) {
             if (file.isDirectory()) {
                 searchJsonFiles(file, objectMapper);

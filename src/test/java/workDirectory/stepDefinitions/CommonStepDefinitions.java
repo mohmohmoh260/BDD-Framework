@@ -1,7 +1,6 @@
 package workDirectory.stepDefinitions;
 
 import builds.actions.MainActions;
-import builds.driver.MainDriver;
 import builds.snippet.GherkinDataTableExtractor;
 import builds.utilities.IfStatementHandler;
 import io.cucumber.java.ParameterType;
@@ -22,7 +21,7 @@ public class CommonStepDefinitions extends MainActions {
     private static final ThreadLocal<IfStatementHandler> ifStatementHandler = ThreadLocal.withInitial(IfStatementHandler::new);
 
     @When("^run snippet scenario \"([^\"]+)\"$")
-    public void runSnippetScenario(String scenarioName) throws Exception {
+    public void runSnippetScenario(String scenarioName) throws Throwable {
         List<Path> featureFiles = gherkinDataTableExtractor.get().getFeatureFiles();
         Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
 

@@ -1,6 +1,5 @@
 package builds.driver;
 
-import builds.utilities.TestNGXmlParser;
 import org.json.JSONObject;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -11,22 +10,18 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class RemoteDriver extends MainDriver {
-
-    private final List<Map<String,String>> globalDeviceParameter = TestNGXmlParser.getGlobalParameters();
 
     public void setupRemoteDriver(String platform, String URL) throws IOException {
         if (driver.get() == null) {
             driver.set(new RemoteWebDriver(new URL(getBrowserStackURL()), getCapabilities(platform)));
-            driver.get().get(globalDeviceParameter.get(0).get(URL));
+            driver.get().get(globalDeviceParameter.get().get(0).get(URL));
         }
     }
 
     private String getBrowserStackURL() {
-        return "https://instructorkym_Jty946:3EsDgU7zSZrAnCZJ2fRj@hub-cloud.browserstack.com/wd/hub";
+        return "https://amirul_D6CMwe:FqzCyn83EZ5zx7xLy71C@hub-cloud.browserstack.com/wd/hub";
     }
 
     private static DesiredCapabilities getCapabilities(String platform) throws IOException {
@@ -58,7 +53,6 @@ public class RemoteDriver extends MainDriver {
             JSONObject mobileConfig = jsonConfig.getJSONObject(platform); // "android" or "ios"
 
             HashMap<String, Object> browserstackOptions = new HashMap<>();
-            System.out.println("Check: "+mobileConfig.getString("deviceName"));
             browserstackOptions.put("deviceName", mobileConfig.getString("deviceName"));
             browserstackOptions.put("osVersion", mobileConfig.getString("osVersion"));
             browserstackOptions.put("app", mobileConfig.getString("app"));
@@ -69,12 +63,5 @@ public class RemoteDriver extends MainDriver {
         }
 
         return caps;
-    }
-
-    public void quitDriver() {
-        if (driver.get() != null) {
-            driver.get().quit();
-            driver.remove();
-        }
     }
 }

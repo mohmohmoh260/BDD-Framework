@@ -2,10 +2,8 @@ package builds.actions;
 
 import builds.driver.BrowserDriver;
 import builds.driver.MainDriver;
-import builds.utilities.TestNGXmlParser;
 import builds.driver.MobileDriver;
 import builds.driver.RemoteDriver;
-import builds.elements.ElementInstance;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -18,19 +16,15 @@ import workDirectory.stepDefinitions.Hooks;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public abstract class MainActions extends MainDriver {
 
-    protected static final ThreadLocal<List<Map<String, String>>> globalDeviceParameter = ThreadLocal.withInitial(() -> new ArrayList<>(TestNGXmlParser.getGlobalParameters()));
     protected static final ThreadLocal<Boolean> toExecute = ThreadLocal.withInitial(() -> true);
     protected static final ThreadLocal<HashMap<String, String>> variables = ThreadLocal.withInitial(HashMap::new);
-    private static final ThreadLocal<ElementInstance> elementInstance = ThreadLocal.withInitial(ElementInstance::new);
 
     public static class Result { // Make it public static
         public boolean success;
@@ -88,22 +82,15 @@ public abstract class MainActions extends MainDriver {
         String xpath;
 
         if (driver.get() instanceof RemoteWebDriver) {
-            xpath = elementInstance.get().getElementValue(elementName, "web");
+            xpath = getElementValue(elementName, "web");
         } else if (driver.get() instanceof AndroidDriver) {
-            xpath = elementInstance.get().getElementValue(elementName, "android");
+            xpath = getElementValue(elementName, "android");
         } else if (driver.get() instanceof IOSDriver) {
-            xpath = elementInstance.get().getElementValue(elementName, "ios");
+            xpath =getElementValue(elementName, "ios");
         } else {
             System.err.println("Driver is not an instance of AndroidDriver, IOSDriver, or RemoteWebDriver");
             return null;
         }
-
-        // 🛑 Prevent InvalidSelectorException
-        if (xpath.startsWith("❌")) {
-            System.err.println("❌ ERROR: Invalid XPath returned for element -> " + elementName);
-            return null;
-        }
-
         return By.xpath(xpath);
     }
 

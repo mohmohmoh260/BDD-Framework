@@ -11,6 +11,10 @@ Feature: Reuse Scenarios
   #And run snippet scenario "testing"
     When run snippet scenario "User login to M2U"
 
+  @test
+  Scenario: Print Device Driver 3
+  #And run snippet scenario "testing"
+    When run snippet scenario "User login to M2U 2"
 
 
 

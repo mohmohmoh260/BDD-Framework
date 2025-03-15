@@ -1,32 +1,27 @@
 package builds.driver;
 
-import builds.utilities.TestNGXmlParser;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class BrowserDriver extends MainDriver {
 
-    private final List<Map<String,String>> globalDeviceParameter = TestNGXmlParser.getGlobalParameters();
-
     public void setupBrowserDriver(String browserType, String URL){
         // Global Setup
-        if(globalDeviceParameter.get(0).get("globalBrowserTypeState").equalsIgnoreCase("false")){
-            if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("chrome")){
+        if(globalDeviceParameter.get().get(0).get("globalBrowserTypeState").equalsIgnoreCase("false")){
+            if(globalDeviceParameter.get().get(0).get("globalBrowserType").equalsIgnoreCase("chrome")){
                 driver.set(WebDriverManager.chromedriver().create());
-            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("firefox")){
+            }else if(globalDeviceParameter.get().get(0).get("globalBrowserType").equalsIgnoreCase("firefox")){
                 driver.set(WebDriverManager.firefoxdriver().create());
-            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("edge")){
+            }else if(globalDeviceParameter.get().get(0).get("globalBrowserType").equalsIgnoreCase("edge")){
                 driver.set(WebDriverManager.edgedriver().create());
-            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("chromium")){
+            }else if(globalDeviceParameter.get().get(0).get("globalBrowserType").equalsIgnoreCase("chromium")){
                 driver.set(WebDriverManager.chromiumdriver().create());
-            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("ie")){
+            }else if(globalDeviceParameter.get().get(0).get("globalBrowserType").equalsIgnoreCase("ie")){
                 driver.set(WebDriverManager.iedriver().create());
-            }else if(globalDeviceParameter.get(0).get("globalBrowserType").equalsIgnoreCase("safari")){
+            }else if(globalDeviceParameter.get().get(0).get("globalBrowserType").equalsIgnoreCase("safari")){
                 driver.set(WebDriverManager.safaridriver().create());
             }else{
                 Logger logger = (Logger) LoggerFactory.getILoggerFactory();
@@ -53,7 +48,7 @@ public class BrowserDriver extends MainDriver {
                 driver.set(WebDriverManager.chromiumdriver().create());
             }
         }
-        driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(Long.parseLong(globalDeviceParameter.get(0).get("implicitwait"))));
-        driver.get().get(globalDeviceParameter.get(0).get(URL));
+        driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(Long.parseLong(globalDeviceParameter.get().get(0).get("implicitwait"))));
+        driver.get().get(globalDeviceParameter.get().get(0).get(URL));
     }
 }

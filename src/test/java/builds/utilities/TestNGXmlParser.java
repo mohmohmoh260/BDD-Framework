@@ -8,9 +8,11 @@ import java.io.FileInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TestNGXmlParser {
+public abstract class TestNGXmlParser {
 
-    public static List<Map<String, String>> getGlobalParameters() {
+    protected static final ThreadLocal<List<Map<String, String>>> globalDeviceParameter = ThreadLocal.withInitial(() -> new ArrayList<>(TestNGXmlParser.getGlobalParameters()));
+
+    protected static List<Map<String, String>> getGlobalParameters() {
         String testngXmlPath = "testng.xml";
         List<Map<String, String>> globalParametersList = new ArrayList<>();
         try {
@@ -24,11 +26,8 @@ public class TestNGXmlParser {
                 Map<String, String> globalParams = suite.getParameters();
 
                 if (!globalParams.isEmpty()) {
-                    Map<String, String> globalParamsMap = new LinkedHashMap<>();
                     // Add suite-level parameters
-                    for (Map.Entry<String, String> entry : globalParams.entrySet()) {
-                        globalParamsMap.put(entry.getKey(), entry.getValue());
-                    }
+                    Map<String, String> globalParamsMap = new LinkedHashMap<>(globalParams);
 
                     // Add global parameters to the list
                     globalParametersList.add(globalParamsMap);
@@ -41,7 +40,7 @@ public class TestNGXmlParser {
         return globalParametersList;
     }
 
-    public List<Map<String, String>> filterXMLByTestName(String testName){
+    protected List<Map<String, String>> filterXMLByTestName(String testName){
         List<Map<String, String>> allTests = getXMLContent();
         // Example usage: filter by test name
         List<Map<String, String>> filteredTests = filterByTestName(allTests, testName);
@@ -98,9 +97,7 @@ public class TestNGXmlParser {
 
                     // Add test-level parameters
                     Map<String, String> testParameters = test.getLocalParameters();
-                    for (Map.Entry<String, String> entry : testParameters.entrySet()) {
-                        testDetails.put(entry.getKey(), entry.getValue());
-                    }
+                    testDetails.putAll(testParameters);
 
                     // Add all class names under this test
                     List<String> classes = new ArrayList<>();
