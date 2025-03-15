@@ -12,22 +12,26 @@ import java.util.regex.Pattern;
 
 public class ElementInstance {
 
-    public static final ThreadLocal<HashMap<String, HashMap<String, String>>> elements =
-            ThreadLocal.withInitial(HashMap::new);
+    public static final ThreadLocal<HashMap<String, HashMap<String, String>>> elements = ThreadLocal.withInitial(HashMap::new);
+    private static final ThreadLocal<Map<String, String>> keyToFileMap = ThreadLocal.withInitial(HashMap::new); // Stores key → file mapping
 
-    private static final Map<String, String> keyToFileMap = new HashMap<>(); // Stores key → file mapping
+    public ElementInstance(){
+        getAllElement();
+    }
 
-    public void getAllElement() {
-        String directoryPath = "src/test/java/workDirectory/pageObject"; // Change this to your directory path
+    private void getAllElement() {
+        elements.get().clear(); // Clear before loading to avoid duplicates
+        keyToFileMap.get().clear();
+
+        String directoryPath = "src/test/java/workDirectory/pageObject"; // Adjust path if needed
         ObjectMapper objectMapper = new ObjectMapper();
 
         File folder = new File(directoryPath);
         if (!folder.exists() || !folder.isDirectory()) {
-            System.out.println("Invalid directory path!");
+            System.err.println("❌ Invalid directory path: " + directoryPath);
             return;
         }
 
-        // Recursively search for JSON files in all subdirectories
         searchJsonFiles(folder, objectMapper);
     }
 
@@ -41,7 +45,7 @@ public class ElementInstance {
         return "❌ Element name not found";
     }
 
-    private static void searchJsonFiles(File folder, ObjectMapper objectMapper) {
+    private void searchJsonFiles(File folder, ObjectMapper objectMapper) {
         for (File file : Objects.requireNonNull(folder.listFiles())) {
             if (file.isDirectory()) {
                 searchJsonFiles(file, objectMapper);
@@ -75,17 +79,17 @@ public class ElementInstance {
                             file, new TypeReference<HashMap<String, HashMap<String, String>>>() {});
 
                     for (String key : data.keySet()) {
-                        if (keyToFileMap.containsKey(key)) {
+                        if (keyToFileMap.get().containsKey(key)) {
                             throw new RuntimeException("❌ Duplicate name found across multiple files: \"" + key +
-                                    "\"\n  - " + keyToFileMap.get(key) +
+                                    "\"\n  - " + keyToFileMap.get().get(key) +
                                     "\n  - " + file.getAbsolutePath());
                         }
-                        keyToFileMap.put(key, file.getAbsolutePath());
+                        keyToFileMap.get().put(key, file.getAbsolutePath());
                     }
 
                     elements.get().putAll(data);
 
-                    System.out.println("✅ File processed: " + file.getAbsolutePath());
+                    //System.out.println("✅ File processed: " + file.getAbsolutePath());
 
                 } catch (IOException e) {
                     System.err.println("❌ Error reading file: " + file.getAbsolutePath());

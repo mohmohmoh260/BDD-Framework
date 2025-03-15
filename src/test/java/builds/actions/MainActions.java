@@ -18,6 +18,7 @@ import workDirectory.stepDefinitions.Hooks;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,10 @@ import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public abstract class MainActions extends MainDriver {
 
-    protected static final List<Map<String,String>> globalDeviceParameter = TestNGXmlParser.getGlobalParameters();
+    protected static final ThreadLocal<List<Map<String, String>>> globalDeviceParameter = ThreadLocal.withInitial(() -> new ArrayList<>(TestNGXmlParser.getGlobalParameters()));
     protected static final ThreadLocal<Boolean> toExecute = ThreadLocal.withInitial(() -> true);
     protected static final ThreadLocal<HashMap<String, String>> variables = ThreadLocal.withInitial(HashMap::new);
-    private static final ElementInstance elementInstance = new ElementInstance();
+    private static final ThreadLocal<ElementInstance> elementInstance = ThreadLocal.withInitial(ElementInstance::new);
 
     public static class Result { // Make it public static
         public boolean success;
@@ -44,7 +45,7 @@ public abstract class MainActions extends MainDriver {
     public boolean waitElementExist(String elementName, Integer timeout) {
         try{
             if (timeout == null) {
-                timeout = Integer.parseInt(globalDeviceParameter.get(0).get("timeOut"));
+                timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
             }
             WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
             wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
@@ -57,7 +58,7 @@ public abstract class MainActions extends MainDriver {
     public boolean waitElementVisible(String elementName, Integer timeout){
         try{
             if (timeout == null) {
-                timeout = Integer.parseInt(globalDeviceParameter.get(0).get("timeOut"));
+                timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
             }
             WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
             wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
@@ -83,17 +84,27 @@ public abstract class MainActions extends MainDriver {
         remoteDriver.setupRemoteDriver(platform, URL);
     }
 
-    public By fetchElement(String elementName){
-        if(driver.get() instanceof RemoteWebDriver){
-            return By.xpath(elementInstance.getElementValue(elementName, "web"));
+    public By fetchElement(String elementName) {
+        String xpath;
+
+        if (driver.get() instanceof RemoteWebDriver) {
+            xpath = elementInstance.get().getElementValue(elementName, "web");
         } else if (driver.get() instanceof AndroidDriver) {
-            return By.xpath(elementInstance.getElementValue(elementName, "android"));
+            xpath = elementInstance.get().getElementValue(elementName, "android");
         } else if (driver.get() instanceof IOSDriver) {
-            return By.xpath(elementInstance.getElementValue(elementName, "ios"));
-        }else {
-            System.err.println("Driver is not an instance of AndroidDriver or IOSDriver or RemoteWebDriver");
+            xpath = elementInstance.get().getElementValue(elementName, "ios");
+        } else {
+            System.err.println("Driver is not an instance of AndroidDriver, IOSDriver, or RemoteWebDriver");
             return null;
         }
+
+        // 🛑 Prevent InvalidSelectorException
+        if (xpath.startsWith("❌")) {
+            System.err.println("❌ ERROR: Invalid XPath returned for element -> " + elementName);
+            return null;
+        }
+
+        return By.xpath(xpath);
     }
 
     public List<WebElement> findElements(String elementName, Integer timeout){
@@ -191,6 +202,6 @@ public abstract class MainActions extends MainDriver {
     }
 
     public void navigateToURL(String URL) {
-        driver.get().get(globalDeviceParameter.get(0).get(URL));
+        driver.get().get(globalDeviceParameter.get().get(0).get(URL));
     }
 }

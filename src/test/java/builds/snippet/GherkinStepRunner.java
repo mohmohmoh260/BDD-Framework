@@ -41,7 +41,7 @@ public class GherkinStepRunner {
                     }
 
                     // Invoke the method
-                    System.out.println("Executing snippet step: " + gherkinStep);
+                    // System.out.println("Executing snippet step: " + gherkinStep);
                     method.invoke(instance, params);
                     return true;
                 }

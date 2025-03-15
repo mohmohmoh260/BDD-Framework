@@ -24,7 +24,7 @@ public class Hooks extends MainActions {
 
     @AfterStep
     public void takeScreenshotIfFailed(Scenario scenario) {
-        if(globalDeviceParameter.get(0).get("screenshotEveryStep").equals("true")){
+        if(globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true")){
             screenshot();
         }
     }

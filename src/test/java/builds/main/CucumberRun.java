@@ -25,15 +25,9 @@ public class CucumberRun {
 	public static class TestRunner extends AbstractTestNGCucumberTests {
 
 		@Override
-		@DataProvider(parallel = false)
+		@DataProvider(parallel = true)
 		public Object[][] scenarios() {
 			return super.scenarios();
-		}
-
-		@BeforeSuite
-		public void fetchData(){
-			ElementInstance elementInstance = new ElementInstance();
-			elementInstance.getAllElement();
 		}
 
 		@AfterSuite
@@ -45,11 +39,6 @@ public class CucumberRun {
 			}else {
 				Desktop.getDesktop().open(new File(System.getProperty("user.dir")+"/Test Reports"));
 			}
-		}
-
-		@AfterSuite
-		public void flushExtentReport() {
-			//ExtentManager.getInstance().flush(); // Ensure the report is finalized
 		}
 	}
 }
