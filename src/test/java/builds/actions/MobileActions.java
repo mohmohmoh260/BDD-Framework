@@ -28,7 +28,7 @@ public class MobileActions extends MainActions {
         UP, DOWN, LEFT, RIGHT
     }
 
-    public static void swipe(SwipeDirection direction, int percentage) {
+    public void swipe(SwipeDirection direction, int percentage) {
         int screenWidth = driver.get().manage().window().getSize().width;
         int screenHeight = driver.get().manage().window().getSize().height;
 
@@ -70,7 +70,7 @@ public class MobileActions extends MainActions {
         performSwipe(startX, startY, endX, endY);
     }
 
-    private static void performSwipe(int startX, int startY, int endX, int endY) {
+    private void performSwipe(int startX, int startY, int endX, int endY) {
         PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
         Sequence swipe = new Sequence(finger, 1);
 

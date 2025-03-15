@@ -8,9 +8,6 @@ import java.util.*;
 
 public class IfStatementHandler extends MainActions {
 
-    private final MobileActions mobileActions = new MobileActions();
-    private final BrowserActions browserActions = new BrowserActions();
-
     public void toExecuteChecker(String methodName, List<Object> param, Integer timeout){
         Result result;
         switch (methodName){

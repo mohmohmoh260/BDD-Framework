@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 
 public abstract class TestNGXmlParser {
 
-    protected static final ThreadLocal<List<Map<String, String>>> globalDeviceParameter = ThreadLocal.withInitial(() -> new ArrayList<>(TestNGXmlParser.getGlobalParameters()));
+    protected static final ThreadLocal<List<Map<String, String>>> globalDeviceParameter = ThreadLocal.withInitial(() -> new ArrayList<>(getGlobalParameters()));
 
-    protected static List<Map<String, String>> getGlobalParameters() {
+    private static List<Map<String, String>> getGlobalParameters() {
         String testngXmlPath = "testng.xml";
         List<Map<String, String>> globalParametersList = new ArrayList<>();
         try {

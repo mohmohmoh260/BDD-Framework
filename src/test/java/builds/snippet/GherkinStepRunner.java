@@ -10,10 +10,10 @@ import java.util.regex.*;
 
 public class GherkinStepRunner {
 
-    private final List<Class<?>> stepDefinitionClasses;
+    private static List<Class<?>> stepDefinitionClasses = null;
 
     public GherkinStepRunner(List<Class<?>> stepDefinitionClasses) {
-        this.stepDefinitionClasses = stepDefinitionClasses;
+        GherkinStepRunner.stepDefinitionClasses = stepDefinitionClasses;
     }
 
     public boolean executeStep(String gherkinStep, DataTable dataTable) throws Throwable {

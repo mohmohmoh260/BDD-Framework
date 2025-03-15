@@ -10,13 +10,12 @@ import java.util.*;
 
 public class GherkinDataTableExtractor {
 
-    private final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
+    private static final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
 
     public List<Map<String, String>> getExamplesFromScenarioOutline(Path featureFile, String scenarioName) throws IOException {
         List<String> lines = Files.readAllLines(featureFile);
         boolean foundScenario = false;
-        boolean foundExamples = false;
-        List<String> headers = new ArrayList<>();
+        List<String> headers;
         List<Map<String, String>> exampleData = new ArrayList<>();
 
         for (int i = 0; i < lines.size(); i++) {
@@ -35,7 +34,6 @@ public class GherkinDataTableExtractor {
 
             // ✅ Detect and process Examples table
             if (foundScenario && line.startsWith("Examples:")) {
-                foundExamples = true;
                 i++; // Move to headers row
                 headers = extractTableRow(lines.get(i++));
 

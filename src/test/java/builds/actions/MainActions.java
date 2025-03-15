@@ -45,6 +45,7 @@ public abstract class MainActions extends MainDriver {
             wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
             return true;
         }catch (TimeoutException e){
+            System.err.println(e.getCause().toString());
             return false;
         }
     }
@@ -59,6 +60,7 @@ public abstract class MainActions extends MainDriver {
             wait.until((ExpectedConditions.visibilityOf(driver.get().findElement(fetchElement(elementName)))));
             return true;
         } catch (TimeoutException e) {
+            System.err.println(e.getCause().toString());
             return false;
         }
     }
@@ -80,16 +82,15 @@ public abstract class MainActions extends MainDriver {
 
     public By fetchElement(String elementName) {
         String xpath;
-
         if (driver.get() instanceof RemoteWebDriver) {
             xpath = getElementValue(elementName, "web");
+            System.out.println("Xpath: "+xpath);
         } else if (driver.get() instanceof AndroidDriver) {
             xpath = getElementValue(elementName, "android");
         } else if (driver.get() instanceof IOSDriver) {
-            xpath =getElementValue(elementName, "ios");
+            xpath = getElementValue(elementName, "ios");
         } else {
-            System.err.println("Driver is not an instance of AndroidDriver, IOSDriver, or RemoteWebDriver");
-            return null;
+            throw new IllegalStateException("❌ Unsupported driver type: " + driver.get().getClass().getSimpleName());
         }
         return By.xpath(xpath);
     }

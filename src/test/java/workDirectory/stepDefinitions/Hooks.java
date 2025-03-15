@@ -14,7 +14,7 @@ public class Hooks extends MainActions {
     public void beforeStep(Scenario scenario) {
         currentScenario.set(scenario);
         if(!toExecute.get()){
-            System.out.println("Skipping test: "+ StepListener.gherkinStep.get());
+            currentScenario.get().log("⏭ Skipping test: "+ StepListener.gherkinStep.get());
         }
     }
 
