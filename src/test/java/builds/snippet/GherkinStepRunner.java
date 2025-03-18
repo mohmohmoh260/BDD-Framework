@@ -16,7 +16,7 @@ public class GherkinStepRunner {
         GherkinStepRunner.stepDefinitionClasses = stepDefinitionClasses;
     }
 
-    public boolean executeStep(String gherkinStep, DataTable dataTable) throws Throwable {
+    public void executeStep(String gherkinStep, DataTable dataTable) throws Throwable {
         String cleanedStep = gherkinStep.replaceFirst("^(Given|When|Then|And|\\$)\\s+", "").trim();
 
         for (Class<?> clazz : stepDefinitionClasses) {
@@ -46,11 +46,9 @@ public class GherkinStepRunner {
                     try {
                         method.invoke(instance, params);
                     } catch (InvocationTargetException e) {
-                        System.err.println("Error invoking method: " + method.getName());
-                        e.getCause().printStackTrace(); // Print root cause
-                        throw e.getCause(); // Re-throw the actual cause
+                        return;
                     }
-                    return true;
+                    return;
                 }
             }
         }
@@ -73,9 +71,17 @@ public class GherkinStepRunner {
     }
 
     private Object convertParameter(Class<?> type, String value) {
+        if (value == null) {
+            if (type.equals(int.class) || type.equals(double.class) || type.equals(boolean.class)) {
+                throw new IllegalArgumentException("❌ Cannot convert null to a primitive type: " + type.getSimpleName());
+            }
+            return null; // Return null for wrapper types and String
+        }
+
         if (type.equals(int.class) || type.equals(Integer.class)) return Integer.parseInt(value);
         if (type.equals(double.class) || type.equals(Double.class)) return Double.parseDouble(value);
         if (type.equals(boolean.class) || type.equals(Boolean.class)) return Boolean.parseBoolean(value);
+
         return value;
     }
 

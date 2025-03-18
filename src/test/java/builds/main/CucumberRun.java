@@ -1,13 +1,7 @@
 package builds.main;
 
-import builds.extent.ExtentManager;
-import builds.driver.BrowserDriver;
-import builds.elements.ElementInstance;
-import builds.driver.MobileDriver;
-import com.aventstack.extentreports.ExtentReports;
 import io.cucumber.testng.*;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 
 import java.awt.*;
@@ -16,7 +10,7 @@ import java.io.IOException;
 
 public class CucumberRun {
 	@CucumberOptions(
-			plugin= {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:", "builds.utilities.StepListener"},
+			plugin= {"builds.listener.StepListener"},
 			features= {"src/test/resources/Features", "src/test/resources/Snippet"},
 			glue = {"workDirectory.stepDefinitions", "builds.extent.ReportFinalizer"},
 			tags = ("@test")

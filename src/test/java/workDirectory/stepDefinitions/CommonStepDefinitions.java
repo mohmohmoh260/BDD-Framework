@@ -1,8 +1,13 @@
 package workDirectory.stepDefinitions;
 
+import builds.actions.BrowserActions;
 import builds.actions.MainActions;
+import builds.actions.MobileActions;
+import builds.extent.ExtentManager;
 import builds.snippet.GherkinDataTableExtractor;
 import builds.utilities.IfStatementHandler;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -19,56 +24,63 @@ public class CommonStepDefinitions extends MainActions {
 
     private static final ThreadLocal<GherkinDataTableExtractor> gherkinDataTableExtractor = ThreadLocal.withInitial(GherkinDataTableExtractor::new);
     private static final ThreadLocal<IfStatementHandler> ifStatementHandler = ThreadLocal.withInitial(IfStatementHandler::new);
+    private static final BrowserActions browserActions = new BrowserActions();
+    private static final MobileActions mobileActions = new MobileActions();
 
     @When("^run snippet scenario \"([^\"]+)\"$")
     public void runSnippetScenario(String scenarioName) throws Throwable {
-        List<Path> featureFiles = gherkinDataTableExtractor.get().getFeatureFiles();
-        Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
+        Hooks hooks = new Hooks();
+        if(toExecute.get()){
+            List<Path> featureFiles = gherkinDataTableExtractor.get().getFeatureFiles();
+            Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
 
-        for (Path featureFile : featureFiles) {
-            // Fetch examples for the Scenario Outline
-            List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.get().getExamplesFromScenarioOutline(featureFile, scenarioName);
+            for (Path featureFile : featureFiles) {
+                // Fetch examples for the Scenario Outline
+                List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.get().getExamplesFromScenarioOutline(featureFile, scenarioName);
 
-            if (!exampleDataList.isEmpty()) {
-                for (Map<String, String> exampleData : exampleDataList) {
-                    // ✅ Prevent duplicate execution of the same example
-                    if (executedExamples.contains(exampleData)) {
-                        continue;
+                if (!exampleDataList.isEmpty()) {
+                    for (Map<String, String> exampleData : exampleDataList) {
+                        // ✅ Prevent duplicate execution of the same example
+                        if (executedExamples.contains(exampleData)) {
+                            continue;
+                        }
+
+                        // Extract steps for the specific example only
+                        List<List<String>> scenarioStepsForExample = Collections.singletonList(
+                                gherkinDataTableExtractor.get().extractStepsFromFeature(featureFile, scenarioName, exampleData)
+                        );
+
+                        String formattedExampleData = exampleData.entrySet().stream()
+                                .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
+                                .collect(Collectors.joining(", "));
+
+                        ExtentTest parentStep = ExtentManager.getExtent().createNode("Running Scenario: " + scenarioName + " with Example Data: [" + formattedExampleData + "]");
+                        ExtentManager.setNodeExtent(parentStep);
+
+                        gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioStepsForExample, exampleData, hooks.getScenario());
+
+                        executedExamples.add(exampleData); // ✅ Mark this example as executed
                     }
-
-                    // Extract steps for the specific example only
-                    List<List<String>> scenarioStepsForExample = Collections.singletonList(
-                            gherkinDataTableExtractor.get().extractStepsFromFeature(featureFile, scenarioName, exampleData)
-                    );
-
-                    String formattedExampleData = exampleData.entrySet().stream()
-                            .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
-                            .collect(Collectors.joining(", "));
-
-                    Hooks.getScenario().log("🔹 Running Scenario: **" + scenarioName + "** with Example Data: {" + formattedExampleData + "}");
-
-                    gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioStepsForExample, exampleData, Hooks.getScenario());
-
-                    executedExamples.add(exampleData); // ✅ Mark this example as executed
+                    return; // ✅ Exit after executing Scenario Outline examples
                 }
-                return; // ✅ Exit after executing Scenario Outline examples
-            }
 
-            // ✅ If no examples exist, run the scenario normally (single execution)
-            List<List<String>> scenarioSteps = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
-            if (!scenarioSteps.isEmpty()) {
-                Hooks.getScenario().log("🔹 Running Scenario: **" + scenarioName + "** (No Examples)");
+                // ✅ If no examples exist, run the scenario normally (single execution)
+                List<List<String>> scenarioSteps = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
+                if (!scenarioSteps.isEmpty()) {
+                    ExtentTest parentStep = ExtentManager.getExtent().createNode("Running Scenario: " + scenarioName);
+                    ExtentManager.setNodeExtent(parentStep);
 
-                try {
-                    gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap(), Hooks.getScenario());
-                } catch (Exception e) {
-                    Hooks.getScenario().log("❌ Scenario Failed: **" + scenarioName + "** | Error: " + e.getMessage());
-                    throw e;
+                    try {
+                        gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap(), hooks.getScenario());
+                    } catch (Exception e) {
+                        ExtentManager.getExtent().log(Status.FAIL,scenarioName);
+                        throw e;
+                    }
+                    return; // ✅ Exit after executing the scenario
                 }
-                return; // ✅ Exit after executing the scenario
             }
         }
-    }
+        }
 
     // Adding addition parameter for gherkin
     @ParameterType("true|false")
@@ -81,6 +93,11 @@ public class CommonStepDefinitions extends MainActions {
         ifStatementHandler.get().toExecuteChecker(new Object(){}.getClass().getEnclosingMethod().getName(), Collections.singletonList(elementName), timeout);
     }
 
+    @And ("^if \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
+    public void ifElementIsVisible(String elementName, Integer timeout){
+        ifStatementHandler.get().toExecuteChecker(new Object(){}.getClass().getEnclosingMethod().getName(), Collections.singletonList(elementName), timeout);
+    }
+
     @And("end statement")
     public void endIfStatement(){
         ifStatementHandler.get().endIf();
@@ -88,9 +105,6 @@ public class CommonStepDefinitions extends MainActions {
 
     @And("take screenshot")
     public void takeAScreenshot() {
-        if(toExecute.get()){
-            screenshot();
-        }
     }
 
     @Given("^launch \"([^\"]+)\" browser and navigate to \"([^\"]+)\"$")
@@ -139,7 +153,7 @@ public class CommonStepDefinitions extends MainActions {
     public void iGetTextFromAndSetIntoVariable(String elementName, String variableName) {
         if(toExecute.get()) {
             variables.get().put(variableName, getText(elementName, null));
-            Hooks.getScenario().log("Text :"+getText(elementName, null)+" is set into variable "+variableName);
+            //hooks.getScenario().log("Text :"+getText(elementName, null)+" is set into variable "+variableName);
         }
     }
 
@@ -150,23 +164,32 @@ public class CommonStepDefinitions extends MainActions {
         }
     }
 
-    @Then("^verify element \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
+    @Then("^verify \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
     public void iVerifyElementIsVisible(String elementName, Integer timeout) {
         if(toExecute.get()) {
             verifyElementVisible(elementName, timeout);
         }
     }
 
-    @And("^wait for element \"([^\"]+)\" to be visible(?: within (\\d+) seconds)?$")
+    @And("^wait for \"([^\"]+)\" to be visible(?: within (\\d+) seconds)?$")
     public void waitForElementToBeVisible(String elementName, Integer timeout) {
         if(toExecute.get()) {
             waitElementVisible(elementName, timeout);
         }
     }
 
+    @When("swipe left")
+    public void swipeLeft() {
+        mobileActions.swipe(MobileActions.SwipeDirection.LEFT, 50);
+    }
 
-    @Then("^print \"([^\"]+)\" and \"([^\"]+)\"$")
-    public void printAnd(String arg0, String arg1) {
-        System.out.println(arg0+" "+arg1);
+    @And("^verify actual text of \"([^\"]+)\" is equals to expected text \"([^\"]+)\"(?: within (\\d+) seconds)?$")
+    public void verifyTextIsEqualsTo(String elementName, String expectedText, Integer timeout) {
+        verifyEquals(getText(elementName, timeout), expectedText);
+    }
+
+    @And("^print \"([^\"]+)\"$")
+    public void print(String arg0) {
+        System.out.println(arg0);
     }
 }

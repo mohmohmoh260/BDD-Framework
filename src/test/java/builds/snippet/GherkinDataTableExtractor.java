@@ -1,5 +1,10 @@
 package builds.snippet;
 
+import builds.actions.MainActions;
+import builds.extent.ExtentManager;
+import builds.utilities.Result;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Scenario;
 import workDirectory.stepDefinitions.CommonStepDefinitions;
@@ -8,7 +13,7 @@ import java.nio.file.*;
 import java.io.IOException;
 import java.util.*;
 
-public class GherkinDataTableExtractor {
+public class GherkinDataTableExtractor extends MainActions{
 
     private static final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
 
@@ -160,19 +165,31 @@ public class GherkinDataTableExtractor {
     }
 
     public void executeScenarioWithExampleData(List<List<String>> scenarioStepsForExample, Map<String, String> exampleData, Scenario scenario) throws Throwable {
+
         for (List<String> steps : scenarioStepsForExample) {
             for (String step : steps) {
+
                 // Execute only once with final replaced step
                 DataTable dataTable = createDataTable(exampleData);
-                boolean passed = stepRunner.executeStep(step, dataTable);
+                stepRunner.executeStep(step, dataTable);
+//                System.out.println("Result: "+Result.success.get());
+//                System.out.println("Result: "+Result.message.get());
 
-                if (passed) {
-                    scenario.log("✅ Passed: " + step);
+                if (Result.success.get()) {
+                    ExtentTest screenshotNode = ExtentManager.getNodeExtent().createNode(step);
+                    if(step.equals("And take screenshot")){
+                        takeScreenshot(screenshotNode);
+                    }else if(globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true")){
+                        takeScreenshot(screenshotNode);
+                    }
+
                 } else {
-                    scenario.log("❌ Failed: " + step);
+                    ExtentManager.getNodeExtent().createNode(step).log(Status.FAIL,step);
+                    throw new RuntimeException(Result.message.get());
                 }
             }
         }
+        ExtentManager.removeNodeExtent();
     }
 
     private DataTable createDataTable(Map<String, String> exampleData) {

@@ -4,37 +4,32 @@ import builds.driver.BrowserDriver;
 import builds.driver.MainDriver;
 import builds.driver.MobileDriver;
 import builds.driver.RemoteDriver;
+import builds.extent.ExtentManager;
+import builds.utilities.Result;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-import org.openqa.selenium.interactions.Actions;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.*;
 import org.testng.Assert;
-import workDirectory.stepDefinitions.Hooks;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import static workDirectory.stepDefinitions.Hooks.getScenario;
 
 public abstract class MainActions extends MainDriver {
 
     protected static final ThreadLocal<Boolean> toExecute = ThreadLocal.withInitial(() -> true);
     protected static final ThreadLocal<HashMap<String, String>> variables = ThreadLocal.withInitial(HashMap::new);
-
-    public static class Result { // Make it public static
-        public boolean success;
-        String message;
-
-        public Result(boolean success, String message) {
-            this.success = success;
-            this.message = message;
-        }
-    }
+    private static final ThreadLocal<Result> result = new ThreadLocal<>();
 
     public boolean waitElementExist(String elementName, Integer timeout) {
         try{
@@ -82,13 +77,13 @@ public abstract class MainActions extends MainDriver {
 
     public By fetchElement(String elementName) {
         String xpath;
-        if (driver.get() instanceof RemoteWebDriver) {
-            xpath = getElementValue(elementName, "web");
-            System.out.println("Xpath: "+xpath);
-        } else if (driver.get() instanceof AndroidDriver) {
+
+        if (driver.get() instanceof AndroidDriver) {  // ✅ Check Android first
             xpath = getElementValue(elementName, "android");
         } else if (driver.get() instanceof IOSDriver) {
             xpath = getElementValue(elementName, "ios");
+        } else if (driver.get() instanceof RemoteWebDriver) {
+            xpath = getElementValue(elementName, "web");
         } else {
             throw new IllegalStateException("❌ Unsupported driver type: " + driver.get().getClass().getSimpleName());
         }
@@ -100,34 +95,106 @@ public abstract class MainActions extends MainDriver {
         return driver.get().findElements(fetchElement(elementName));
     }
 
-    public Result verifyElementVisible(String elementName, Integer timeout){
+    public void verifyElementVisible(String elementName, Integer timeout){
         try{
             Assert.assertTrue(waitElementVisible(elementName, timeout), "Element "+elementName+" with locator: "+fetchElement(elementName));
-            highlightElement(elementName, timeout);
-            unHighlightElement(elementName, timeout);
-            return new Result(true, "");
+            if(driver.get() instanceof RemoteWebDriver){
+                BrowserActions browserActions = new BrowserActions();
+                browserActions.highlightElement(elementName, timeout);
+                browserActions.unHighlightElement(elementName, timeout);
+            }
+            result.get().setSuccess(true);
         }catch (Exception e){
-            return new Result(false, e.getLocalizedMessage());
+            result.get().setSuccess(false);
+            result.get().setMessage(e.getLocalizedMessage());
         }
     }
 
-    public boolean verifyElementExist(String elementName, Integer timeout){
+    public void verifyElementExist(String elementName, Integer timeout){
         try{
             Assert.assertTrue(waitElementExist(elementName, timeout), "Element "+elementName+" with locator: "+fetchElement(elementName));
-            return true;
+            if(driver.get() instanceof RemoteWebDriver){
+                BrowserActions browserActions = new BrowserActions();
+                browserActions.highlightElement(elementName, timeout);
+                browserActions.unHighlightElement(elementName, timeout);
+            }
+            result.get().setSuccess(true);
         }catch (Exception e){
-            return false;
+            result.get().setSuccess(false);
+            result.get().setMessage(e.getLocalizedMessage());
+        }
+    }
+
+    public void verifyEquals(Object actual, Object expected){
+        try{
+            Assert.assertEquals(actual, expected);
+            result.get().setSuccess(true);
+        }catch (Exception e){
+            result.get().setSuccess(false);
+            result.get().setMessage(e.getLocalizedMessage());
         }
     }
 
     public void click(String elementName, Integer timeout) {
-        waitElementVisible(elementName, timeout);
-        driver.get().findElement(fetchElement(elementName)).click();
+        try{
+            waitElementVisible(elementName, timeout);
+            driver.get().findElement(fetchElement(elementName)).click();
+            result.get().setSuccess(true);
+        }catch (Exception e){
+            result.get().setSuccess(false);
+            result.get().setMessage(e.getLocalizedMessage());
+        }
     }
 
     public void setText(String value, String elementName, Integer timeout) {
-        waitElementVisible(elementName, timeout);
-        driver.get().findElement(fetchElement(elementName)).sendKeys(value);
+        try{
+            waitElementVisible(elementName, timeout);
+            driver.get().findElement(fetchElement(elementName)).sendKeys(value);
+            result.get().setSuccess(true);
+        }catch (Exception e){
+            result.get().setSuccess(false);
+            result.get().setMessage(e.getLocalizedMessage());
+        }
+    }
+
+    public String getText(String elementName, Integer timeout){
+        String actualText = "";
+        try{
+            waitElementExist(elementName, timeout);
+            actualText =  driver.get().findElement(fetchElement(elementName)).getText();
+            result.get().setSuccess(true);
+        }catch (Exception e){
+            result.get().setSuccess(false);
+            result.get().setMessage(e.getLocalizedMessage());
+        }
+        return actualText;
+    }
+
+    public void takeScreenshot(ExtentTest extent) {
+        if (driver.get() == null) {
+            return;
+        }
+
+        try {
+            // Generate Unique Screenshot Name
+            String relativePath = "test-output/screenshots/" + System.currentTimeMillis() + ".png";
+            String absolutePath = new File(relativePath).getAbsolutePath();  // Ensure correct path
+
+            // Capture Screenshot and Save as File
+            File srcFile = ((TakesScreenshot) driver.get()).getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(srcFile, new File(absolutePath));
+
+            // Attach Screenshot to Report (Node or Main Test)
+                extent.info("Screenshot: ",
+                        MediaEntityBuilder.createScreenCaptureFromPath(absolutePath).build());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void navigateToURL(String URL) {
+        driver.get().get(globalDeviceParameter.get().get(0).get(URL));
     }
 
     public void close(){
@@ -136,60 +203,5 @@ public abstract class MainActions extends MainDriver {
 
     public void quit(){
         driver.get().quit();
-    }
-
-    public String getText(String elementName, Integer timeout){
-        waitElementExist(elementName, timeout);
-        return driver.get().findElement(fetchElement(elementName)).getText();
-    }
-
-    public void scrollToView(String elementName, Integer timeout) {
-        waitElementExist(elementName, timeout);
-        JavascriptExecutor j = (JavascriptExecutor) driver.get();
-        j.executeScript ("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})", driver.get().findElement(fetchElement(elementName)));
-    }
-
-    public void highlightElement(String elementName, Integer timeout){
-        try{
-            scrollToView(elementName, timeout);
-            ((JavascriptExecutor) driver.get()).executeScript("arguments[0].style.border='3px solid lime'", driver.get().findElement(fetchElement(elementName)));
-        }catch (Exception ignored){
-
-        }
-    }
-
-     public void unHighlightElement(String elementName, Integer timeout){
-        try{
-            scrollToView(elementName, timeout);
-            ((JavascriptExecutor) driver.get()).executeScript("arguments[0].style.removeProperty('border')", driver.get().findElement(fetchElement(elementName)));
-        }catch (Exception ignored){
-
-        }
-    }
-
-    public void screenshot() {
-        if(driver.get() instanceof RemoteWebDriver){
-            byte[] screenshot = ((TakesScreenshot) driver.get()).getScreenshotAs(OutputType.BYTES);
-            Hooks.getScenario().attach(screenshot, "image/png", "Screenshot");
-        }else{
-            TakesScreenshot screenshotDriver = (TakesScreenshot) driver.get();
-            byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
-            getScenario().attach(screenshot, "image/png", "Screenshot");
-        }
-
-    }
-
-    public void pressEnter() {
-        Actions actions = new Actions(driver.get());
-        actions.sendKeys(Keys.ENTER);
-        actions.perform();
-    }
-
-    public void assertPageTitle(String title) {
-        Assert.assertEquals(title, driver.get().getTitle());
-    }
-
-    public void navigateToURL(String URL) {
-        driver.get().get(globalDeviceParameter.get().get(0).get(URL));
     }
 }

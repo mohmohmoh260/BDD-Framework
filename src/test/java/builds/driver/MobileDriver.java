@@ -1,5 +1,8 @@
 package builds.driver;
 
+import builds.extent.ExtentManager;
+import com.aventstack.extentreports.ExtentTest;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.ios.IOSDriver;
@@ -27,6 +30,7 @@ public class MobileDriver extends MainDriver {
         String bundleID = deviceParameters.get(0).get("bundleID");
         String appPackage = deviceParameters.get(0).get("appPackage");
         String appActivity = deviceParameters.get(0).get("appActivity");
+        String browserType = deviceParameters.get(0).get("browserType");
         String fullReset = deviceParameters.get(0).get("fullReset");
         String noReset = deviceParameters.get(0).get("noReset");
 
@@ -54,7 +58,7 @@ public class MobileDriver extends MainDriver {
             uiAutomator2Options.setCapability("autoDismissAlerts", true);
 
             String apkPath = deviceParameters.get(0).get("apkPath");
-            if(!apkPath.isEmpty()){
+            if (!apkPath.isEmpty()) {
                 String OS = System.getProperty("os.name");
                 if (!OS.contains("Mac OS")) {
                     uiAutomator2Options.setApp(System.getProperty("user.dir") + "\\" + apkPath.replace("/", "\\"));
@@ -68,7 +72,6 @@ public class MobileDriver extends MainDriver {
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
-
         } else if (platformName.equalsIgnoreCase("iOS")) {
             XCUITestOptions xcuiTestOptions = new XCUITestOptions();
 
@@ -83,12 +86,13 @@ public class MobileDriver extends MainDriver {
                     .setNoReset(Boolean.parseBoolean(noReset))
                     .setAutoDismissAlerts(true)
                     .setAutoAcceptAlerts(true)
-                    .setUseNewWDA(true);
+                    .setUseNewWDA(true)
+                    .setCapability("browserType", browserType); // Add browserType capability
 
             xcuiTestOptions.setCapability("autoGrantPermissions", true);
 
             String apkPath = deviceParameters.get(0).get("apkPath");
-            if(!apkPath.isEmpty()){
+            if (!apkPath.isEmpty()) {
                 String OS = System.getProperty("os.name");
                 if (!OS.contains("Mac OS")) {
                     xcuiTestOptions.setApp(System.getProperty("user.dir") + "\\" + apkPath.replace("/", "\\"));

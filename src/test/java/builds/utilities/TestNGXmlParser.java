@@ -45,7 +45,7 @@ public abstract class TestNGXmlParser {
         // Example usage: filter by test name
         List<Map<String, String>> filteredTests = filterByTestName(allTests, testName);
         if(filteredTests.isEmpty()){
-            System.err.println("Please check the test name input is exist in testNG test tag name attribute value");
+            System.err.println("Please check the test name input is exist in testng.xml test tag name attribute value");
             System.exit(1);
         }
         return filteredTests;

@@ -1,25 +1,25 @@
 {
-  "Username_Input": {
+  "M2U_Username_Input": {
     "web": "//*[@id='username']",
     "android": "",
     "ios": ""
   },
-  "Button_Login": {
+  "M2U_Button_Login": {
     "web": "//*[text()='LOGIN']",
     "android": "",
     "ios": ""
   },
-  "SecurityPhrase": {
+  "M2U_SecurityPhrase": {
     "web": "//span[contains(@class, \"SecurityPhrase---image-caption---\")]",
     "android": "",
     "ios": ""
   },
-  "Yes_btn": {
+  "M2U_Yes_btn": {
     "web": "//*[text()='YES']",
     "android": "",
     "ios": ""
   },
-  "Password_input": {
+  "M2U_Password_input": {
     "web": "//*[@id='my-password-input']",
     "android": "",
     "ios": ""

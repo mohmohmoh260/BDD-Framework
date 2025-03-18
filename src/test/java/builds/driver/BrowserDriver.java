@@ -1,6 +1,8 @@
 package builds.driver;
 
+import builds.extent.ExtentManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;

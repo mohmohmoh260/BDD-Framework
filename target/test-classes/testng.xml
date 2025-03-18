@@ -18,8 +18,8 @@
         <parameter name="deviceName" value="Pixel 8"/>
         <parameter name="platformVersion" value="14"/>
         <parameter name="apkPath" value=""/>
-        <parameter name="appPackage" value="com.android.chrome"/>
-        <parameter name="appActivity" value="com.google.android.apps.chrome.Main"/>
+        <parameter name="appPackage" value="com.mbblabs.mayabusiness.uat"/>
+        <parameter name="appActivity" value="com.mbblabs.mayabusiness.MainActivity"/>
         <parameter name="noReset" value="true"/>
         <parameter name="fullReset" value="false"/>
         <parameter name="platformName" value="android"/>
@@ -49,6 +49,7 @@
         <parameter name="apkPath" value=""/>
         <parameter name="automationName" value="XCUITest"/>
         <parameter name="bundleID" value="com.apple.mobilesafari"/>
+        <parameter name="browserType" value="Safari"/>
         <parameter name="noReset" value="false"/>
         <parameter name="fullReset" value="false"/>
         <classes>
@@ -63,6 +64,7 @@
         <parameter name="apkPath" value=""/>
         <parameter name="automationName" value="XCUITest"/>
         <parameter name="bundleID" value="com.apple.mobilesafari"/>
+        <parameter name="browserType" value="Safari"/>
         <parameter name="noReset" value="false"/>
         <parameter name="fullReset" value="false"/>
         <classes>
@@ -70,3 +72,4 @@
         </classes>
     </test>
 </suite>
+

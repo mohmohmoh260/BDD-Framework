@@ -1,15 +1,15 @@
 package builds.utilities;
 
-import builds.actions.BrowserActions;
 import builds.actions.MainActions;
-import builds.actions.MobileActions;
 
 import java.util.*;
 
 public class IfStatementHandler extends MainActions {
 
+    Result result = new Result();
+
     public void toExecuteChecker(String methodName, List<Object> param, Integer timeout){
-        Result result;
+
         switch (methodName){
             case "ifNumberIsBiggerThanNumber":
                 if((Integer) param.get(0)>(Integer) param.get(1)){
@@ -26,19 +26,21 @@ public class IfStatementHandler extends MainActions {
                 }
                 break;
             case "ifElementIsNotVisible":
-                result = verifyElementVisible((String) param.get(0), timeout);
-                if(!result.success){
+                verifyElementVisible((String) param.get(0), timeout);
+                if(!result.getSuccess()){
                     toExecute.set(true);
                 }else {
                     toExecute.set(false);
                 }
+                break;
             case "ifElementIsVisible":
-                result = verifyElementVisible((String) param.get(0), timeout);
-                if(result.success){
+                verifyElementVisible((String) param.get(0), timeout);
+                if(result.getSuccess()){
                     toExecute.set(true);
                 }else {
                     toExecute.set(false);
                 }
+                break;
             default:
                 System.out.println("if statement is not exist, please check if the method name is exist in toExecuteChecker method");
         }
