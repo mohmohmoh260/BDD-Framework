@@ -35,20 +35,16 @@ public class Hooks extends MainActions {
 
     @AfterStep
     public void afterStep(Scenario scenario) {
-
-        ExtentTest screenshotNode;
         if(!StepListener.gherkinStep.get().contains("run snippet scenario")){
             if (scenario.isFailed()) {
                 Result result = new Result();
-                screenshotNode = ExtentManager.getExtent().createNode(StepListener.gherkinStep.get()).fail(result.getMessage());
+                ExtentManager.getExtent().fail(StepListener.gherkinStep.get() + "<br><br>" + result.getException(), takeScreenshot());
             } else {
-                screenshotNode = ExtentManager.getExtent().createNode(StepListener.gherkinStep.get());
-            }
-
-            if(globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true")){
-                takeScreenshot(screenshotNode);
-            }else if(StepListener.gherkinStep.get().equals("And take screenshot")){
-                takeScreenshot(screenshotNode);
+                if(globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true")||StepListener.gherkinStep.get().equals("And take screenshot")){
+                    ExtentManager.getExtent().pass(StepListener.gherkinStep.get() , takeScreenshot());
+                }else {
+                    ExtentManager.getExtent().pass(StepListener.gherkinStep.get());
+                }
             }
         }
     }

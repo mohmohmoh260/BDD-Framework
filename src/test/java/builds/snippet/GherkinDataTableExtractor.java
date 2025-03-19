@@ -3,8 +3,6 @@ package builds.snippet;
 import builds.actions.MainActions;
 import builds.extent.ExtentManager;
 import builds.utilities.Result;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Scenario;
 import workDirectory.stepDefinitions.CommonStepDefinitions;
@@ -12,10 +10,23 @@ import workDirectory.stepDefinitions.CommonStepDefinitions;
 import java.nio.file.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GherkinDataTableExtractor extends MainActions{
 
     private static final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
+
+    public List<Map<String, String>> getExamplesFromScenarioOutline(String scenarioName) throws IOException {
+        List<Path> featureFiles = getFeatureFiles(); // ✅ Gets all feature files
+        List<Map<String, String>> allExamples = new ArrayList<>();
+
+        for (Path featureFile : featureFiles) {
+            allExamples.addAll(getExamplesFromScenarioOutline(featureFile, scenarioName)); // ✅ Uses each file
+        }
+
+        return allExamples;
+    }
 
     public List<Map<String, String>> getExamplesFromScenarioOutline(Path featureFile, String scenarioName) throws IOException {
         List<String> lines = Files.readAllLines(featureFile);
@@ -64,23 +75,47 @@ public class GherkinDataTableExtractor extends MainActions{
         return exampleData;
     }
 
-    public List<List<String>> getStepsFromScenario(String scenarioName) throws IOException {
-        List<Path> featureFiles = getFeatureFiles();
-
-        for (Path featureFile : featureFiles) {
-            // Pass null to get all example variations
-            return Collections.singletonList(extractStepsFromFeature(featureFile, scenarioName, null)); // Return immediately to prevent duplicate retrieval
+    public List<Path> getFeatureFiles() throws IOException {
+        Path featureDirectory = Paths.get("src/test/resources/Snippet"); // Adjust path as needed
+        try (Stream<Path> stream = Files.walk(featureDirectory)) {
+            return stream.filter(p -> p.toString().endsWith(".feature") && isNotEmpty(p))
+                    .collect(Collectors.toList());
         }
-        return Collections.emptyList();
     }
 
-    public List<Path> getFeatureFiles() throws IOException {
-        try (var paths = Files.walk(Paths.get("src/test/resources/Snippet"))) {
-            return paths.filter(path -> {
-                boolean isFile = Files.isRegularFile(path);
-                return isFile && path.toString().endsWith(".feature");
-            }).toList();
+    private boolean isNotEmpty(Path path) {
+        try {
+            return Files.size(path) > 0;
+        } catch (IOException e) {
+            return false; // Treat unreadable files as empty
         }
+    }
+
+    public List<List<String>> getStepsFromScenario(String scenarioName) throws IOException {
+        List<Path> featureFiles = getFeatureFiles();
+        List<List<String>> allSteps = new ArrayList<>();
+
+        for (Path featureFile : featureFiles) {
+            List<Map<String, String>> examples = getExamplesFromScenarioOutline(featureFile, scenarioName);
+
+            if (examples.isEmpty()) {
+                // Normal scenario (not an outline)
+                List<String> steps = extractStepsFromFeature(featureFile, scenarioName, null);
+                if (!steps.isEmpty()) {
+                    allSteps.add(steps);
+                }
+            } else {
+                // Scenario Outline: Extract steps for each example row
+                for (Map<String, String> exampleData : examples) {
+                    List<String> steps = extractStepsFromFeature(featureFile, scenarioName, exampleData);
+                    if (!steps.isEmpty()) {
+                        allSteps.add(steps);
+                    }
+                }
+            }
+        }
+
+        return allSteps.isEmpty() ? Collections.emptyList() : allSteps;
     }
 
     public List<String> extractStepsFromFeature(Path featureFile, String scenarioName, Map<String, String> exampleData) throws IOException {
@@ -172,20 +207,18 @@ public class GherkinDataTableExtractor extends MainActions{
                 // Execute only once with final replaced step
                 DataTable dataTable = createDataTable(exampleData);
                 stepRunner.executeStep(step, dataTable);
-//                System.out.println("Result: "+Result.success.get());
-//                System.out.println("Result: "+Result.message.get());
 
-                if (Result.success.get()) {
-                    ExtentTest screenshotNode = ExtentManager.getNodeExtent().createNode(step);
-                    if(step.equals("And take screenshot")){
-                        takeScreenshot(screenshotNode);
-                    }else if(globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true")){
-                        takeScreenshot(screenshotNode);
+                Result result = new Result();
+
+                if (result.getSuccess()) {
+                    if(step.equals("And take screenshot") || (globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true"))){
+                        ExtentManager.getNodeExtent().pass(step, takeScreenshot());
+                    }else{
+                        ExtentManager.getNodeExtent().pass(step);
                     }
-
                 } else {
-                    ExtentManager.getNodeExtent().createNode(step).log(Status.FAIL,step);
-                    throw new RuntimeException(Result.message.get());
+                    ExtentManager.getNodeExtent().fail(step + "<br><br>" + result.getException(), takeScreenshot());
+                    throw new RuntimeException(result.getException());
                 }
             }
         }

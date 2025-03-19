@@ -7,7 +7,6 @@ import builds.extent.ExtentManager;
 import builds.snippet.GherkinDataTableExtractor;
 import builds.utilities.IfStatementHandler;
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
 import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -30,57 +29,42 @@ public class CommonStepDefinitions extends MainActions {
     @When("^run snippet scenario \"([^\"]+)\"$")
     public void runSnippetScenario(String scenarioName) throws Throwable {
         Hooks hooks = new Hooks();
-        if(toExecute.get()){
-            List<Path> featureFiles = gherkinDataTableExtractor.get().getFeatureFiles();
+        if (toExecute.get()) {
             Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
 
-            for (Path featureFile : featureFiles) {
-                // Fetch examples for the Scenario Outline
-                List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.get().getExamplesFromScenarioOutline(featureFile, scenarioName);
+            // 🔹 Fetch examples from ALL feature files
+            List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.get().getExamplesFromScenarioOutline(scenarioName);
 
-                if (!exampleDataList.isEmpty()) {
-                    for (Map<String, String> exampleData : exampleDataList) {
-                        // ✅ Prevent duplicate execution of the same example
-                        if (executedExamples.contains(exampleData)) {
-                            continue;
-                        }
+            if (!exampleDataList.isEmpty()) {
+                for (Map<String, String> exampleData : exampleDataList) {
+                    if (executedExamples.contains(exampleData)) continue;
 
-                        // Extract steps for the specific example only
-                        List<List<String>> scenarioStepsForExample = Collections.singletonList(
-                                gherkinDataTableExtractor.get().extractStepsFromFeature(featureFile, scenarioName, exampleData)
-                        );
+                    List<List<String>> scenarioStepsForExample = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
 
-                        String formattedExampleData = exampleData.entrySet().stream()
-                                .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
-                                .collect(Collectors.joining(", "));
+                    String formattedExampleData = exampleData.entrySet().stream()
+                            .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
+                            .collect(Collectors.joining(", "));
 
-                        ExtentTest parentStep = ExtentManager.getExtent().createNode("Running Scenario: " + scenarioName + " with Example Data: [" + formattedExampleData + "]");
-                        ExtentManager.setNodeExtent(parentStep);
-
-                        gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioStepsForExample, exampleData, hooks.getScenario());
-
-                        executedExamples.add(exampleData); // ✅ Mark this example as executed
-                    }
-                    return; // ✅ Exit after executing Scenario Outline examples
-                }
-
-                // ✅ If no examples exist, run the scenario normally (single execution)
-                List<List<String>> scenarioSteps = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
-                if (!scenarioSteps.isEmpty()) {
-                    ExtentTest parentStep = ExtentManager.getExtent().createNode("Running Scenario: " + scenarioName);
+                    ExtentTest parentStep = ExtentManager.getExtent().createNode("Running Scenario: " + scenarioName + " with Example Data: [" + formattedExampleData + "]");
                     ExtentManager.setNodeExtent(parentStep);
 
-                    try {
-                        gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap(), hooks.getScenario());
-                    } catch (Exception e) {
-                        ExtentManager.getExtent().log(Status.FAIL,scenarioName);
-                        throw e;
-                    }
-                    return; // ✅ Exit after executing the scenario
+                    gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioStepsForExample, exampleData, hooks.getScenario());
+
+                    executedExamples.add(exampleData);
                 }
+                return;
+            }
+
+            // 🔹 Handle non-outline scenarios
+            List<List<String>> scenarioSteps = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
+            if (!scenarioSteps.isEmpty()) {
+                ExtentTest parentStep = ExtentManager.getExtent().createNode("Running Scenario: " + scenarioName);
+                ExtentManager.setNodeExtent(parentStep);
+
+                gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap(), hooks.getScenario());
             }
         }
-        }
+    }
 
     // Adding addition parameter for gherkin
     @ParameterType("true|false")

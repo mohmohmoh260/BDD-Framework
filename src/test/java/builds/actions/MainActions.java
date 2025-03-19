@@ -6,11 +6,12 @@ import builds.driver.MobileDriver;
 import builds.driver.RemoteDriver;
 import builds.extent.ExtentManager;
 import builds.utilities.Result;
-import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
+import com.aventstack.extentreports.model.Media;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,9 +20,7 @@ import org.testng.Assert;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public abstract class MainActions extends MainDriver {
 
     protected static final ThreadLocal<Boolean> toExecute = ThreadLocal.withInitial(() -> true);
     protected static final ThreadLocal<HashMap<String, String>> variables = ThreadLocal.withInitial(HashMap::new);
-    private static final ThreadLocal<Result> result = new ThreadLocal<>();
+    private static final ThreadLocal<Result> result = ThreadLocal.withInitial(Result::new);
 
     public boolean waitElementExist(String elementName, Integer timeout) {
         try{
@@ -104,9 +103,9 @@ public abstract class MainActions extends MainDriver {
                 browserActions.unHighlightElement(elementName, timeout);
             }
             result.get().setSuccess(true);
-        }catch (Exception e){
+        }catch (Throwable t){
             result.get().setSuccess(false);
-            result.get().setMessage(e.getLocalizedMessage());
+            result.get().setException(ExceptionUtils.wrapAndThrow(t));
         }
     }
 
@@ -119,9 +118,9 @@ public abstract class MainActions extends MainDriver {
                 browserActions.unHighlightElement(elementName, timeout);
             }
             result.get().setSuccess(true);
-        }catch (Exception e){
+        }catch (Throwable t){
             result.get().setSuccess(false);
-            result.get().setMessage(e.getLocalizedMessage());
+            result.get().setException(ExceptionUtils.wrapAndThrow(t));
         }
     }
 
@@ -129,9 +128,9 @@ public abstract class MainActions extends MainDriver {
         try{
             Assert.assertEquals(actual, expected);
             result.get().setSuccess(true);
-        }catch (Exception e){
+        }catch (Throwable t){
             result.get().setSuccess(false);
-            result.get().setMessage(e.getLocalizedMessage());
+            result.get().setException(ExceptionUtils.wrapAndThrow(t));
         }
     }
 
@@ -140,9 +139,9 @@ public abstract class MainActions extends MainDriver {
             waitElementVisible(elementName, timeout);
             driver.get().findElement(fetchElement(elementName)).click();
             result.get().setSuccess(true);
-        }catch (Exception e){
+        }catch (Throwable t){
             result.get().setSuccess(false);
-            result.get().setMessage(e.getLocalizedMessage());
+            result.get().setException(ExceptionUtils.wrapAndThrow(t));
         }
     }
 
@@ -151,9 +150,9 @@ public abstract class MainActions extends MainDriver {
             waitElementVisible(elementName, timeout);
             driver.get().findElement(fetchElement(elementName)).sendKeys(value);
             result.get().setSuccess(true);
-        }catch (Exception e){
+        }catch (Throwable t){
             result.get().setSuccess(false);
-            result.get().setMessage(e.getLocalizedMessage());
+            result.get().setException(ExceptionUtils.wrapAndThrow(t));
         }
     }
 
@@ -163,33 +162,30 @@ public abstract class MainActions extends MainDriver {
             waitElementExist(elementName, timeout);
             actualText =  driver.get().findElement(fetchElement(elementName)).getText();
             result.get().setSuccess(true);
-        }catch (Exception e){
+        }catch (Throwable t){
             result.get().setSuccess(false);
-            result.get().setMessage(e.getLocalizedMessage());
+            result.get().setException(ExceptionUtils.wrapAndThrow(t));
         }
         return actualText;
     }
 
-    public void takeScreenshot(ExtentTest extent) {
+    public static Media takeScreenshot() {
         if (driver.get() == null) {
-            return;
+            return null; // Return null to prevent errors
         }
 
         try {
-            // Generate Unique Screenshot Name
-            String relativePath = "test-output/screenshots/" + System.currentTimeMillis() + ".png";
+            String relativePath = ExtentManager.baseScreenshotFolder + System.currentTimeMillis() + ".png";
             String absolutePath = new File(relativePath).getAbsolutePath();  // Ensure correct path
 
-            // Capture Screenshot and Save as File
             File srcFile = ((TakesScreenshot) driver.get()).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(srcFile, new File(absolutePath));
 
-            // Attach Screenshot to Report (Node or Main Test)
-                extent.info("Screenshot: ",
-                        MediaEntityBuilder.createScreenCaptureFromPath(absolutePath).build());
+            return MediaEntityBuilder.createScreenCaptureFromPath(absolutePath).build();
 
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 

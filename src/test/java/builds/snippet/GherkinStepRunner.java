@@ -46,6 +46,7 @@ public class GherkinStepRunner {
                     try {
                         method.invoke(instance, params);
                     } catch (InvocationTargetException e) {
+                        System.err.println(e.getLocalizedMessage());
                         return;
                     }
                     return;

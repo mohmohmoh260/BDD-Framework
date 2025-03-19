@@ -1,13 +1,5 @@
 Feature: Snippet Demo Feature
 
-  Scenario Outline: testing
-    Then print "<data>" and "<data2>"
-    Then print "<data3>" and "<data4>"
-    Examples:
-      |data  |data2 |data3  |data4 |
-      |123   |abc   |aaaa   |bbbb  |
-      |456   |def   |cccc   |dddd  |
-
   Scenario Outline: User login to M2U
     Then set text "<username>" into "Username_Input"
     And click "Button_Login"
@@ -21,14 +13,6 @@ Feature: Snippet Demo Feature
     Examples:
     | username   |      password|     securityPhrase        |
     |autouat1     |    Maybank@1|      automation ONLY?     |
-
-  Scenario Outline: testing
-    Then print "<data>" and "<data2>"
-    Then print "<data3>" and "<data4>"
-    Examples:
-      |data  |data2 |data3  |data4 |
-      |123   |abc   |aaaa   |bbbb  |
-      |456   |def   |cccc   |dddd  |
 
   Scenario Outline: User login to MAE
     Then click "Agree_button"
@@ -59,3 +43,21 @@ Feature: Snippet Demo Feature
     Examples:
     | username | password | security |
     | hrmaker1 | Mbbtest@1| hrmaker1 |
+
+
+  Scenario Outline: User login to MAE sass
+    Then click "Agree_button"
+    When if "Proceed Anyway_Button" is visible within 10 seconds
+    And click "Proceed Anyway_Button"
+    When if "Proceed Anyway_Button" is visible within 10 seconds
+    And click "Agree & Proceed_button"
+    And end statement
+    And end statement
+    And click "Next_Button"
+    And click "Next_Button"
+    And click "Next_Button"
+    And click "Next_Button"
+    And click "Log In Here_button"
+    Examples:
+      | Subject Title   |  Body Text    |
+      |  samuat04   |    Maybank@1|
