@@ -2,7 +2,6 @@ package workDirectory.stepDefinitions;
 
 import builds.actions.MainActions;
 import builds.extent.ExtentManager;
-import builds.utilities.Result;
 import builds.listener.StepListener;
 import com.aventstack.extentreports.ExtentTest;
 import io.appium.java_client.AppiumDriver;
@@ -37,8 +36,7 @@ public class Hooks extends MainActions {
     public void afterStep(Scenario scenario) {
         if(!StepListener.gherkinStep.get().contains("run snippet scenario")){
             if (scenario.isFailed()) {
-                Result result = new Result();
-                ExtentManager.getExtent().fail(StepListener.gherkinStep.get() + "<br><br>" + result.getException(), takeScreenshot());
+                ExtentManager.getExtent().fail(StepListener.gherkinStep.get() + "<br><br>", takeScreenshot());
             } else {
                 if(globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true")||StepListener.gherkinStep.get().equals("And take screenshot")){
                     ExtentManager.getExtent().pass(StepListener.gherkinStep.get() , takeScreenshot());

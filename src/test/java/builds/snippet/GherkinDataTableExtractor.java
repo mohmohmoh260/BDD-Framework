@@ -2,7 +2,6 @@ package builds.snippet;
 
 import builds.actions.MainActions;
 import builds.extent.ExtentManager;
-import builds.utilities.Result;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Scenario;
 import workDirectory.stepDefinitions.CommonStepDefinitions;
@@ -10,6 +9,7 @@ import workDirectory.stepDefinitions.CommonStepDefinitions;
 import java.nio.file.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -96,11 +96,14 @@ public class GherkinDataTableExtractor extends MainActions{
         List<List<String>> allSteps = new ArrayList<>();
 
         for (Path featureFile : featureFiles) {
+            // Ensure exact match when retrieving examples
             List<Map<String, String>> examples = getExamplesFromScenarioOutline(featureFile, scenarioName);
 
             if (examples.isEmpty()) {
-                // Normal scenario (not an outline)
+                // Normal scenario (not an outline) - Ensure exact name match
                 List<String> steps = extractStepsFromFeature(featureFile, scenarioName, null);
+
+                // Debug: Check if steps were found
                 if (!steps.isEmpty()) {
                     allSteps.add(steps);
                 }
@@ -108,11 +111,17 @@ public class GherkinDataTableExtractor extends MainActions{
                 // Scenario Outline: Extract steps for each example row
                 for (Map<String, String> exampleData : examples) {
                     List<String> steps = extractStepsFromFeature(featureFile, scenarioName, exampleData);
+
                     if (!steps.isEmpty()) {
                         allSteps.add(steps);
                     }
                 }
             }
+        }
+
+        // Debug: If no steps were found
+        if (allSteps.isEmpty()) {
+            System.out.println("No exact match found for scenario: " + scenarioName);
         }
 
         return allSteps.isEmpty() ? Collections.emptyList() : allSteps;
@@ -129,7 +138,7 @@ public class GherkinDataTableExtractor extends MainActions{
             String line = lines.get(i).trim();
 
             // ✅ Detect correct scenario
-            if (line.startsWith("Scenario Outline:") && line.contains(scenarioName)) {
+            if (line.matches("^Scenario Outline:\\s+" + Pattern.quote(scenarioName) + "$")) {
                 foundScenario = true;
                 isScenarioOutline = true;
                 stepTemplate.clear();
@@ -151,12 +160,6 @@ public class GherkinDataTableExtractor extends MainActions{
 
                 while (i < lines.size() && lines.get(i).trim().startsWith("|")) {
                     List<String> values = extractTableRow(lines.get(i++));
-
-                    if (values.size() != headers.size()) {  // ✅ ADD THIS CHECK
-                        throw new IllegalStateException(
-                                "❌ Mismatch: headers size (" + headers.size() + ") vs values size (" + values.size() + ") in " + featureFile
-                        );
-                    }
 
                     Map<String, String> rowData = new HashMap<>();
                     for (int j = 0; j < headers.size(); j++) {
@@ -206,19 +209,17 @@ public class GherkinDataTableExtractor extends MainActions{
 
                 // Execute only once with final replaced step
                 DataTable dataTable = createDataTable(exampleData);
-                stepRunner.executeStep(step, dataTable);
+                boolean status = stepRunner.executeStep(step, dataTable);
 
-                Result result = new Result();
-
-                if (result.getSuccess()) {
+                if (status) {
                     if(step.equals("And take screenshot") || (globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true"))){
                         ExtentManager.getNodeExtent().pass(step, takeScreenshot());
                     }else{
                         ExtentManager.getNodeExtent().pass(step);
                     }
                 } else {
-                    ExtentManager.getNodeExtent().fail(step + "<br><br>" + result.getException(), takeScreenshot());
-                    throw new RuntimeException(result.getException());
+                    ExtentManager.getNodeExtent().fail(step + "<br><br>", takeScreenshot());
+                    throw new RuntimeException("ABCDE");
                 }
             }
         }

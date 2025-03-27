@@ -11,5 +11,5 @@ Feature: Snippet Demo Feature
     And click "Button_Login"
     And take screenshot
     Examples:
-    | username   |      password|     securityPhrase        |
-    |autouat1     |    Maybank@1|      automation ONLY?     |
+    | username   |      password|     securityPhrase       |
+    |autouat1    |    Maybank@1|      automation ONLY?     |

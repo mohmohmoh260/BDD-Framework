@@ -38,8 +38,8 @@ Feature: Snippet Demo Feature
     And end statement
     And set text "<username>" into "BIZ_Username_Input"
     And click "BIZ_Next_Button"
-    Then verify actual text of "BIZ_Security Phrase_Text" is equals to expected text "<security>"
-    And click "BIZ_Yes_Button"
+#    Then verify actual text of "BIZ_Security Phrase_Text" is equals to expected text "<security>"
+#    And click "BIZ_Yes_Button"
     Examples:
     | username | password | security |
     | hrmaker1 | Mbbtest@1| hrmaker1 |

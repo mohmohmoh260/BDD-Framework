@@ -15,7 +15,6 @@ import io.cucumber.java.en.When;
 import org.testng.Assert;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,7 @@ public class CommonStepDefinitions extends MainActions {
         if (toExecute.get()) {
             Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
 
-            // 🔹 Fetch examples from ALL feature files
+            // Fetch examples from ALL feature files
             List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.get().getExamplesFromScenarioOutline(scenarioName);
 
             if (!exampleDataList.isEmpty()) {

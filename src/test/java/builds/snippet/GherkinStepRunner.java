@@ -11,18 +11,20 @@ import java.util.regex.*;
 public class GherkinStepRunner {
 
     private static List<Class<?>> stepDefinitionClasses = null;
+    private static final Set<String> executedExamples = new HashSet<>();  // Track executed steps
 
     public GherkinStepRunner(List<Class<?>> stepDefinitionClasses) {
         GherkinStepRunner.stepDefinitionClasses = stepDefinitionClasses;
     }
 
-    public void executeStep(String gherkinStep, DataTable dataTable) throws Throwable {
+    public Boolean executeStep(String gherkinStep, DataTable dataTable) throws Throwable {
         String cleanedStep = gherkinStep.replaceFirst("^(Given|When|Then|And|\\$)\\s+", "").trim();
 
         for (Class<?> clazz : stepDefinitionClasses) {
             for (Method method : clazz.getDeclaredMethods()) {
                 String annotationValue = getCucumberAnnotationValue(method);
                 if (annotationValue == null) continue;
+
                 Pattern pattern = buildRegexPattern(annotationValue);
                 Matcher matcher = pattern.matcher(cleanedStep);
 
@@ -42,18 +44,21 @@ public class GherkinStepRunner {
                         params = appendDataTable(params, dataTable != null ? dataTable : DataTable.create(Collections.emptyList()));
                     }
 
-                    // Invoke the method
+                    // Invoke the method and handle exceptions
                     try {
                         method.invoke(instance, params);
+                        System.out.println("✅ Step Executed: " + gherkinStep);
+                        return true;  // Step executed successfully
                     } catch (InvocationTargetException e) {
-                        System.err.println(e.getLocalizedMessage());
-                        return;
+                        throw e.getCause();  // Rethrow actual exception from step definition
+                    } catch (Exception e) {
+                        e.printStackTrace(); // Log unexpected exceptions
+                        return false;
                     }
-                    return;
                 }
             }
         }
-        throw new NoSuchMethodException("No matching step definition found for: " + gherkinStep);
+        throw new NoSuchMethodException("❌ No matching step definition found for: " + gherkinStep);
     }
 
     private String getCucumberAnnotationValue(Method method) {

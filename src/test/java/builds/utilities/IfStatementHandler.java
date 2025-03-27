@@ -6,8 +6,6 @@ import java.util.*;
 
 public class IfStatementHandler extends MainActions {
 
-    Result result = new Result();
-
     public void toExecuteChecker(String methodName, List<Object> param, Integer timeout){
 
         switch (methodName){
@@ -26,16 +24,14 @@ public class IfStatementHandler extends MainActions {
                 }
                 break;
             case "ifElementIsNotVisible":
-                verifyElementVisible((String) param.get(0), timeout);
-                if(!result.getSuccess()){
+                if(verifyElementNotVisible((String) param.get(0), timeout)){
                     toExecute.set(true);
                 }else {
                     toExecute.set(false);
                 }
                 break;
             case "ifElementIsVisible":
-                verifyElementVisible((String) param.get(0), timeout);
-                if(result.getSuccess()){
+                if(verifyElementVisible((String) param.get(0), timeout)){
                     toExecute.set(true);
                 }else {
                     toExecute.set(false);

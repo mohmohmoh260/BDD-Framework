@@ -1,5 +1,5 @@
 {
-  "BIZ_Login to M2U Biz_Button": {
+  "BIZ_Login": {
     "web": "",
     "android": "//*[@content-desc='introScreen_Login to M2U Biz_txt']",
     "ios": ""

@@ -45,15 +45,6 @@ Feature: Snippet Demo Feature
     | hrmaker1 | Mbbtest@1| hrmaker1 |
 
 
-  Scenario Outline: testing
-    Then print "<data>" and "<data2>"
-    Then print "<data3>" and "<data4>"
-    Examples:
-      |data  |data2 |data3  |data4 |
-      |123   |abc   |aaaa   |bbbb  |
-      |456   |def   |cccc   |dddd  |
-
-
   Scenario Outline: User login to MAE sass
     Then click "Agree_button"
     When if "Proceed Anyway_Button" is visible within 10 seconds
