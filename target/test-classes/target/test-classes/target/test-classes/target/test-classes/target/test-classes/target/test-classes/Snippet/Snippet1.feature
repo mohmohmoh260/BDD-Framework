@@ -35,7 +35,7 @@ Feature: Snippet Demo Feature
   Scenario Outline: User login to BIZ
     When if "BIZ_Login" is visible within 30 seconds
       And take screenshot
-      And click "BIZ_Loginn"
+      And click "BIZ_Login"
     And end statement
     And set text "<username>" into "BIZ_Username_Input"
     And click "BIZ_Next_Button"

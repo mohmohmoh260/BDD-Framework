@@ -33,9 +33,9 @@ Feature: Snippet Demo Feature
 
 
   Scenario Outline: User login to BIZ
-    When if "BIZ_Login to M2U Biz_Button" is visible within 30 seconds
+    When if "BIZ_Login" is visible within 30 seconds
       And take screenshot
-      And click "BIZ_Login to M2U Biz_Button"
+      And click "BIZ_Loginn"
     And end statement
     And set text "<username>" into "BIZ_Username_Input"
     And click "BIZ_Next_Button"
