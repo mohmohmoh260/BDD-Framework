@@ -717,6 +717,64 @@
       "responseMode": null
     },
     {
+      "uuid": "655f47ad-7070-4d5d-a04c-4db0f8b128a3",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "2fa/v2/secure2u/s2uActivationCardInquiry",
+      "responses": [
+        {
+          "uuid": "441f188d-6213-43b1-8e32-cb396e43f17d",
+          "body": "{\r\n  \"s2UActivationCardNumber\": 0503,\r\n  \"s2UActivationCardUser\": true\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "75f63702-a9ac-4d31-ad22-1997e2807360",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "2fa/v2/secure2u/checkEligibility",
+      "responses": [
+        {
+          "uuid": "71de545a-1738-458b-8b24-d1e2f9ec889a",
+          "body": "{\r\n  \"status\": \"M001\",\r\n  \"code\": \"M001\",\r\n  \"text\": \"Success\",\r\n  \"payload\": null,\r\n  \"s2uInfo\": {\r\n    \"s2u_enabled\": true,\r\n    \"s2u_registered\": true\r\n  },\r\n  \"rsaStatus\": null,\r\n  \"statusDescription\": null,\r\n  \"serverDate\": null,\r\n  \"challenge\": null,\r\n  \"s2w\": null\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
       "uuid": "9cf68a6b-4755-4454-9d75-db2f3ca149f5",
       "type": "http",
       "documentation": "",
@@ -784,6 +842,64 @@
         {
           "uuid": "de6af9e1-b399-42c0-b0c1-60a9aebcaa89",
           "body": "{\r\n  \"message\": \"Success\",\r\n  \"code\": 200,\r\n  \"challenge\": null,\r\n  \"result\": \"89a9bd2d-014d-4911-9f5d-bb1cb1b4e708\"\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "5997fa0a-57ea-4f3c-b56f-415c7daae9b8",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "2fa/v1/secure2u/publicKey",
+      "responses": [
+        {
+          "uuid": "4f5731f7-887a-4681-8afe-f2b08b44ba38",
+          "body": "{\r\n  \"publicKey\": \"xKIn6LFlsmRIdgHBEU1NoeY2L08jCbB/LXnn0SO/AwU=\"\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "65387c7b-1d59-46bc-9fce-20fb3ee5f091",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "2fa/v2/secure2u/register",
+      "responses": [
+        {
+          "uuid": "10376035-8889-41ea-9283-6e07b214ec98",
+          "body": "{\r\n  \"status\": \"M000\",\r\n  \"code\": \"200\",\r\n  \"text\": null,\r\n  \"payload\": [\r\n    {\r\n      \"serverPubKey\": [\r\n        196,\r\n        162,\r\n        39,\r\n        232,\r\n        177,\r\n        101,\r\n        178,\r\n        100,\r\n        72,\r\n        118,\r\n        1,\r\n        193,\r\n        17,\r\n        77,\r\n        77,\r\n        161,\r\n        230,\r\n        54,\r\n        47,\r\n        79,\r\n        35,\r\n        9,\r\n        176,\r\n        127,\r\n        45,\r\n        121,\r\n        231,\r\n        209,\r\n        35,\r\n        191,\r\n        3,\r\n        5\r\n      ],\r\n      \"encriptedSeeds\": \"AAAAAAAAAAAAAAAAAAAAAGPtnJiU5N2/2CLd8K7z/wVCspTlLJ4AqJwcPUpEefSd2Bx0d34f9T8pThtEwGRkab7tvMT2WOr3mMrrdWjX3Q1xHrMUZoisrbkFp9mpe7KWfVHtvwkLSkCl6p48Pvm30c3U5SKM1Q16HBn/2Nc=\",\r\n      \"nonce\": \"CTC9ZiZIoEk3gVo+1U28Uok8fOOcwV8A\",\r\n      \"deviceId\": \"6472ca54-123e-47b4-8fa1-cb894d629946\",\r\n      \"isUnderCoolDown\": false,\r\n      \"coolDownDue\": 1731645685,\r\n      \"coolDownPeriod\": 2,\r\n      \"isActivationPending\": false\r\n    }\r\n  ],\r\n  \"s2uInfo\": null,\r\n  \"rsaStatus\": null,\r\n  \"statusDescription\": null,\r\n  \"serverDate\": null,\r\n  \"challenge\": null,\r\n  \"s2w\": {\r\n    \"displayPopup\": false,\r\n    \"txnType\": \"M2US2UREG\",\r\n    \"chance\": 1,\r\n    \"generic\": false,\r\n    \"amount\": 0,\r\n    \"formattedAmount\": \"0.00\"\r\n  }\r\n}",
           "latency": 0,
           "statusCode": 200,
           "label": "",
@@ -955,6 +1071,62 @@
           "latency": 0,
           "statusCode": 200,
           "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "d9060dd0-ec17-4c68-82e0-1079e57d6071",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "2fa/v2/secure2u/validate",
+      "responses": [
+        {
+          "uuid": "1caf4818-16fc-4d8e-85a8-bd7a71535979",
+          "body": "{\r\n  \"status\": \"M000\",\r\n  \"code\": null,\r\n  \"text\": \"Success\",\r\n  \"payload\": [\r\n    {\r\n      \"hardware_id\": \"835f1ce5be828de3\",\r\n      \"device_name\": \"OnePlus7TPro\",\r\n      \"mdip_id\": \"585a6357-c01a-4042-a06c-12e9d959e65b\",\r\n      \"app_id\": \"MYA\",\r\n      \"updateGCM\": false,\r\n      \"updateMultiOTP\": false,\r\n      \"registration_attempts\": 1,\r\n      \"device_status\": true,\r\n      \"isActivationPending\": false,\r\n      \"isUnderCoolDown\": false,\r\n      \"coolDownDue\": \"1731401472\",\r\n      \"coolDownTotalHours\": \"2114\",\r\n      \"updateOsid\": false\r\n    }\r\n  ],\r\n  \"s2uInfo\": {\r\n    \"pull\": \"Y\",\r\n    \"s2uFavTxnFlag\": \"N\",\r\n    \"s2uFavTxnLimit\": \"10000\",\r\n    \"s2u_enabled\": true,\r\n    \"action_flow\": \"SMS_TAC\",\r\n    \"s2u_registered\": true\r\n  },\r\n  \"rsaStatus\": null,\r\n  \"statusDescription\": \"Success\",\r\n  \"serverDate\": null,\r\n  \"challenge\": null,\r\n  \"s2w\": null\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "function_code",
+              "value": "FN00004",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "fe83d2b5-ef86-4540-ba8d-7c5931d4cd7d",
+          "body": "{\r\n  \"status\": \"M000\",\r\n  \"code\": null,\r\n  \"text\": \"Success\",\r\n  \"payload\": [\r\n    {\r\n      \"hardware_id\": \"835f1ce5be828de3\",\r\n      \"device_name\": \"OnePlus7TPro\",\r\n      \"mdip_id\": \"585a6357-c01a-4042-a06c-12e9d959e65b\",\r\n      \"app_id\": \"MYA\",\r\n      \"updateGCM\": false,\r\n      \"updateMultiOTP\": false,\r\n      \"registration_attempts\": 1,\r\n      \"device_status\": true,\r\n      \"isActivationPending\": false,\r\n      \"isUnderCoolDown\": false,\r\n      \"coolDownDue\": \"1731401472\",\r\n      \"coolDownTotalHours\": \"2114\",\r\n      \"updateOsid\": false\r\n    }\r\n  ],\r\n  \"s2uInfo\": {\r\n    \"pull\": \"Y\",\r\n    \"s2uFavTxnFlag\": \"Y\",\r\n    \"s2uFavTxnLimit\": \"5000\",\r\n    \"s2u_enabled\": true,\r\n    \"action_flow\": \"S2U\",\r\n    \"s2u_registered\": true\r\n  },\r\n  \"rsaStatus\": null,\r\n  \"statusDescription\": \"Success\",\r\n  \"serverDate\": null,\r\n  \"challenge\": null,\r\n  \"s2w\": null\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "S2U",
           "headers": [],
           "bodyType": "INLINE",
           "filePath": "",
@@ -1543,6 +1715,64 @@
       "responseMode": null
     },
     {
+      "uuid": "7e418e3b-ba13-4e8e-8940-c8bffc521b1f",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "2fa/v2/secure2u/challenge",
+      "responses": [
+        {
+          "uuid": "add965f4-a8a9-4325-95ba-1d8d648ed7c1",
+          "body": "{\r\n  \"status\": \"M000\",\r\n  \"code\": \"200\",\r\n  \"text\": \"Success\",\r\n  \"payload\": [\r\n    {\r\n      \"encryptedChallenge\": \"AAAAAAAAAAAAAAAAAAAAAAXUjf0PHkg7I1x4fXY28FJBiUjN4B2LcKLUL7OeI1x2MIgmowmfjeXNWanJc3Z//dlnO/hicljiF/TJhZmUvEy9BoEKFhk2oQq8BYY524aKpRbaPvGe8Jyms+O34YYjbJfADlih4zBy/fNHxZi4pYsEWvrFwV1M9+oO7x5V1o4DI+nBCZHp0KwTvzt3wZUlFnQ5bkLwh38zVOqEy6x9mLw01OIJbfQXq4UuOAB1ckSOdx/t0IWnsHlYoLAHQtX/1vnLAzd86LPbJRAmyKbn0k5yvXCFAuDwyVVS7raZfpNPErWMOkkjDyCNcJrmwMfEzcYhxGCcwy/0hcifojxr2ygi4JHuzqY0bknghWXBgBx4kc5nTMFQk5wK4GtFFs7i7nZQLuqygavVHl6kV9jX2kFSd+lPqZc17p5ZmhoEp4DrYB93EEQDydrmfr5LTEX9xGkZ3WW0qIW98vRheKRl1833Ns0JhV85SWPcfsrzJu/9ZRK802KgAn+BdFCTR6ngIn31zOwEFlOBllKpr1tzp6BSa/oxpSyb7yxVMCPadsGQLr6cKa/ghcsucYcPIjf2duBZLWLpa3BBN3tJj9sc483m93B/XBlmYFG/om5L0kahPBJo/A1IRMvCJ2ONPQlWHokIj8LTWt6apeqK9Sc1lTsPwa1XpQGo6dzOzaMJvb/nkactHY3er6XxNJfHTHVl11j/lenEdd5qTwKrT0w/GFc86e2L6pxcZ1DVNi9kkeaVYfobulPB3IoKKySynHkOwsWP2uFhxG4QlOo/kjDasP0yJtxxKu/qRX5bHwNO+sv0J8eKKinS5M6D1tUnoaVbm6NNsKqVowPqOscs5CdaKCS7ExwR+68G2eaf17hdzGsBKKac8hNb+m1/v1dZj8+LsGHQra1jN94tR4hh2BW8D7xhZgenZggdxjGox+dO8K1yj5PvL3hsjF3CmmsB2cfu4auKomIUb3oBrPwdUSeCp1pkeqK/xTpa0Afc6AQgZquhDQQpmgCxdINfHsJM40CwGkzkOQT9V076Lya6gC0SwE6iTlLy1Z4YI45l1gtma7tcNlkVUshfVX05/a5Et7VQB9tGtbYnHvKf9BqJ1pYIMM0nwEGTC9IT+rC4vX8IH1uY0ajNv+yM2BXAE9Sc5jYDvf7qTF4qvm0CAQJjZW0pLdGy0xqFGnGbE6IC7GFGUN8SZDvQ4x+UYoOZG/iYp7vtcdAG35Gs2t7Ef4U30Z45c8daxnN2xa/BpJkQGVLW9Wkn6CZAtYIUe6g0vr3+ASLTKGrRXr5EuT/+SKKSayVsSBWG5zeti+bKq2MqC/n2NXiKHjc+94dC/NK+CRgHzhqL+HHKE8RAZT5qBbA0X4spayVSGCf1J4ICCI1vMTyk2TgU23qwm8U6+FtkJw4B6cL3ya5foYaBAEXccFsHDXqHtUfWutCoH+TUUqxJZqvGjGOz19xo6933D/HPxGi7YFGH0bslG2KDE+f+VrwRbdbxCEuT+N3MDyZvdgeyA6Zk/+6/iLg/a+r/J17ZpVtkk4J0myJCI+O7DI5wOVvSkEfrUUipST9Y6fcQYVsa+ztxg2nHV9L//gaKrlkdbdCy32lF\",\r\n      \"nonce\": \"MoJzU/ryC0iUl3QkGbb2q7fGOSdlGMjN\",\r\n      \"message\": \"You have a Maybank2u transaction to be approved\",\r\n      \"type\": \"trns\",\r\n      \"msgId\": \"1\",\r\n      \"full_desc\": \"You have a Maybank2u transaction to be approved\",\r\n      \"cat_id\": \"10000\",\r\n      \"cat_name\": \"Transactions\",\r\n      \"subcat_id\": \"0\",\r\n      \"is_sound\": \"true\",\r\n      \"template_id\": \"0\",\r\n      \"inbox_expiry\": \"1731409026\",\r\n      \"device_id\": \"585a6357-c01a-4042-a06c-12e9d959e65b\"\r\n    }\r\n  ],\r\n  \"s2uInfo\": null,\r\n  \"rsaStatus\": null,\r\n  \"statusDescription\": null,\r\n  \"serverDate\": null,\r\n  \"challenge\": null,\r\n  \"s2w\": null\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "06278c82-4b76-433f-8e94-7472c7a02c04",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "2fa/v2/secure2u/signTransaction",
+      "responses": [
+        {
+          "uuid": "09de058a-f8c3-45d4-9212-c62c90f2e251",
+          "body": "{\r\n  \"status\": \"M000\",\r\n  \"code\": \"200\",\r\n  \"text\": \"Authorized\",\r\n  \"statusCode\": \"M000\",\r\n  \"statusDescription\": \"Successful\",\r\n  \"payload\": {\r\n    \"transactionId\": \"MC11111117200889395M\",\r\n    \"RequestDt\": \"20241112\",\r\n    \"RequestTime\": \"185603\",\r\n    \"PAN\": \"0000007001340503\",\r\n    \"ApplID\": \"MYA\",\r\n    \"CustId\": \"000699941\",\r\n    \"HardwareId\": \"\",\r\n    \"CustName\": \"AUTO SIT A\",\r\n    \"PhoneNum\": \"013-1111111\",\r\n    \"TokenNum\": \"00000070013405030039404265607160\",\r\n    \"ApprovalStatus\": \"00\",\r\n    \"PayeeName\": \"TENAGA NASIONAL BE\",\r\n    \"Amt\": \"+000000000002000\",\r\n    \"FrAcctId\": \"1647170256080000\",\r\n    \"ToAcctId\": \"0000000000000000\",\r\n    \"PayeeType\": \"J\",\r\n    \"PayeeCode\": \"\",\r\n    \"BillingAcct\": \"210270824408             \",\r\n    \"BillReferenceNo\": \"\",\r\n    \"EffectiveDate\": \"000000\",\r\n    \"CurCodeValue\": \"MYR\",\r\n    \"FromAcctBal\": \"+000000199993800\",\r\n    \"SeqNo\": \"00000000\",\r\n    \"SerCharge\": \"+000000000000000\",\r\n    \"ValuDate\": \"20241112\",\r\n    \"AprrovalCode\": \"\",\r\n    \"RechargeCode\": \"\",\r\n    \"SerialNo\": \"\",\r\n    \"LoginName\": \"\",\r\n    \"Password\": \"\",\r\n    \"MMERefNo\": \"\",\r\n    \"ToAcctCurCodeValue\": \"\",\r\n    \"ToAcctBal\": \"\",\r\n    \"ReversalInd\": \"\",\r\n    \"GSTAmt\": \"\",\r\n    \"TotalAmt\": \"\",\r\n    \"WUPointEarned\": \"\",\r\n    \"WUTransactionID\": \"\",\r\n    \"WUMoneyControlDate\": \"\",\r\n    \"WUMTCN\": \"\",\r\n    \"WUReturnDateTime\": \"\",\r\n    \"FILLER\": \"\"\r\n  },\r\n  \"additionalStatusDescription\": null,\r\n  \"asnbTransferReceipt\": {\r\n    \"fundPrice\": null,\r\n    \"unitAllocated\": \"0.00\",\r\n    \"saleChargePercentage\": null,\r\n    \"saleChargeRm\": null,\r\n    \"sstAmount\": \"0.00\"\r\n  },\r\n  \"bakongReferenceNo\": null,\r\n  \"remittanceReferenceNo\": null,\r\n  \"mbbRefNo\": null,\r\n  \"consentId\": null,\r\n  \"dateTime\": \"12 Nov 2024, 6:56 PM\",\r\n  \"pinBlock\": null,\r\n  \"maeCustRisk\": null,\r\n  \"transactionReferenceNumber\": \"MC11111117200889396M\",\r\n  \"certificateNumber\": null,\r\n  \"newAccBal\": null,\r\n  \"isDuplicate\": false,\r\n  \"cardStpCustInqRes\": null,\r\n  \"serverDate\": \"12 Nov 2024\",\r\n  \"wallet\": {\r\n    \"name\": \"Savings Account-i\",\r\n    \"code\": \"13\",\r\n    \"type\": \"S\",\r\n    \"group\": \"13S\",\r\n    \"number\": \"1647170256080000000\",\r\n    \"certs\": null,\r\n    \"balance\": \"1999938.00\",\r\n    \"currentBalance\": \"1999938.00\",\r\n    \"oneDayFloat\": null,\r\n    \"twoDayFloat\": null,\r\n    \"lateClearing\": null,\r\n    \"regNumber\": null,\r\n    \"loanType\": null,\r\n    \"value\": 1999938,\r\n    \"primary\": true,\r\n    \"supplementaryAvailable\": false,\r\n    \"unitsInGrams\": null,\r\n    \"currencyCode\": null,\r\n    \"statusCode\": null,\r\n    \"statusMessage\": null,\r\n    \"currencyCodes\": null,\r\n    \"accountType\": null,\r\n    \"cardType\": null,\r\n    \"formattedNumber\": null\r\n  },\r\n  \"formattedTransactionRefNumber\": \"200889395M\"\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
       "uuid": "171c43a4-e516-4804-99cf-56350621ede2",
       "type": "http",
       "documentation": "",
@@ -2051,6 +2281,14 @@
     },
     {
       "type": "route",
+      "uuid": "655f47ad-7070-4d5d-a04c-4db0f8b128a3"
+    },
+    {
+      "type": "route",
+      "uuid": "75f63702-a9ac-4d31-ad22-1997e2807360"
+    },
+    {
+      "type": "route",
       "uuid": "9cf68a6b-4755-4454-9d75-db2f3ca149f5"
     },
     {
@@ -2063,6 +2301,14 @@
     },
     {
       "type": "route",
+      "uuid": "5997fa0a-57ea-4f3c-b56f-415c7daae9b8"
+    },
+    {
+      "type": "route",
+      "uuid": "65387c7b-1d59-46bc-9fce-20fb3ee5f091"
+    },
+    {
+      "type": "route",
       "uuid": "66c3d235-1275-412c-b52a-acfbdc54d2d4"
     },
     {
@@ -2072,6 +2318,10 @@
     {
       "type": "route",
       "uuid": "4f888d8c-cee6-4d7e-8501-1dab79d873c3"
+    },
+    {
+      "type": "route",
+      "uuid": "d9060dd0-ec17-4c68-82e0-1079e57d6071"
     },
     {
       "type": "route",
@@ -2124,6 +2374,14 @@
     {
       "type": "route",
       "uuid": "1929b5ad-60c1-4800-9e2d-ca16d10d4658"
+    },
+    {
+      "type": "route",
+      "uuid": "7e418e3b-ba13-4e8e-8940-c8bffc521b1f"
+    },
+    {
+      "type": "route",
+      "uuid": "06278c82-4b76-433f-8e94-7472c7a02c04"
     },
     {
       "type": "route",
