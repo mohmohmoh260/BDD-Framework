@@ -187,4 +187,8 @@ public abstract class MainActions extends MainDriver {
     public void quit(){
         driver.get().quit();
     }
+
+    protected void assertEquals(){
+
+    }
 }

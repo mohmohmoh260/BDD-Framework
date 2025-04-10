@@ -12,7 +12,7 @@ Feature: Snippet Demo Feature
     And take screenshot
     Examples:
     | username   |      password|     securityPhrase        |
-    |autouat1     |    Maybank@1|      automation ONLY?     |
+    |autouat1     |    Maybank@1|      automation ONLY??     |
 
   Scenario Outline: User login to MAE
     Then click "Agree_button"

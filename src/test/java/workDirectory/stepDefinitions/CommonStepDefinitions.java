@@ -13,6 +13,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
 import java.io.IOException;
 import java.util.*;
@@ -24,6 +25,7 @@ public class CommonStepDefinitions extends MainActions {
     private static final ThreadLocal<IfStatementHandler> ifStatementHandler = ThreadLocal.withInitial(IfStatementHandler::new);
     private static final BrowserActions browserActions = new BrowserActions();
     private static final MobileActions mobileActions = new MobileActions();
+    private static final SoftAssert softAssert = new SoftAssert();
 
     @When("^run snippet scenario \"([^\"]+)\"$")
     public void runSnippetScenario(String scenarioName) throws Throwable {
@@ -143,7 +145,7 @@ public class CommonStepDefinitions extends MainActions {
     @Then("^verify text \"([^\"]+)\" is equals to variable \"([^\"]+)\"$")
     public void iVerifyTextIsEqualsToVariable(String expectedText, String variableName) {
         if(toExecute.get()) {
-            Assert.assertEquals(expectedText, variables.get().get(variableName), "Expected text "+expectedText+" is not equals to actual text "+variables.get().get(variableName));
+          assertEquals(expectedText, variables.get().get(variableName), "Expected text "+expectedText+" is not equals to actual text "+variables.get().get(variableName));
         }
     }
 

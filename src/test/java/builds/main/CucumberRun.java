@@ -28,7 +28,7 @@ public class CucumberRun {
 		}
 
 		@BeforeSuite
-		public static void killProcesses() {
+		public void killProcesses() {
 			String os = System.getProperty("os.name").toLowerCase();
 
 			String[] command;
@@ -52,7 +52,7 @@ public class CucumberRun {
 		}
 
 		@BeforeSuite
-		public static void featuresChecker() throws IOException {
+		public void featuresChecker() throws IOException {
 			String featureDirectory = "src/test/resources/Snippet";
 			FeatureDuplicateChecker.findDuplicateScenarios(featureDirectory);
 		}
