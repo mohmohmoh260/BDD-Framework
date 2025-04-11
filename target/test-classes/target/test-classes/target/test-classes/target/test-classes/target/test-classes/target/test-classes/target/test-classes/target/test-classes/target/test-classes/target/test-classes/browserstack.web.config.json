@@ -1,0 +1,7 @@
+{
+  "web": {
+    "browser": "chrome",
+    "browserVersion": "latest",
+    "os": "Windows 10"
+  }
+}

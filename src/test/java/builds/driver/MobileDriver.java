@@ -1,8 +1,5 @@
 package builds.driver;
 
-import builds.extent.ExtentManager;
-import com.aventstack.extentreports.ExtentTest;
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.ios.IOSDriver;
@@ -16,10 +13,23 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Handles setup and initialization of local Appium mobile drivers for Android and iOS platforms.
+ * Extends {@link MainDriver} to use shared thread-local driver management.
+ */
 public class MobileDriver extends MainDriver {
 
+    /**
+     * Thread-local storage for the Appium server instance.
+     * Ensures each test thread runs with its own Appium service.
+     */
     private static final ThreadLocal<AppiumDriverLocalService> appiumDriverLocalService = new ThreadLocal<>();
 
+    /**
+     * Initializes the mobile driver based on platform-specific parameters provided via XML configuration.
+     *
+     * @param testName The name of the test to retrieve corresponding device and app capabilities.
+     */
     public void setupMobileDriver(String testName) {
         List<Map<String, String>> deviceParameters = filterXMLByTestName(testName);
 
@@ -34,8 +44,8 @@ public class MobileDriver extends MainDriver {
         String fullReset = deviceParameters.get(0).get("fullReset");
         String noReset = deviceParameters.get(0).get("noReset");
 
-        int min = 5000;  // Minimum port number
-        int max = 65535; // Maximum port number
+        int min = 5000;
+        int max = 65535;
         String port = String.valueOf((int) (Math.random() * (max - min + 1)) + min);
         startAppiumService(port);
 
@@ -72,9 +82,9 @@ public class MobileDriver extends MainDriver {
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
+
         } else if (platformName.equalsIgnoreCase("iOS")) {
             XCUITestOptions xcuiTestOptions = new XCUITestOptions();
-
             xcuiTestOptions
                     .setUdid(udid)
                     .setPlatformName(platformName)
@@ -87,7 +97,7 @@ public class MobileDriver extends MainDriver {
                     .setAutoDismissAlerts(true)
                     .setAutoAcceptAlerts(true)
                     .setUseNewWDA(true)
-                    .setCapability("browserType", browserType); // Add browserType capability
+                    .setCapability("browserType", browserType);
 
             xcuiTestOptions.setCapability("autoGrantPermissions", true);
 
@@ -116,6 +126,11 @@ public class MobileDriver extends MainDriver {
         driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(120));
     }
 
+    /**
+     * Starts a new local Appium service using a randomly generated port.
+     *
+     * @param port The port number for the Appium server to bind to.
+     */
     private void startAppiumService(String port){
         AppiumServiceBuilder appiumServiceBuilder = new AppiumServiceBuilder();
         appiumServiceBuilder.withIPAddress("127.0.0.1");

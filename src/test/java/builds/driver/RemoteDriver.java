@@ -13,9 +13,9 @@ import java.util.HashMap;
 
 public class RemoteDriver extends MainDriver {
 
-    public void setupRemoteDriver(String platform, String URL) throws IOException {
+    public void setupRemoteDriver(String parentKey, String URL) throws IOException {
         if (driver.get() == null) {
-            driver.set(new RemoteWebDriver(new URL(getBrowserStackURL()), getCapabilities(platform)));
+            driver.set(new RemoteWebDriver(new URL(getBrowserStackURL()), getCapabilities(parentKey)));
             driver.get().get(globalDeviceParameter.get().get(0).get(URL));
         }
     }
@@ -24,15 +24,14 @@ public class RemoteDriver extends MainDriver {
         return "https://amirul_D6CMwe:FqzCyn83EZ5zx7xLy71C@hub-cloud.browserstack.com/wd/hub";
     }
 
-    private static DesiredCapabilities getCapabilities(String platform) throws IOException {
+    private static DesiredCapabilities getCapabilities(String parentKey) throws IOException {
         String configFilePath;
+        boolean isWeb = isWebConfig(parentKey);
 
-        // Determine which config file to load
-        if (platform.equals("web")) {
-            configFilePath = "src/test/resources/browserstack.web.config.json";
-        } else {
-            configFilePath = "src/test/resources/browserstack.mobile.config.json";
-        }
+        // Choose appropriate config file based on key
+        configFilePath = isWeb
+                ? "src/test/resources/browserstack.web.config.json"
+                : "src/test/resources/browserstack.mobile.config.json";
 
         File file = new File(configFilePath);
         if (!file.exists()) {
@@ -42,26 +41,41 @@ public class RemoteDriver extends MainDriver {
         String content = new String(Files.readAllBytes(file.toPath()));
         JSONObject jsonConfig = new JSONObject(content);
 
+        if (!jsonConfig.has(parentKey)) {
+            throw new RuntimeException("❌ Parent key not found in config: " + parentKey);
+        }
+
+        JSONObject config = jsonConfig.getJSONObject(parentKey);
         DesiredCapabilities caps = new DesiredCapabilities();
 
-        if (platform.equals("web")) {
-            JSONObject webConfig = jsonConfig.getJSONObject("web");
-            caps.setBrowserName(System.getProperty("browser", webConfig.getString("browser")));
-            caps.setVersion(webConfig.getString("browserVersion"));
-            caps.setPlatform(Platform.fromString(webConfig.getString("os")));
+        if (isWeb) {
+            caps.setBrowserName(config.getString("browser"));
+            caps.setVersion(config.getString("browserVersion"));
+            caps.setPlatform(Platform.fromString(config.getString("os")));
+
+            if (config.has("osVersion")) {
+                HashMap<String, Object> browserstackOptions = new HashMap<>();
+                browserstackOptions.put("osVersion", config.getString("osVersion"));
+                caps.setCapability("bstack:options", browserstackOptions);
+            }
+
         } else {
-            JSONObject mobileConfig = jsonConfig.getJSONObject(platform); // "android" or "ios"
-
             HashMap<String, Object> browserstackOptions = new HashMap<>();
-            browserstackOptions.put("deviceName", mobileConfig.getString("deviceName"));
-            browserstackOptions.put("osVersion", mobileConfig.getString("osVersion"));
-            browserstackOptions.put("app", mobileConfig.getString("app"));
-            browserstackOptions.put("realMobile", mobileConfig.getBoolean("realMobile"));
+            browserstackOptions.put("deviceName", config.getString("deviceName"));
+            browserstackOptions.put("osVersion", config.getString("osVersion"));
+            browserstackOptions.put("app", config.getString("app"));
+            browserstackOptions.put("realMobile", config.getBoolean("realMobile"));
 
-            caps.setCapability("platformName", platform.equals("android") ? "Android" : "iOS");
+            String platform = config.getString("platform");
+            caps.setCapability("platformName", platform.equalsIgnoreCase("android") ? "Android" : "iOS");
             caps.setCapability("bstack:options", browserstackOptions);
         }
 
         return caps;
+    }
+
+    private static boolean isWebConfig(String parentKey) {
+        // Any key that is not scenario1, scenario2, etc., is assumed to be a web key.
+        return !(parentKey.toLowerCase().contains("scenario") || parentKey.equalsIgnoreCase("android") || parentKey.equalsIgnoreCase("ios"));
     }
 }

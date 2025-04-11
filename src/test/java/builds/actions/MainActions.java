@@ -26,6 +26,7 @@ public abstract class MainActions extends MainDriver {
 
     protected static final ThreadLocal<Boolean> toExecute = ThreadLocal.withInitial(() -> true);
     protected static final ThreadLocal<HashMap<String, String>> variables = ThreadLocal.withInitial(HashMap::new);
+    protected static final ThreadLocal<Boolean> isSnippet = ThreadLocal.withInitial(() -> false);
 
     public boolean waitElementExist(String elementName, Integer timeout) {
         if (timeout == null) {
@@ -65,9 +66,9 @@ public abstract class MainActions extends MainDriver {
         mobileDriver.setupMobileDriver(testName);
     }
 
-    public void remoteDriverSetup(String platform, String URL) throws IOException {
+    public void remoteDriverSetup(String parentKey, String URL) throws IOException {
         RemoteDriver remoteDriver = new RemoteDriver();
-        remoteDriver.setupRemoteDriver(platform, URL);
+        remoteDriver.setupRemoteDriver(parentKey, URL);
     }
 
     public By fetchElement(String elementName) {
@@ -188,7 +189,20 @@ public abstract class MainActions extends MainDriver {
         driver.get().quit();
     }
 
-    protected void assertEquals(){
+    protected void assertEquals(String actualText, String expectedVariableValue, String failMessage){
+       if(actualText.equals(expectedVariableValue)){
+            if(isSnippet.get()){
+                ExtentManager.getNodeExtent().pass(takeScreenshot());
+            }else{
+                ExtentManager.getExtent().pass(takeScreenshot());
+            }
+       }else {
+           if(isSnippet.get()){
+               ExtentManager.getNodeExtent().fail(failMessage, takeScreenshot());
+           }else{
+               ExtentManager.getExtent().pass(failMessage, takeScreenshot());
+           }
+       }
 
     }
 }

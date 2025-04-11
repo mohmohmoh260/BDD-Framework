@@ -11,19 +11,42 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * ElementInstance provides centralized access to JSON-defined UI elements.
+ * It loads JSON files from the pageObject directory and stores them in thread-safe maps.
+ *
+ * Each JSON file is expected to define UI element locators per platform (e.g., Android, iOS, Web).
+ * Example structure:
+ * {
+ *     "loginButton": {
+ *         "Android": "id:loginBtn",
+ *         "iOS": "accessibility:login"
+ *     }
+ * }
+ */
 public abstract class ElementInstance extends TestNGXmlParser {
 
-    private static final ThreadLocal<HashMap<String, HashMap<String, String>>> elements = ThreadLocal.withInitial(HashMap::new);
-    private static final ThreadLocal<Map<String, String>> keyToFileMap = ThreadLocal.withInitial(HashMap::new);
+    // Holds all element data, structured as: ElementName -> Platform -> Locator
+    private static final ThreadLocal<HashMap<String, HashMap<String, String>>> elements =
+            ThreadLocal.withInitial(HashMap::new);
 
+    // Tracks where each key was loaded from, to detect duplicates across files
+    private static final ThreadLocal<Map<String, String>> keyToFileMap =
+            ThreadLocal.withInitial(HashMap::new);
+
+    /**
+     * Constructor automatically triggers loading of element data for the thread.
+     */
     public ElementInstance() {
         loadElementsForThread();
     }
 
+    /**
+     * Ensures elements are loaded only once per thread.
+     */
     private void loadElementsForThread() {
-        // Prevent multiple loads for the same thread
         if (elements.get().isEmpty()) {
-            synchronized (ElementInstance.class) { // 🔒 Ensure no duplicate processing
+            synchronized (ElementInstance.class) {
                 if (elements.get().isEmpty()) {
                     getAllElement();
                 }
@@ -31,6 +54,9 @@ public abstract class ElementInstance extends TestNGXmlParser {
         }
     }
 
+    /**
+     * Entry point to scan and load JSON element files from the directory.
+     */
     private void getAllElement() {
         String directoryPath = "src/test/java/workDirectory/pageObject";
         ObjectMapper objectMapper = new ObjectMapper();
@@ -44,6 +70,14 @@ public abstract class ElementInstance extends TestNGXmlParser {
         searchJsonFiles(folder, objectMapper);
     }
 
+    /**
+     * Fetches the locator for a given element name and platform.
+     *
+     * @param elementName the element key name
+     * @param platform the target platform (e.g., Android, iOS, Web)
+     * @return locator string if found
+     * @throws RuntimeException if element or platform locator is missing
+     */
     protected String getElementValue(String elementName, String platform) {
         if (elements.get().isEmpty()) {
             throw new RuntimeException("❌ Elements not loaded for this thread!");
@@ -60,9 +94,16 @@ public abstract class ElementInstance extends TestNGXmlParser {
             }
             return locator;
         }
+
         throw new RuntimeException("❌ Element name not found: " + elementName);
     }
 
+    /**
+     * Recursively scans folders for JSON files, validates structure, and loads into memory.
+     *
+     * @param folder current directory to scan
+     * @param objectMapper Jackson object mapper
+     */
     private void searchJsonFiles(File folder, ObjectMapper objectMapper) {
         for (File file : Objects.requireNonNull(folder.listFiles())) {
             if (file.isDirectory()) {
@@ -76,6 +117,7 @@ public abstract class ElementInstance extends TestNGXmlParser {
                     HashSet<String> localKeys = new HashSet<>();
                     StringBuilder duplicateKeysInSameFile = new StringBuilder();
 
+                    // Detect duplicate element keys in the same file
                     while (matcher.find()) {
                         String key = matcher.group(1);
                         if (!localKeys.add(key)) {
@@ -84,9 +126,11 @@ public abstract class ElementInstance extends TestNGXmlParser {
                     }
 
                     if (!duplicateKeysInSameFile.isEmpty()) {
-                        throw new RuntimeException("❌ Duplicate name found in file: " + file.getAbsolutePath() + duplicateKeysInSameFile);
+                        throw new RuntimeException("❌ Duplicate name found in file: " +
+                                file.getAbsolutePath() + duplicateKeysInSameFile);
                     }
 
+                    // Parse the JSON into the main element map
                     HashMap<String, HashMap<String, String>> data = objectMapper.readValue(
                             file, new TypeReference<HashMap<String, HashMap<String, String>>>() {});
 

@@ -13,21 +13,39 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GherkinDataTableExtractor extends MainActions{
+/**
+ * Utility class for extracting and executing Gherkin scenario steps, particularly Scenario Outlines with Examples.
+ */
+public class GherkinDataTableExtractor extends MainActions {
 
     private static final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
 
+    /**
+     * Retrieves all example data rows for a specific scenario outline name across all feature files.
+     *
+     * @param scenarioName the name of the scenario outline
+     * @return a list of maps representing example data rows, where each map contains parameter names and values
+     * @throws IOException if an I/O error occurs reading from the feature files
+     */
     public List<Map<String, String>> getExamplesFromScenarioOutline(String scenarioName) throws IOException {
-        List<Path> featureFiles = getFeatureFiles(); // ✅ Gets all feature files
+        List<Path> featureFiles = getFeatureFiles();
         List<Map<String, String>> allExamples = new ArrayList<>();
 
         for (Path featureFile : featureFiles) {
-            allExamples.addAll(getExamplesFromScenarioOutline(featureFile, scenarioName)); // ✅ Uses each file
+            allExamples.addAll(getExamplesFromScenarioOutline(featureFile, scenarioName));
         }
 
         return allExamples;
     }
 
+    /**
+     * Retrieves example data rows for a scenario outline with a given name from a specific feature file.
+     *
+     * @param featureFile  the path to the feature file
+     * @param scenarioName the name of the scenario outline
+     * @return a list of maps containing example values keyed by placeholder
+     * @throws IOException if an I/O error occurs reading the file
+     */
     public List<Map<String, String>> getExamplesFromScenarioOutline(Path featureFile, String scenarioName) throws IOException {
         List<String> lines = Files.readAllLines(featureFile);
         boolean foundScenario = false;
@@ -37,20 +55,17 @@ public class GherkinDataTableExtractor extends MainActions{
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i).trim();
 
-            // ✅ Detect scenario outline start
             if (line.startsWith("Scenario Outline:") && line.contains(scenarioName)) {
                 foundScenario = true;
                 continue;
             }
 
-            // ✅ Stop processing when encountering a new scenario or feature
             if (foundScenario && (line.startsWith("Scenario:") || line.startsWith("Scenario Outline:") || line.startsWith("Feature:"))) {
-                break; // 🔴 EXIT to avoid processing another scenario's examples
+                break;
             }
 
-            // ✅ Detect and process Examples table
             if (foundScenario && line.startsWith("Examples:")) {
-                i++; // Move to headers row
+                i++;
                 headers = extractTableRow(lines.get(i++));
 
                 while (i < lines.size() && lines.get(i).trim().startsWith("|")) {
@@ -68,50 +83,63 @@ public class GherkinDataTableExtractor extends MainActions{
                     }
                     exampleData.add(rowData);
                 }
-                break; // ✅ STOP after processing correct Examples table
+                break;
             }
         }
 
         return exampleData;
     }
 
+    /**
+     * Recursively finds all non-empty .feature files in the target feature directory.
+     *
+     * @return a list of paths to feature files
+     * @throws IOException if an I/O error occurs during directory traversal
+     */
     public List<Path> getFeatureFiles() throws IOException {
-        Path featureDirectory = Paths.get("src/test/resources/Snippet"); // Adjust path as needed
+        Path featureDirectory = Paths.get("src/test/resources/Snippet");
         try (Stream<Path> stream = Files.walk(featureDirectory)) {
             return stream.filter(p -> p.toString().endsWith(".feature") && isNotEmpty(p))
                     .collect(Collectors.toList());
         }
     }
 
+    /**
+     * Checks whether a given file path points to a non-empty file.
+     *
+     * @param path the file path
+     * @return true if the file is not empty; false otherwise
+     */
     private boolean isNotEmpty(Path path) {
         try {
             return Files.size(path) > 0;
         } catch (IOException e) {
-            return false; // Treat unreadable files as empty
+            return false;
         }
     }
 
+    /**
+     * Extracts and resolves steps for a scenario (or scenario outline with resolved examples).
+     *
+     * @param scenarioName the name of the scenario
+     * @return a list of resolved step lists (one list per example if it's an outline)
+     * @throws IOException if an I/O error occurs during file reading
+     */
     public List<List<String>> getStepsFromScenario(String scenarioName) throws IOException {
         List<Path> featureFiles = getFeatureFiles();
         List<List<String>> allSteps = new ArrayList<>();
 
         for (Path featureFile : featureFiles) {
-            // Ensure exact match when retrieving examples
             List<Map<String, String>> examples = getExamplesFromScenarioOutline(featureFile, scenarioName);
 
             if (examples.isEmpty()) {
-                // Normal scenario (not an outline) - Ensure exact name match
                 List<String> steps = extractStepsFromFeature(featureFile, scenarioName, null);
-
-                // Debug: Check if steps were found
                 if (!steps.isEmpty()) {
                     allSteps.add(steps);
                 }
             } else {
-                // Scenario Outline: Extract steps for each example row
                 for (Map<String, String> exampleData : examples) {
                     List<String> steps = extractStepsFromFeature(featureFile, scenarioName, exampleData);
-
                     if (!steps.isEmpty()) {
                         allSteps.add(steps);
                     }
@@ -119,7 +147,6 @@ public class GherkinDataTableExtractor extends MainActions{
             }
         }
 
-        // Debug: If no steps were found
         if (allSteps.isEmpty()) {
             System.out.println("No exact match found for scenario: " + scenarioName);
         }
@@ -127,6 +154,15 @@ public class GherkinDataTableExtractor extends MainActions{
         return allSteps.isEmpty() ? Collections.emptyList() : allSteps;
     }
 
+    /**
+     * Extracts steps for a given scenario from a feature file and optionally replaces outline placeholders with example data.
+     *
+     * @param featureFile  the feature file path
+     * @param scenarioName the scenario name
+     * @param exampleData  the example data row for scenario outlines (null if not applicable)
+     * @return a list of steps, with placeholders replaced if example data is provided
+     * @throws IOException if reading the file fails
+     */
     public List<String> extractStepsFromFeature(Path featureFile, String scenarioName, Map<String, String> exampleData) throws IOException {
         List<String> lines = Files.readAllLines(featureFile);
         boolean isScenarioOutline = false;
@@ -137,25 +173,21 @@ public class GherkinDataTableExtractor extends MainActions{
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i).trim();
 
-            // ✅ Detect correct scenario
             if (line.matches("^Scenario Outline:\\s+" + Pattern.quote(scenarioName) + "$")) {
                 foundScenario = true;
                 isScenarioOutline = true;
                 stepTemplate.clear();
                 continue;
-            }
-            else if (line.startsWith("Scenario:") || line.startsWith("Scenario Outline:") || line.startsWith("Feature:")) {
-                if (foundScenario) break; // ✅ STOP at the next scenario
+            } else if (line.startsWith("Scenario:") || line.startsWith("Scenario Outline:") || line.startsWith("Feature:")) {
+                if (foundScenario) break;
             }
 
-            // ✅ Capture steps for the intended scenario
             if (foundScenario && line.matches("^(Given|When|Then|And)\\s+.*")) {
                 stepTemplate.add(line);
             }
 
-            // ✅ Stop when "Examples:" for another scenario appears
             if (foundScenario && line.startsWith("Examples:")) {
-                i++; // Move to headers row
+                i++;
                 List<String> headers = extractTableRow(lines.get(i++));
 
                 while (i < lines.size() && lines.get(i).trim().startsWith("|")) {
@@ -167,16 +199,14 @@ public class GherkinDataTableExtractor extends MainActions{
                     }
                     examplesList.add(rowData);
                 }
-                break; // ✅ STOP after processing the correct "Examples:"
+                break;
             }
         }
 
-        // ✅ Handle normal scenarios (not outlines)
         if (!isScenarioOutline) {
             return stepTemplate;
         }
 
-        // ✅ Ensure only the correct example row is used
         for (Map<String, String> row : examplesList) {
             if (row.equals(exampleData)) {
                 return stepTemplate.stream()
@@ -188,13 +218,26 @@ public class GherkinDataTableExtractor extends MainActions{
         throw new IllegalArgumentException("No matching example row found for data: " + exampleData);
     }
 
+    /**
+     * Extracts a row from a Gherkin-style pipe-separated table.
+     *
+     * @param line a line of text containing table row
+     * @return a list of cell values from the row
+     */
     private List<String> extractTableRow(String line) {
         return Arrays.stream(line.split("\\|"))
                 .map(String::trim)
-                .filter(cell -> !cell.isEmpty()) // Removes any accidental empty entries
+                .filter(cell -> !cell.isEmpty())
                 .toList();
     }
 
+    /**
+     * Replaces scenario outline placeholders with actual values from a given example row.
+     *
+     * @param step          the step containing placeholders
+     * @param exampleValues a map of placeholder to actual value
+     * @return the resolved step with placeholders replaced
+     */
     private String replacePlaceholders(String step, Map<String, String> exampleValues) {
         for (Map.Entry<String, String> entry : exampleValues.entrySet()) {
             step = step.replace(entry.getKey(), entry.getValue());
@@ -202,34 +245,45 @@ public class GherkinDataTableExtractor extends MainActions{
         return step;
     }
 
+    /**
+     * Executes each step of a scenario using the resolved example data and logs results using Extent Reports.
+     *
+     * @param scenarioStepsForExample the list of steps to execute
+     * @param exampleData             the example data to convert into a DataTable
+     * @param scenario                the Cucumber Scenario object
+     * @throws Throwable if a step execution fails
+     */
     public void executeScenarioWithExampleData(List<List<String>> scenarioStepsForExample, Map<String, String> exampleData, Scenario scenario) throws Throwable {
-
         for (List<String> steps : scenarioStepsForExample) {
             for (String step : steps) {
-
-                // Execute only once with final replaced step
                 DataTable dataTable = createDataTable(exampleData);
                 boolean status = stepRunner.executeStep(step, dataTable);
 
                 if (status) {
-                    if(step.equals("And take screenshot") || (globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true"))){
+                    if (step.equals("And take screenshot") || (globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true"))) {
                         ExtentManager.getNodeExtent().pass(step, takeScreenshot());
-                    }else{
+                    } else {
                         ExtentManager.getNodeExtent().pass(step);
                     }
                 } else {
                     ExtentManager.getNodeExtent().fail(step + "<br><br>", takeScreenshot());
-                    throw new RuntimeException("ABCDE");
+                    throw new RuntimeException("Method invocation error");
                 }
             }
         }
         ExtentManager.removeNodeExtent();
     }
 
+    /**
+     * Converts example data into a Cucumber {@link DataTable} format.
+     *
+     * @param exampleData the data map of parameter names and values
+     * @return a DataTable with headers and values
+     */
     private DataTable createDataTable(Map<String, String> exampleData) {
         List<List<String>> table = new ArrayList<>();
-        table.add(new ArrayList<>(exampleData.keySet())); // Headers
-        table.add(new ArrayList<>(exampleData.values())); // Values
+        table.add(new ArrayList<>(exampleData.keySet()));
+        table.add(new ArrayList<>(exampleData.values()));
         return DataTable.create(table);
     }
 }

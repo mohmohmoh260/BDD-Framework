@@ -206,5 +206,11 @@
             <artifactId>json</artifactId>
             <version>LATEST</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/ru.yandex.qatools.ashot/ashot -->
+        <dependency>
+            <groupId>ru.yandex.qatools.ashot</groupId>
+            <artifactId>ashot</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 </project>

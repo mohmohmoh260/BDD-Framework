@@ -1,6 +1,6 @@
 Feature: Snippet Demo Feature
 
-  Scenario Outline: User login to M2U nnn
+  Scenario Outline: ahahahahahahah
     Then set text "<username>" into "Username_Input"
     And click "Button_Login"
     And get text from "SecurityPhrase" and set into variable "security"

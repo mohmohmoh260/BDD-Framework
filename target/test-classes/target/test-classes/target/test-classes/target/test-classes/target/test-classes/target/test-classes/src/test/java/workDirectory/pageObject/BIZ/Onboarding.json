@@ -1,0 +1,37 @@
+{
+  "BIZ_Login": {
+    "web": "",
+    "android": "//*[@content-desc='introScreen_Login to M2U Biz_txt']",
+    "ios": ""
+  },
+  "BIZ_Username_Input": {
+    "web": "",
+    "android": "//*[@content-desc='text_Username_input']",
+    "ios": ""
+  },
+  "BIZ_Next_Button": {
+    "web": "",
+    "android": "//*[@content-desc='button_Next_txt']",
+    "ios": ""
+  },
+  "BIZ_Security Phrase_Text": {
+    "web": "",
+    "android": "//*[@content-desc='securityImageAndPhrase_user_name_txt']",
+    "ios": ""
+  },
+  "BIZ_Yes_Button": {
+    "web": "",
+    "android": "//*[@content-desc='confirmationButton_Yes_txt']",
+    "ios": ""
+  },
+  "BIZ_Password_Input": {
+    "web": "",
+    "android": "//*[@content-desc='inputPassword_input']",
+    "ios": ""
+  },
+  "BIZ_Remove Device_Button": {
+    "web": "",
+    "android": "//*[@content-desc='list_Remove_txt']",
+    "ios": ""
+  }
+}

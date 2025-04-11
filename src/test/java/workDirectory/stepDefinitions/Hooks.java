@@ -11,7 +11,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class Hooks extends MainActions {
 
     private static final ThreadLocal<Scenario> currentScenario = new ThreadLocal<>();
-    private static final ThreadLocal<String> stepName = new ThreadLocal<>();
 
     @Before
     public void beforeScenario(Scenario scenario){
@@ -34,7 +33,7 @@ public class Hooks extends MainActions {
 
     @AfterStep
     public void afterStep(Scenario scenario) {
-        if(!StepListener.gherkinStep.get().contains("run snippet scenario")){
+        if(!isSnippet.get()){
             if (scenario.isFailed()) {
                 ExtentManager.getExtent().fail(StepListener.gherkinStep.get() + "<br><br>", takeScreenshot());
             } else {
@@ -45,25 +44,25 @@ public class Hooks extends MainActions {
                 }
             }
         }
+        isSnippet.set(false);
     }
 
     @After
     public void afterScenario() {
         if(driver.get() instanceof AppiumDriver){
             ExtentManager.getExtent().assignDevice(
-                    "<b>Platform Name:</b> " + ((AppiumDriver) driver.get()).getCapabilities().getPlatformName() + "<br>" +
-                            "<b>Platform Version:</b> " + ((AppiumDriver) driver.get()).getCapabilities().getCapability("platformVersion").toString() + "<br>" +
-                            "<b>Device Name:</b> " + ((AppiumDriver) driver.get()).getCapabilities().getCapability("deviceName").toString()
+                    "<b>Platform Name:</b>&nbsp;" + ((AppiumDriver) driver.get()).getCapabilities().getPlatformName() + "<br>" +
+                            "<b>Platform Version:</b>&nbsp;" + ((AppiumDriver) driver.get()).getCapabilities().getCapability("platformVersion").toString() + "<br>" +
+                            "<b>Device Name:</b>&nbsp;" + ((AppiumDriver) driver.get()).getCapabilities().getCapability("deviceName").toString()
             );
         }else if(driver.get() instanceof RemoteWebDriver){
             ExtentManager.getExtent().assignDevice(
-                    "<b>Browser Name:</b> " + ((RemoteWebDriver) driver.get()).getCapabilities().getBrowserName() + "<br>" +
-                            "<b>Version:</b> " + ((RemoteWebDriver) driver.get()).getCapabilities().getBrowserVersion()
+                    "<b>Browser Name:</b>&nbsp;" + ((RemoteWebDriver) driver.get()).getCapabilities().getBrowserName() + "<br>" +
+                            "<b>Version:</b>&nbsp;" + ((RemoteWebDriver) driver.get()).getCapabilities().getBrowserVersion()
             );
         }else{
            return;
         }
-
         ExtentManager.flush();
     }
 }
