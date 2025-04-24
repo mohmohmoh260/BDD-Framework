@@ -233,13 +233,19 @@ public abstract class MainActions extends MainDriver {
         }
     }
 
+    protected void writeReportSkipped(){
+        if(isSnippet.get()){
+            ExtentManager.bufferLog(Status.FAIL, "<span style='color:grey'>⏭ Skipping test: " + currentSnippetStep.get() + "</span>", takeScreenshot());
+        }
+    }
+
     protected Boolean verifyElementVisible(String elementName, Integer timeout){
         try{
             waitElementVisible(elementName, timeout);
             writeReportPassed();
             return true;
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
             return false;
         }
@@ -251,7 +257,7 @@ public abstract class MainActions extends MainDriver {
             writeReportPassed();
             return true;
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
             return false;
         }
@@ -263,7 +269,7 @@ public abstract class MainActions extends MainDriver {
             writeReportPassed();
             return true;
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
             return false;
         }
@@ -286,7 +292,7 @@ public abstract class MainActions extends MainDriver {
             writeReportFailed(new Throwable("Element should not Exist"));
             return false;
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportPassed();
             return true;
         }
@@ -299,7 +305,7 @@ public abstract class MainActions extends MainDriver {
             writeReportPassed();
             return true;
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
             return false;
         }
@@ -312,7 +318,7 @@ public abstract class MainActions extends MainDriver {
             writeReportPassed();
             return true;
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
             return false;
         }
@@ -324,7 +330,7 @@ public abstract class MainActions extends MainDriver {
             browserDriver.setupBrowserDriver(browserType, URL);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -345,7 +351,7 @@ public abstract class MainActions extends MainDriver {
             remoteDriver.setupRemoteDriver(parentKey, URL);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -359,7 +365,7 @@ public abstract class MainActions extends MainDriver {
             js.executeScript("arguments[0].click();", element);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -374,7 +380,7 @@ public abstract class MainActions extends MainDriver {
             js.executeScript("arguments[0].click();", element);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -385,7 +391,7 @@ public abstract class MainActions extends MainDriver {
             driver.get().findElement(fetchElement(elementName)).sendKeys(value);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -397,7 +403,7 @@ public abstract class MainActions extends MainDriver {
             actualText =  driver.get().findElement(fetchElement(elementName)).getText();
             writeReportPassed();
         }catch (Throwable t) {
-        StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
         return actualText;
@@ -408,7 +414,7 @@ public abstract class MainActions extends MainDriver {
             driver.get().get(globalDeviceParameter.get().get(0).get(URL));
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -418,7 +424,7 @@ public abstract class MainActions extends MainDriver {
             driver.get().close();
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -428,7 +434,7 @@ public abstract class MainActions extends MainDriver {
             driver.get().quit();
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -438,7 +444,7 @@ public abstract class MainActions extends MainDriver {
             Assert.assertEquals(actualText, expectedVariableValue);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -449,7 +455,7 @@ public abstract class MainActions extends MainDriver {
             driver.get().switchTo().window(newTb.get(tab));
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -460,7 +466,7 @@ public abstract class MainActions extends MainDriver {
             driver.get().switchTo().window(newTb.get(0));
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -471,7 +477,7 @@ public abstract class MainActions extends MainDriver {
             select.selectByVisibleText(text);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -482,7 +488,7 @@ public abstract class MainActions extends MainDriver {
             select.selectByIndex(index);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -493,7 +499,7 @@ public abstract class MainActions extends MainDriver {
             select.selectByValue(value);
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -584,7 +590,7 @@ public abstract class MainActions extends MainDriver {
             }
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -594,7 +600,7 @@ public abstract class MainActions extends MainDriver {
             Assert.assertEquals(title, driver.get().getTitle());
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -610,7 +616,7 @@ public abstract class MainActions extends MainDriver {
             }
             writeReportPassed();
         }catch (Throwable t) {
-    StepListener.lastStepError.set(t);
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }

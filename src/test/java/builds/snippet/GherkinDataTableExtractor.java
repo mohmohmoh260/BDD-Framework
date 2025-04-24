@@ -261,7 +261,6 @@ public class GherkinDataTableExtractor extends MainActions {
      * @throws Throwable if a step execution fails
      */
     public void executeScenarioWithExampleData(List<List<String>> scenarioStepsForExample, Map<String, String> exampleData) throws Throwable {
-        ExtentManager.createAndPushNode(ExtentManager.getCurrentNodeName());
         for (List<String> steps : scenarioStepsForExample) {
             for (String step : steps) {
                 currentSnippetStep.set(step);

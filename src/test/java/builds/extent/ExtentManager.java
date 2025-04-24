@@ -16,7 +16,6 @@ public class ExtentManager {
     private static final ThreadLocal<ExtentTest> extent = new ThreadLocal<>();
     private static final ThreadLocal<Deque<ExtentTest>> nodeStack = ThreadLocal.withInitial(ArrayDeque::new);
     private static final ThreadLocal<List<LogEntry>> bufferedLogs = ThreadLocal.withInitial(ArrayList::new);
-    private static final ThreadLocal<String> currentNodeName = ThreadLocal.withInitial(() -> "");
 
     public static final String baseReportFolder;
     public static final String baseScreenshotFolder;
@@ -70,6 +69,10 @@ public class ExtentManager {
         nodeStack.get().push(extentTest);  // Push root node
     }
 
+    public static synchronized Deque<ExtentTest> getNodeStack(){
+        return nodeStack.get();
+    }
+
     public static synchronized void createAndPushNode(String nodeName) {
         ExtentManager.flushBufferedLogsToExtent();
         ExtentTest parent = nodeStack.get().peek();
@@ -86,14 +89,6 @@ public class ExtentManager {
 
     public static synchronized void flush() {
         extentReports.flush();
-    }
-
-    public static void setCurrentNodeName(String nodeName) {
-        currentNodeName.set(nodeName);
-    }
-
-    public static String getCurrentNodeName() {
-        return currentNodeName.get();
     }
 
     private static class LogEntry {

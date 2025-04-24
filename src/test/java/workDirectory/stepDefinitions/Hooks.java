@@ -4,6 +4,7 @@ import builds.actions.MainActions;
 import builds.extent.ExtentManager;
 import builds.listener.StepListener;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import io.appium.java_client.AppiumDriver;
 import io.cucumber.java.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -35,21 +36,17 @@ public class Hooks extends MainActions {
         int currentStepIndex = stepCounter.get();
         String stepText = getStepByIndex(scenario, currentStepIndex);
         stepCounter.set(currentStepIndex + 1);
-        if(stepText.contains("running snippet scenario")){
-            ExtentManager.createAndPushNode("<span style='color:blue'>" + stepText + "</span>");
-        }else{
-            ExtentManager.createAndPushNode(stepText);
-        }
+        ExtentManager.createAndPushNode(stepText);
     }
 
     @AfterStep
     public void afterStep(Scenario scenario){
-        if(!StepListener.gherkinStep.get().contains("snippet")){
+        if(!isSnippet.get()){
             if(scenario.isFailed()){
                 Throwable error = StepListener.lastStepError.get();
-                writeReportFailed(error);
+                ExtentManager.bufferLog(Status.FAIL, "<span style='color:red'>" + StepListener.gherkinStep.get() + "</span><br><br>" + error, takeScreenshot());
             }else {
-                writeReportPassed();
+                ExtentManager.bufferLog(Status.PASS, StepListener.gherkinStep.get(),  takeScreenshot());
             }
         }
         isSnippet.set(false);
