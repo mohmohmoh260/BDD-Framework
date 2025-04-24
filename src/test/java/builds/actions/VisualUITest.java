@@ -13,7 +13,7 @@ import java.io.File;
 
 public class VisualUITest {
 
-    public static void main(String[] args) throws Exception {
+    public static void visualTest() throws Exception {
         WebDriver driver = new ChromeDriver();
         driver.get("https://example.com");
 

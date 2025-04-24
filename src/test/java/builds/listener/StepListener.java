@@ -11,6 +11,8 @@ import io.cucumber.plugin.event.*;
  */
 public class StepListener implements ConcurrentEventListener {
 
+    public static ThreadLocal<Throwable> lastStepError = new ThreadLocal<>();
+
     /**
      * Thread-local variable to store the current Gherkin step being executed.
      * <p>

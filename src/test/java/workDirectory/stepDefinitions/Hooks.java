@@ -7,10 +7,18 @@ import com.aventstack.extentreports.ExtentTest;
 import io.appium.java_client.AppiumDriver;
 import io.cucumber.java.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import io.cucumber.java.BeforeStep;
+import io.cucumber.plugin.event.TestCase;
+import io.cucumber.plugin.event.TestStep;
+import io.cucumber.plugin.event.PickleStepTestStep;
+import io.cucumber.java.Scenario;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class Hooks extends MainActions {
 
-    private static final ThreadLocal<Scenario> currentScenario = new ThreadLocal<>();
+    private static final ThreadLocal<Integer> stepCounter = ThreadLocal.withInitial(() -> 0);
 
     @Before
     public void beforeScenario(Scenario scenario){
@@ -21,48 +29,75 @@ public class Hooks extends MainActions {
 
     @BeforeStep
     public void beforeStep(Scenario scenario) {
-        currentScenario.set(scenario);
-        if(!toExecute.get()){
-            currentScenario.get().log("⏭ Skipping test: "+ StepListener.gherkinStep.get());
+        if(!toExecute.get().getLast()){
+            ExtentManager.getExtent().skip("⏭ Skipping test: " + StepListener.gherkinStep.get());
         }
-    }
-
-    public Scenario getScenario() {
-        return currentScenario.get();
+        int currentStepIndex = stepCounter.get();
+        String stepText = getStepByIndex(scenario, currentStepIndex);
+        stepCounter.set(currentStepIndex + 1);
+        if(stepText.contains("running snippet scenario")){
+            ExtentManager.createAndPushNode("<span style='color:blue'>" + stepText + "</span>");
+        }else{
+            ExtentManager.createAndPushNode(stepText);
+        }
     }
 
     @AfterStep
-    public void afterStep(Scenario scenario) {
-        if(!isSnippet.get()){
-            if (scenario.isFailed()) {
-                ExtentManager.getExtent().fail(StepListener.gherkinStep.get() + "<br><br>", takeScreenshot());
-            } else {
-                if(globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true")||StepListener.gherkinStep.get().equals("And take screenshot")){
-                    ExtentManager.getExtent().pass(StepListener.gherkinStep.get() , takeScreenshot());
-                }else {
-                    ExtentManager.getExtent().pass(StepListener.gherkinStep.get());
-                }
+    public void afterStep(Scenario scenario){
+        if(!StepListener.gherkinStep.get().contains("snippet")){
+            if(scenario.isFailed()){
+                Throwable error = StepListener.lastStepError.get();
+                writeReportFailed(error);
+            }else {
+                writeReportPassed();
             }
         }
         isSnippet.set(false);
+        ExtentManager.popNode();
     }
 
     @After
     public void afterScenario() {
         if(driver.get() instanceof AppiumDriver){
             ExtentManager.getExtent().assignDevice(
-                    "<b>Platform Name:</b>&nbsp;" + ((AppiumDriver) driver.get()).getCapabilities().getPlatformName() + "<br>" +
-                            "<b>Platform Version:</b>&nbsp;" + ((AppiumDriver) driver.get()).getCapabilities().getCapability("platformVersion").toString() + "<br>" +
-                            "<b>Device Name:</b>&nbsp;" + ((AppiumDriver) driver.get()).getCapabilities().getCapability("deviceName").toString()
+                    "<b>Platform Name:&nbsp;</b>" + ((AppiumDriver) driver.get()).getCapabilities().getPlatformName() + "<br>" +
+                            "<b>Platform Version:&nbsp;</b>" + ((AppiumDriver) driver.get()).getCapabilities().getCapability("platformVersion").toString() + "<br>" +
+                            "<b>Device Name:&nbsp;</b>" + ((AppiumDriver) driver.get()).getCapabilities().getCapability("deviceName").toString()
             );
         }else if(driver.get() instanceof RemoteWebDriver){
             ExtentManager.getExtent().assignDevice(
-                    "<b>Browser Name:</b>&nbsp;" + ((RemoteWebDriver) driver.get()).getCapabilities().getBrowserName() + "<br>" +
-                            "<b>Version:</b>&nbsp;" + ((RemoteWebDriver) driver.get()).getCapabilities().getBrowserVersion()
+                    "<b>Browser Name:&nbsp;</b>" + ((RemoteWebDriver) driver.get()).getCapabilities().getBrowserName() + "<br>" +
+                            "<b>Version:&nbsp;</b>" + ((RemoteWebDriver) driver.get()).getCapabilities().getBrowserVersion()
             );
         }else{
            return;
         }
         ExtentManager.flush();
+    }
+
+    private String getStepByIndex(Scenario scenario, int index) {
+        try {
+            Field delegateField = scenario.getClass().getDeclaredField("delegate");
+            delegateField.setAccessible(true);
+            Object scenarioImpl = delegateField.get(scenario);
+
+            Field testCaseField = scenarioImpl.getClass().getDeclaredField("testCase");
+            testCaseField.setAccessible(true);
+            TestCase testCase = (TestCase) testCaseField.get(scenarioImpl);
+
+            List<TestStep> steps = testCase.getTestSteps();
+            int stepCount = 0;
+            for (TestStep step : steps) {
+                if (step instanceof PickleStepTestStep) {
+                    if (stepCount == index) {
+                        return ((PickleStepTestStep) step).getStep().getText();
+                    }
+                    stepCount++;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

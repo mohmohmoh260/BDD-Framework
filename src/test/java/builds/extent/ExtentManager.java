@@ -1,47 +1,38 @@
 package builds.extent;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.*;
+import com.aventstack.extentreports.model.Media;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.ExtentSparkReporterConfig;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.aventstack.extentreports.reporter.configuration.ViewName;
 
 import java.text.SimpleDateFormat;
+import java.util.*;
 
-/**
- * ExtentManager is responsible for initializing and managing ExtentReports instances.
- * It handles thread-safe creation of test and node logs for parallel test execution.
- */
 public class ExtentManager {
 
-    // Thread-local ExtentTest for individual test cases
-    private static final ThreadLocal<ExtentTest> extent = new ThreadLocal<>();
-
-    // Thread-local ExtentTest for node-level logs (e.g., steps under a test)
-    private static final ThreadLocal<ExtentTest> nodeExtent = new ThreadLocal<>();
-
-    // Singleton ExtentReports instance
     private static final ExtentReports extentReports = new ExtentReports();
+    private static final ThreadLocal<ExtentTest> extent = new ThreadLocal<>();
+    private static final ThreadLocal<Deque<ExtentTest>> nodeStack = ThreadLocal.withInitial(ArrayDeque::new);
+    private static final ThreadLocal<List<LogEntry>> bufferedLogs = ThreadLocal.withInitial(ArrayList::new);
+    private static final ThreadLocal<String> currentNodeName = ThreadLocal.withInitial(() -> "");
 
-    // Report output directory and screenshot directory (OS-aware)
     public static final String baseReportFolder;
     public static final String baseScreenshotFolder;
 
-    // Static block to initialize folders and configure ExtentSparkReporter
     static {
-        String timeStamp = new SimpleDateFormat("dd.MM.yy_HH-mm-ss").format(new java.util.Date());
-        String OS = System.getProperty("os.name");
+        String timeStamp = new SimpleDateFormat("dd.MM.yy_HH-mm-ss").format(new Date());
+        String os = System.getProperty("os.name");
 
-        if (!OS.contains("Mac OS")) {
-            baseReportFolder = "test-output\\" + timeStamp + "\\";
-            baseScreenshotFolder = baseReportFolder + "\\screenshot\\";
-        } else {
+        if (os.contains("Mac OS")) {
             baseReportFolder = "test-output/" + timeStamp + "/";
-            baseScreenshotFolder = baseReportFolder + "/screenshot/";
+            baseScreenshotFolder = baseReportFolder + "screenshot/";
+        } else {
+            baseReportFolder = "test-output\\" + timeStamp + "\\";
+            baseScreenshotFolder = baseReportFolder + "screenshot\\";
         }
 
-        // Initialize ExtentSparkReporter with desired configuration and view layout
         ExtentSparkReporter spark = new ExtentSparkReporter(baseReportFolder + "ExtentReport.html")
                 .viewConfigurer()
                 .viewOrder()
@@ -65,71 +56,74 @@ public class ExtentManager {
         extentReports.attachReporter(spark);
     }
 
-    /**
-     * Gets the thread-local ExtentTest instance for the current test.
-     *
-     * @return ExtentTest instance for the current thread
-     */
-    public static synchronized ExtentTest getExtent() {
-        return extent.get();
-    }
-
-    /**
-     * Sets the thread-local ExtentTest instance for the current test.
-     *
-     * @param test ExtentTest to be associated with the current thread
-     */
-    public static synchronized void setExtent(ExtentTest test) {
-        extent.set(test);
-    }
-
-    /**
-     * Removes the ExtentTest instance from the current thread to prevent memory leaks.
-     */
-    public static synchronized void removeExtent() {
-        extent.remove();
-    }
-
-    /**
-     * Gets the thread-local node ExtentTest instance.
-     * Typically used for logging sub-steps under a main test case.
-     *
-     * @return ExtentTest instance representing a node
-     */
-    public static synchronized ExtentTest getNodeExtent() {
-        return nodeExtent.get();
-    }
-
-    /**
-     * Sets the node ExtentTest instance for the current thread.
-     *
-     * @param test Node-level ExtentTest
-     */
-    public static synchronized void setNodeExtent(ExtentTest test) {
-        nodeExtent.set(test);
-    }
-
-    /**
-     * Removes the node ExtentTest instance from the current thread.
-     */
-    public static synchronized void removeNodeExtent() {
-        nodeExtent.remove();
-    }
-
-    /**
-     * Returns the singleton ExtentReports instance.
-     *
-     * @return ExtentReports
-     */
     public static synchronized ExtentReports getInstance() {
         return extentReports;
     }
 
-    /**
-     * Flushes all logs to the HTML report file.
-     * This should be called once after test execution is complete.
-     */
+    public static synchronized ExtentTest getExtent() {
+        return extent.get();
+    }
+
+    public static synchronized void setExtent(ExtentTest extentTest) {
+        extent.set(extentTest);
+        nodeStack.get().clear();
+        nodeStack.get().push(extentTest);  // Push root node
+    }
+
+    public static synchronized void createAndPushNode(String nodeName) {
+        ExtentManager.flushBufferedLogsToExtent();
+        ExtentTest parent = nodeStack.get().peek();
+        ExtentTest child = parent.createNode(nodeName);
+        nodeStack.get().push(child);
+    }
+
+    public static synchronized void popNode() {
+        ExtentManager.flushBufferedLogsToExtent();
+        if (!nodeStack.get().isEmpty()) {
+            nodeStack.get().pop();
+        }
+    }
+
     public static synchronized void flush() {
         extentReports.flush();
+    }
+
+    public static void setCurrentNodeName(String nodeName) {
+        currentNodeName.set(nodeName);
+    }
+
+    public static String getCurrentNodeName() {
+        return currentNodeName.get();
+    }
+
+    private static class LogEntry {
+        Status status;
+        String message;
+        Media media;
+
+        LogEntry(Status status, String message, Media media) {
+            this.status = status;
+            this.message = message;
+            this.media = media;
+        }
+    }
+
+    public static void bufferLog(Status status, String message, Media media) {
+        bufferedLogs.get().add(new LogEntry(status, message, media));
+    }
+
+    private static void flushBufferedLogsToExtent() {
+        if (bufferedLogs.get().isEmpty()) return;
+
+        ExtentTest current = nodeStack.get().peek();
+        for (LogEntry log : bufferedLogs.get()) {
+            if (log.media != null) {
+                current.log(log.status, log.message, log.media);
+            } else {
+                current.log(log.status, log.message);
+            }
+        }
+
+        bufferedLogs.get().clear();
     }
 }

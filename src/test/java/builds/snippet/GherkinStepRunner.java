@@ -29,11 +29,10 @@ public class GherkinStepRunner {
      * Executes a Gherkin step by matching it against known step definitions.
      *
      * @param gherkinStep the Gherkin step text (e.g., "Given user is on login page")
-     * @param dataTable optional Cucumber {@link DataTable} to be passed to the step definition
-     * @return true if the step was executed successfully, false otherwise
+     * @param dataTable   optional Cucumber {@link DataTable} to be passed to the step definition
      * @throws Throwable if the invoked method throws an exception or no match is found
      */
-    public Boolean executeStep(String gherkinStep, DataTable dataTable) throws Throwable {
+    public void executeStep(String gherkinStep, DataTable dataTable) throws Throwable {
         String cleanedStep = gherkinStep.replaceFirst("^(Given|When|Then|And|\\$)\\s+", "").trim();
 
         for (Class<?> clazz : stepDefinitionClasses) {
@@ -62,13 +61,14 @@ public class GherkinStepRunner {
 
                     // Invoke the method and handle exceptions
                     try {
+//                        System.out.println("Executing: "+gherkinStep);
                         method.invoke(instance, params);
-                        return true;  // Step executed successfully
+                        return;  // Step executed successfully
                     } catch (InvocationTargetException e) {
                         throw e.getCause();  // Rethrow actual exception from step definition
                     } catch (Exception e) {
                         e.printStackTrace(); // Log unexpected exceptions
-                        return false;
+                        return;
                     }
                 }
             }

@@ -3,8 +3,10 @@ package builds.snippet;
 import builds.actions.MainActions;
 import builds.extent.ExtentManager;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.Scenario;
-import workDirectory.stepDefinitions.CommonStepDefinitions;
+import workDirectory.stepDefinitions.ActionStepDefinitions;
+import workDirectory.stepDefinitions.IfStatementStepDefinitions;
+import workDirectory.stepDefinitions.SnippetStepDefinitions;
+import workDirectory.stepDefinitions.VerificationStepDefinitions;
 
 import java.nio.file.*;
 import java.io.IOException;
@@ -18,7 +20,12 @@ import java.util.stream.Stream;
  */
 public class GherkinDataTableExtractor extends MainActions {
 
-    private static final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(CommonStepDefinitions.class));
+    private static final GherkinStepRunner stepRunner = new GherkinStepRunner(List.of(
+            ActionStepDefinitions.class,
+            IfStatementStepDefinitions.class,
+            SnippetStepDefinitions.class,
+            VerificationStepDefinitions.class
+    ));
 
     /**
      * Retrieves all example data rows for a specific scenario outline name across all feature files.
@@ -173,11 +180,12 @@ public class GherkinDataTableExtractor extends MainActions {
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i).trim();
 
-            if (line.matches("^Scenario Outline:\\s+" + Pattern.quote(scenarioName) + "$")) {
+            if (line.matches("^Scenario(?: Outline)?:\\s+" + Pattern.quote(scenarioName) + "$")) {
                 foundScenario = true;
-                isScenarioOutline = true;
+                isScenarioOutline = line.startsWith("Scenario Outline:");
                 stepTemplate.clear();
                 continue;
+
             } else if (line.startsWith("Scenario:") || line.startsWith("Scenario Outline:") || line.startsWith("Feature:")) {
                 if (foundScenario) break;
             }
@@ -203,7 +211,7 @@ public class GherkinDataTableExtractor extends MainActions {
             }
         }
 
-        if (!isScenarioOutline) {
+        if (!isScenarioOutline || exampleData == null || exampleData.isEmpty()) {
             return stepTemplate;
         }
 
@@ -250,28 +258,19 @@ public class GherkinDataTableExtractor extends MainActions {
      *
      * @param scenarioStepsForExample the list of steps to execute
      * @param exampleData             the example data to convert into a DataTable
-     * @param scenario                the Cucumber Scenario object
      * @throws Throwable if a step execution fails
      */
-    public void executeScenarioWithExampleData(List<List<String>> scenarioStepsForExample, Map<String, String> exampleData, Scenario scenario) throws Throwable {
+    public void executeScenarioWithExampleData(List<List<String>> scenarioStepsForExample, Map<String, String> exampleData) throws Throwable {
+        ExtentManager.createAndPushNode(ExtentManager.getCurrentNodeName());
         for (List<String> steps : scenarioStepsForExample) {
             for (String step : steps) {
+                currentSnippetStep.set(step);
                 DataTable dataTable = createDataTable(exampleData);
-                boolean status = stepRunner.executeStep(step, dataTable);
-
-                if (status) {
-                    if (step.equals("And take screenshot") || (globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true"))) {
-                        ExtentManager.getNodeExtent().pass(step, takeScreenshot());
-                    } else {
-                        ExtentManager.getNodeExtent().pass(step);
-                    }
-                } else {
-                    ExtentManager.getNodeExtent().fail(step + "<br><br>", takeScreenshot());
-                    throw new RuntimeException("Method invocation error");
-                }
+                stepRunner.executeStep(step, dataTable);
             }
+            currentSnippetStep.set("");
         }
-        ExtentManager.removeNodeExtent();
+        ExtentManager.popNode();
     }
 
     /**

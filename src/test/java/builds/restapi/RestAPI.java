@@ -32,7 +32,7 @@ public abstract class RestAPI extends Hooks {
                 .statusCode(201)  // Validate success status
                 .extract().response();
 
-        getScenario().log("Response Body: " + response.asString());
+        //getScenario().log("Response Body: " + response.asString());
     }
 
     public void PUTRequest(){

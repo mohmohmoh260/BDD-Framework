@@ -21,7 +21,7 @@ public class RemoteDriver extends MainDriver {
     }
 
     private String getBrowserStackURL() {
-        return "https://amirul_D6CMwe:FqzCyn83EZ5zx7xLy71C@hub-cloud.browserstack.com/wd/hub";
+        return "https://" + globalDeviceParameter.get().get(0).get("browserStackUsername") + ":" + globalDeviceParameter.get().get(0).get("browserStackAccessKey") + "@hub-cloud.browserstack.com/wd/hub";
     }
 
     private static DesiredCapabilities getCapabilities(String parentKey) throws IOException {

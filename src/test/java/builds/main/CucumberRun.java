@@ -27,7 +27,7 @@ public class CucumberRun {
 	@CucumberOptions(
 			plugin = {"builds.listener.StepListener"},
 			features = {"src/test/resources/Features", "src/test/resources/Snippet"},
-			glue = {"workDirectory.stepDefinitions", "builds.extent.ReportFinalizer"},
+			glue = {"workDirectory.stepDefinitions"},
 			tags = ("@test")
 	)
 	public static class TestRunner extends AbstractTestNGCucumberTests {
