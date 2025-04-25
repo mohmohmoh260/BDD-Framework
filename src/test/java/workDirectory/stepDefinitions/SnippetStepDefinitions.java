@@ -20,39 +20,37 @@ public class SnippetStepDefinitions extends MainActions {
      */
     @When("^run snippet scenario \"([^\"]+)\"$")
     public void runSnippetScenario(String scenarioName) throws Throwable {
-        if(toExecute.get().getLast()) {
-            Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
-            List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.get().getExamplesFromScenarioOutline(scenarioName);
-            isSnippet.set(true);
-            if (!exampleDataList.isEmpty()) {
-                for (Map<String, String> exampleData : exampleDataList) {
-                    if (exampleData.keySet().equals(new HashSet<>(exampleData.values()))) continue;
-                    if (executedExamples.contains(exampleData)) continue;
+        Set<Map<String, String>> executedExamples = new HashSet<>(); // Prevent duplicate execution
+        List<Map<String, String>> exampleDataList = gherkinDataTableExtractor.get().getExamplesFromScenarioOutline(scenarioName);
+        isSnippet.set(true);
+        if (!exampleDataList.isEmpty()) {
+            for (Map<String, String> exampleData : exampleDataList) {
+                if (exampleData.keySet().equals(new HashSet<>(exampleData.values()))) continue;
+                if (executedExamples.contains(exampleData)) continue;
 
-                    List<List<String>> scenarioStepsForExample = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
+                List<List<String>> scenarioStepsForExample = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
 
-                    String formattedExampleData = exampleData.entrySet().stream()
-                            .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
-                            .collect(Collectors.joining(", "));
+                String formattedExampleData = exampleData.entrySet().stream()
+                        .map(entry -> entry.getKey().replaceAll("[<>]", "") + ": " + entry.getValue())
+                        .collect(Collectors.joining(", "));
 
-                    if(ExtentManager.getNodeStack().size()>2){
-                        ExtentManager.bufferLog(Status.INFO, "<span style='color:blue'>run snippet scenario \"" + scenarioName + "\"</span><br>Example Data: " + formattedExampleData, takeScreenshot());
-                    }
-                    ExtentManager.createAndPushNode("<span style='color:blue'>run snippet scenario \"" + scenarioName + "\"</span><br>Example Data: " + formattedExampleData);
-                    gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioStepsForExample, exampleData);
-                    executedExamples.add(exampleData);
+                if(ExtentManager.getNodeStack().size()>1){
+                    ExtentManager.bufferLog(Status.INFO, "<span style='color:blue'>run snippet scenario \"" + scenarioName + "\"</span><br>Example Data: " + formattedExampleData, takeScreenshot());
                 }
+                ExtentManager.createAndPushNode("<span style='color:blue'>run snippet scenario \"" + scenarioName + "\"</span><br>Example Data: " + formattedExampleData);
+                gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioStepsForExample, exampleData);
+                executedExamples.add(exampleData);
+            }
 
-                return;
+            return;
+        }
+        List<List<String>> scenarioSteps = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
+        if (!scenarioSteps.isEmpty()) {
+            if(ExtentManager.getNodeStack().size()>1){
+                ExtentManager.bufferLog(Status.INFO, "<span style='color:blue'>run snippet scenario \"" + scenarioName + "\"</span>", takeScreenshot());
             }
-            List<List<String>> scenarioSteps = gherkinDataTableExtractor.get().getStepsFromScenario(scenarioName);
-            if (!scenarioSteps.isEmpty()) {
-                if(ExtentManager.getNodeStack().size()>2){
-                    ExtentManager.bufferLog(Status.INFO, "<span style='color:blue'>run snippet scenario \"" + scenarioName + "\"</span>", takeScreenshot());
-                }
-                ExtentManager.createAndPushNode("<span style='color:blue'>run snippet scenario \"" + scenarioName + "\"</span>");
-                gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap());
-            }
+            ExtentManager.createAndPushNode("<span style='color:blue'>run snippet scenario \"" + scenarioName + "\"</span>");
+            gherkinDataTableExtractor.get().executeScenarioWithExampleData(scenarioSteps, Collections.emptyMap());
         }
     }
 }

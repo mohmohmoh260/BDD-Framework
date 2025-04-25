@@ -31,7 +31,7 @@ public class Hooks extends MainActions {
     @BeforeStep
     public void beforeStep(Scenario scenario) {
         if(!toExecute.get().getLast()){
-            ExtentManager.getExtent().skip("⏭ Skipping test: " + StepListener.gherkinStep.get());
+            ExtentManager.bufferLog(Status.SKIP, "⏭ Skipping test: " + StepListener.gherkinStep.get(), null);
         }
         int currentStepIndex = stepCounter.get();
         String stepText = getStepByIndex(scenario, currentStepIndex);

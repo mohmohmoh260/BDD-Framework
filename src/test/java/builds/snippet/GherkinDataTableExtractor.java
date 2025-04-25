@@ -2,6 +2,7 @@ package builds.snippet;
 
 import builds.actions.MainActions;
 import builds.extent.ExtentManager;
+import com.aventstack.extentreports.Status;
 import io.cucumber.datatable.DataTable;
 import workDirectory.stepDefinitions.ActionStepDefinitions;
 import workDirectory.stepDefinitions.IfStatementStepDefinitions;
@@ -263,9 +264,13 @@ public class GherkinDataTableExtractor extends MainActions {
     public void executeScenarioWithExampleData(List<List<String>> scenarioStepsForExample, Map<String, String> exampleData) throws Throwable {
         for (List<String> steps : scenarioStepsForExample) {
             for (String step : steps) {
-                currentSnippetStep.set(step);
-                DataTable dataTable = createDataTable(exampleData);
-                stepRunner.executeStep(step, dataTable);
+                if(toExecute.get().getLast()){
+                    currentSnippetStep.set(step);
+                    DataTable dataTable = createDataTable(exampleData);
+                    stepRunner.executeStep(step, dataTable);
+                }else{
+                    ExtentManager.bufferLog(Status.SKIP, "⏭ Skipping test: " + step, null);
+                }
             }
             currentSnippetStep.set("");
         }

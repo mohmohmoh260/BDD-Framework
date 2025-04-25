@@ -25,10 +25,10 @@ public class ExtentManager {
         String os = System.getProperty("os.name");
 
         if (os.contains("Mac OS")) {
-            baseReportFolder = "test-output/" + timeStamp + "/";
+            baseReportFolder = "../test-output/" + timeStamp + "/";
             baseScreenshotFolder = baseReportFolder + "screenshot/";
         } else {
-            baseReportFolder = "test-output\\" + timeStamp + "\\";
+            baseReportFolder = "..\\test-output\\" + timeStamp + "\\";
             baseScreenshotFolder = baseReportFolder + "screenshot\\";
         }
 

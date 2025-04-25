@@ -221,6 +221,31 @@ public abstract class MainActions extends MainDriver {
         }
     }
 
+    public static Media takeScreenshotFailed() {
+        if (driver.get() == null) {
+            return null; // Return null to prevent errors
+        }
+        String relativePath;
+        String absolutePath = "";
+        try {
+            relativePath = ExtentManager.baseScreenshotFolder + System.currentTimeMillis() + ".png";
+            absolutePath = new File(relativePath).getAbsolutePath();
+
+            File srcFile = ((TakesScreenshot) driver.get()).getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(srcFile, new File(absolutePath));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (absolutePath.isEmpty()) {
+            return null;
+        } else {
+            return MediaEntityBuilder.createScreenCaptureFromPath(absolutePath).build();
+        }
+    }
+
     protected void writeReportPassed(){
         if(isSnippet.get()){
             ExtentManager.bufferLog(Status.PASS, currentSnippetStep.get(), takeScreenshot());
@@ -229,7 +254,7 @@ public abstract class MainActions extends MainDriver {
 
     protected void writeReportFailed(Throwable t){
         if(isSnippet.get()){
-            ExtentManager.bufferLog(Status.FAIL, "<span style='color:red'>" + currentSnippetStep.get() + "</span><br><br>" + t.getMessage(), takeScreenshot());
+            ExtentManager.bufferLog(Status.FAIL, "<span style='color:red'>" + currentSnippetStep.get() + "</span><br><br>" + t.getMessage(), takeScreenshotFailed());
         }
     }
 
