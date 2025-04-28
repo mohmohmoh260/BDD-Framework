@@ -12,6 +12,7 @@
     <!-- Global Variable Browser Settings -->
     <parameter name="M2U_RSA" value="https://m2umobilesit.maybank.com.my/cgi-bin/bvRSA2/m2u/common/login.do"/>
     <parameter name="M2U_UIUX2" value="https://m2umobilesit.maybank.com.my/cgi-bin/bvUIUX2/m2u/common/login.do"/>
+    <parameter name="UCO_Checker" value="https://trinity-uat.maybank.com/UCO"/>
 
     <parameter name="globalBrowserTypeState" value="false"/><!-- Setup for global browser type -->
     <parameter name="globalBrowserType" value="chrome"/><!-- type of global browser setup -->

@@ -15,9 +15,10 @@ public class IfStatementStepDefinitions extends MainActions {
     @And("^if element \"([^\"]+)\" is not visible(?: within (\\d+) seconds)?$")
     public void ifElementIsNotVisible(String elementName, Integer timeout){
         if(toExecute.get().getLast()){
-            if(verifyElementNotVisible(elementName, timeout)){
+            try{
+                verifyElementNotVisible(elementName, timeout);
                 toExecute.get().add(true);
-            }else{
+            }catch (Throwable t){
                 toExecute.get().add(false);
             }
         }
@@ -32,9 +33,10 @@ public class IfStatementStepDefinitions extends MainActions {
     @And ("^if element \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
     public void ifElementIsVisible(String elementName, Integer timeout){
         if(toExecute.get().getLast()){
-            if(verifyElementVisible(elementName, timeout)){
+            try{
+                verifyElementVisible(elementName, timeout);
                 toExecute.get().add(true);
-            }else{
+            }catch (Throwable t){
                 toExecute.get().add(false);
             }
         }
@@ -49,9 +51,10 @@ public class IfStatementStepDefinitions extends MainActions {
     @And("^if text \"([^\"]+)\" is not visible(?: within (\\d+) seconds)?$")
     public void ifTextIsNotVisible(String text, Integer timeout){
         if(toExecute.get().getLast()){
-            if(verifyTextNotVisible(text, timeout)){
+            try{
+                verifyTextNotVisible(text, timeout);
                 toExecute.get().add(true);
-            }else{
+            }catch (Throwable t){
                 toExecute.get().add(false);
             }
         }
@@ -66,9 +69,10 @@ public class IfStatementStepDefinitions extends MainActions {
     @And("^if text \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
     public void ifTextIsVisible(String text, Integer timeout){
         if(toExecute.get().getLast()){
-            if(verifyTextVisible(text, timeout)){
+            try{
+                verifyTextVisible(text, timeout);
                 toExecute.get().add(true);
-            }else{
+            }catch (Throwable t){
                 toExecute.get().add(false);
             }
         }

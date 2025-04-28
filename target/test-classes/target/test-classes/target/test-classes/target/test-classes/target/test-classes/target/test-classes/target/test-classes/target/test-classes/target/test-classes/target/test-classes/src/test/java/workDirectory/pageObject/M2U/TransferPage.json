@@ -1,7 +1,0 @@
-{
-  "M2U_TransferFrom_Dropdown": {
-    "web": "(//*[@id='accounts_dropdown'])[2]",
-    "android": "",
-    "ios": ""
-  }
-}

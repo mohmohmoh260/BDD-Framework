@@ -48,7 +48,10 @@ public class ExtentManager {
         spark.config(
                 ExtentSparkReporterConfig.builder()
                         .theme(Theme.STANDARD)
-                        .documentTitle("MyReport")
+                        .documentTitle("Automation Report")
+                        .timelineEnabled(true)
+                        .reportName("kym")
+                        .css(".app-logo .logo { background-image: url('https://seeklogo.com/images/M/maybank-logo-942F24DA55-seeklogo.com.png') !important; background-size: contain; background-repeat: no-repeat; width: 120px; height: 40px; display: inline-block; }")
                         .build()
         );
 

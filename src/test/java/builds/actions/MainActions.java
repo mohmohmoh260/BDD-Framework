@@ -14,6 +14,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.ios.IOSDriver;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -36,6 +37,7 @@ public abstract class MainActions extends MainDriver {
     protected static final ThreadLocal<HashMap<String, String>> variables = ThreadLocal.withInitial(HashMap::new);
     protected static final ThreadLocal<String> currentSnippetStep = ThreadLocal.withInitial(() -> "");
     protected static final ThreadLocal<Boolean> isSnippet = ThreadLocal.withInitial(() -> false);
+    protected static final ThreadLocal<Boolean> stepStatus = ThreadLocal.withInitial(() -> true);
 
     protected Throwable waitElementExist(String elementName, Integer timeout) {
         if (timeout == null) {
@@ -109,6 +111,7 @@ public abstract class MainActions extends MainDriver {
         try {
             WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
             wait.until((ExpectedConditions.visibilityOf(driver.get().findElement(by))));
+            System.out.println(by);
             return null;
         } catch (Throwable t) {
             return t;
@@ -255,36 +258,32 @@ public abstract class MainActions extends MainDriver {
     protected void writeReportFailed(Throwable t){
         if(isSnippet.get()){
             ExtentManager.bufferLog(Status.FAIL, "<span style='color:red'>" + currentSnippetStep.get() + "</span><br><br>" + t.getMessage(), takeScreenshotFailed());
+        }else{
+            stepStatus.set(false);
         }
     }
 
-    protected void writeReportSkipped(){
-        if(isSnippet.get()){
-            ExtentManager.bufferLog(Status.FAIL, "<span style='color:grey'>⏭ Skipping test: " + currentSnippetStep.get() + "</span>", takeScreenshot());
-        }
-    }
-
-    protected Boolean verifyElementVisible(String elementName, Integer timeout){
+    protected Throwable verifyElementVisible(String elementName, Integer timeout){
         try{
             waitElementVisible(elementName, timeout);
             writeReportPassed();
-            return true;
+            return null;
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return false;
+            return t;
         }
     }
 
-    protected Boolean verifyElementNotVisible(String elementName, Integer timeout){
+    protected Throwable verifyElementNotVisible(String elementName, Integer timeout){
         try{
             waitElementNotVisible(elementName, timeout);
             writeReportPassed();
-            return true;
+            return null;
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return false;
+            return t;
         }
     }
 
@@ -323,29 +322,29 @@ public abstract class MainActions extends MainDriver {
         }
     }
 
-    protected Boolean verifyTextVisible(String text, Integer timeout){
+    protected Throwable verifyTextVisible(String text, Integer timeout){
         By by = By.xpath("//*[text()=\"" + text + "\"]");
         try{
             waitElementVisible(by, timeout);
             writeReportPassed();
-            return true;
+            return null;
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return false;
+            return t;
         }
     }
 
-    protected Boolean verifyTextNotVisible(String text, Integer timeout){
+    protected Throwable verifyTextNotVisible(String text, Integer timeout){
         By by = By.xpath("//*[text()=\"" + text + "\"]");
         try{
             waitElementNotVisible(by, timeout);
             writeReportPassed();
-            return true;
+            return null;
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return false;
+            return t;
         }
     }
 
@@ -366,6 +365,7 @@ public abstract class MainActions extends MainDriver {
             mobileDriver.setupMobileDriver(testName);
             writeReportPassed();
         }catch (Throwable t) {
+            StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
@@ -382,24 +382,25 @@ public abstract class MainActions extends MainDriver {
     }
 
     protected void clickElement(String elementName, Integer timeout) {
-        waitElementVisible(elementName, timeout);
-        waitElementClickable(elementName, timeout);
         try{
+            waitElementVisible(elementName, timeout);
+            waitElementClickable(elementName, timeout);
             WebElement element = driver.get().findElement(fetchElement(elementName));
             JavascriptExecutor js = (JavascriptExecutor) driver.get();
             js.executeScript("arguments[0].click();", element);
             writeReportPassed();
         }catch (Throwable t) {
+            System.out.println("Error: "+t.getMessage());
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }
     }
 
     protected void clickText(String text, Integer timeout) {
-        By by = By.xpath("//*[text()=\"" + text + "\"]");
-        waitElementVisible(by, timeout);
-        waitElementClickable(by, timeout);
         try{
+            By by = By.xpath("//*[text()=\"" + text + "\"]");
+            waitElementVisible(by, timeout);
+            waitElementClickable(by, timeout);
             WebElement element = driver.get().findElement(by);
             JavascriptExecutor js = (JavascriptExecutor) driver.get();
             js.executeScript("arguments[0].click();", element);
@@ -411,8 +412,8 @@ public abstract class MainActions extends MainDriver {
     }
 
     protected void setText(String value, String elementName, Integer timeout) {
-        waitElementVisible(elementName, timeout);
         try{
+            waitElementVisible(elementName, timeout);
             driver.get().findElement(fetchElement(elementName)).sendKeys(value);
             writeReportPassed();
         }catch (Throwable t) {
@@ -423,8 +424,8 @@ public abstract class MainActions extends MainDriver {
 
     protected String getText(String elementName, Integer timeout){
         String actualText = "";
-        waitElementExist(elementName, timeout);
         try{
+            waitElementExist(elementName, timeout);
             actualText =  driver.get().findElement(fetchElement(elementName)).getText();
             writeReportPassed();
         }catch (Throwable t) {
@@ -649,10 +650,11 @@ public abstract class MainActions extends MainDriver {
     protected void swipeDownToElement(String elementName, int startPercentage, int endPercentage, Integer timeout){
         boolean found = false;
         while(!found){
-            if(!verifyElementVisible(elementName, timeout)){
-                swipe(SwipeDirection.DOWN, startPercentage, endPercentage);
-            }else{
+            try{
+                verifyElementVisible(elementName, timeout);
                 found = true;
+            }catch (Throwable t){
+                swipe(SwipeDirection.DOWN, startPercentage, endPercentage);
             }
         }
     }
@@ -660,21 +662,23 @@ public abstract class MainActions extends MainDriver {
     protected void swipeUpToElement(String elementName, int startPercentage, int endPercentage, Integer timeout){
         boolean found = false;
         while(!found){
-            if(!verifyElementVisible(elementName, timeout)){
+           try{
+               verifyElementVisible(elementName, timeout);
+               found = true;
+           }catch (Throwable t){
                 swipe(SwipeDirection.UP, startPercentage, endPercentage);
-            }else{
-                found = true;
-            }
+           }
         }
     }
 
     protected void swipeRightToElement(String elementName, int startPercentage, int endPercentage, Integer timeout){
         boolean found = false;
         while(!found){
-            if(!verifyElementVisible(elementName, timeout)){
-                swipe(SwipeDirection.RIGHT, startPercentage, endPercentage);
-            }else{
+            try{
+                verifyElementVisible(elementName, timeout);
                 found = true;
+            }catch (Throwable t){
+                swipe(SwipeDirection.RIGHT, startPercentage, endPercentage);
             }
         }
     }
@@ -682,10 +686,11 @@ public abstract class MainActions extends MainDriver {
     protected void swipeLeftToElement(String elementName, int startPercentage, int endPercentage, Integer timeout){
         boolean found = false;
         while(!found){
-            if(!verifyElementVisible(elementName, timeout)){
-                swipe(SwipeDirection.LEFT, startPercentage, endPercentage);
-            }else{
+            try{
+                verifyElementVisible(elementName, timeout);
                 found = true;
+            }catch (Throwable t){
+                swipe(SwipeDirection.LEFT, startPercentage, endPercentage);
             }
         }
     }

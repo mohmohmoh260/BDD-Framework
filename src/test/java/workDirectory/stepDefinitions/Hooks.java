@@ -3,6 +3,7 @@ package workDirectory.stepDefinitions;
 import builds.actions.MainActions;
 import builds.extent.ExtentManager;
 import builds.listener.StepListener;
+import builds.utilities.TestNGXmlParser;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import io.appium.java_client.AppiumDriver;
@@ -42,14 +43,18 @@ public class Hooks extends MainActions {
     @AfterStep
     public void afterStep(Scenario scenario){
         if(!isSnippet.get()){
-            if(scenario.isFailed()){
+            if(scenario.isFailed() || !stepStatus.get()){
                 Throwable error = StepListener.lastStepError.get();
-                ExtentManager.bufferLog(Status.FAIL, "<span style='color:red'>" + StepListener.gherkinStep.get() + "</span><br><br>" + error, takeScreenshot());
+                ExtentManager.bufferLog(Status.FAIL, "<span style='color:red'>" + StepListener.gherkinStep.get() + "</span><br><br>" + error, takeScreenshotFailed());
+                if(globalDeviceParameter.get().get(0).get("continueonfailure").equals(false)){
+                    throw new RuntimeException(StepListener.lastStepError.get().getMessage());
+                }
             }else {
-                ExtentManager.bufferLog(Status.PASS, StepListener.gherkinStep.get(),  takeScreenshot());
+                ExtentManager.bufferLog(Status.PASS, null,  takeScreenshot());
             }
         }
         isSnippet.set(false);
+        stepStatus.set(true);
         ExtentManager.popNode();
     }
 

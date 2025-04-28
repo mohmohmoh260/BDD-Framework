@@ -113,8 +113,8 @@ public class ActionStepDefinitions extends MainActions {
      * @param elementName The name of the element to extract text from
      * @param variableName The name of the variable to store the text into
      */
-    @Then("^get text from \"([^\"]+)\" and set into variable \"([^\"]+)\"$")
-    public void getTextFromAndSetIntoVariable(String elementName, String variableName) {
+    @Then("^get text from element \"([^\"]+)\" and set into variable \"([^\"]+)\"$")
+    public void getTextFromElementAndSetIntoVariable(String elementName, String variableName) {
         if(toExecute.get().getLast()) {
             variables.get().put(variableName, getText(elementName, null));
         }

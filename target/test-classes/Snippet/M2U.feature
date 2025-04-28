@@ -3,7 +3,7 @@ Feature: Snippet Demo Feature
   Scenario Outline: User login to M2U
     Then set text "<username>" into element "M2U_Username_Input"
     And click element "M2U_Button_Login"
-    And get text from "M2U_SecurityPhrase" and set into variable "security"
+    And get text from element "M2U_SecurityPhrase" and set into variable "security"
     Then verify text "<securityPhrase>" is equals to variable "security"
     When click element "M2U_Yes_btn"
     And set text "<password>" into element "M2U_Password_input"

@@ -17,13 +17,19 @@ Feature: Reuse Scenarios
     Given launch the Mobile Simulator "Android Device 1"
     When run snippet scenario "User login to BIZ"
 
-    @test3
-    Scenario: test123
-      And print "qwe"
-      Then run snippet scenario "test"
-      When if 1 is smaller than 2
-      Then run snippet scenario "test"
-      And end if statement
+  @RunUCO
+  Scenario Outline: Login to UCO and test BRN/ID search function
+    Given launch "chrome" browser and navigate to "UCO_Checker"
+    Then set text "<username>" into element "UCO_Username_Input"
+    Then set text "<password>" into element "UCO_Password_Input"
+    And click element "UCO_Login_Button"
+    Then run snippet scenario "To Test Search function and verify the user"
+    Then click element "UCO_Yes_Button"
+    Then verify text "ALLY PARK" is visible within 10 seconds
+    Examples:
+    | username | password |
+    | C0101001 | Maybank1234|
+
 
 
 

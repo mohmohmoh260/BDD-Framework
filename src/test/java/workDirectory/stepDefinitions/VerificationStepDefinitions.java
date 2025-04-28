@@ -12,7 +12,7 @@ public class VerificationStepDefinitions extends MainActions {
      * @param variableName The name of the variable to compare
      */
     @Then("^verify text \"([^\"]+)\" is equals to variable \"([^\"]+)\"$")
-    public void iVerifyTextIsEqualsToVariable(String expectedText, String variableName) {
+    public void verifyTextIsEqualsToVariable(String expectedText, String variableName) {
         if(toExecute.get().getLast()) {
             assertEquals(expectedText, variables.get().get(variableName));
         }
@@ -24,10 +24,17 @@ public class VerificationStepDefinitions extends MainActions {
      * @param elementName The name of the element
      * @param timeout Timeout in seconds (optional)
      */
-    @Then("^verify \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
-    public void iVerifyElementIsVisible(String elementName, Integer timeout) {
+    @Then("^verify element \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
+    public void verifyElementIsVisible(String elementName, Integer timeout) {
         if(toExecute.get().getLast()) {
             verifyElementVisible(elementName, timeout);
+        }
+    }
+
+    @Then("^verify text \"([^\"]+)\" is visible(?: within (\\d+) seconds)?$")
+    public void verifyTextIsVisible(String text, Integer timeout) {
+        if(toExecute.get().getLast()) {
+            verifyTextVisible(text, timeout);
         }
     }
 }
