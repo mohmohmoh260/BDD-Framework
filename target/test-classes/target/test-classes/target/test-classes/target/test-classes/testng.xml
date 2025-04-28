@@ -4,8 +4,9 @@
     <!-- Global Variable General Settings -->
     <parameter name="projectName" value="BDD Automation Demo"/>
     <parameter name="screenshotEveryStep" value="false"/>
-    <parameter name="timeOut" value="30"/><!-- time to wait for element -->
+    <parameter name="timeOut" value="3"/><!-- time to wait for element -->
     <parameter name="implicitwait" value="30"/>
+    <parameter name="continueonfailure" value="true"/>
     <parameter name="browserStackUsername" value="amirul_D6CMwe"/>
     <parameter name="browserStackAccessKey" value="FqzCyn83EZ5zx7xLy71C"/>
 

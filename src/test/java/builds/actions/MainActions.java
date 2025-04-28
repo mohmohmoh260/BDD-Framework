@@ -43,131 +43,90 @@ public abstract class MainActions extends MainDriver {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
+        return null;
     }
 
     protected Throwable waitElementExist(By by, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until(ExpectedConditions.presenceOfElementLocated(by));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until(ExpectedConditions.presenceOfElementLocated(by));
+        return null;
     }
 
     protected Throwable waitElementNotExist(String elementName, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until(ExpectedConditions.presenceOfElementLocated(fetchElement(elementName)));
+        return null;
     }
 
     protected Throwable waitElementNotExist(By by, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until(ExpectedConditions.presenceOfElementLocated(by));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until(ExpectedConditions.presenceOfElementLocated(by));
+        return null;
     }
 
     protected Throwable waitElementVisible(String elementName, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until((ExpectedConditions.visibilityOf(driver.get().findElement(fetchElement(elementName)))));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until((ExpectedConditions.visibilityOf(driver.get().findElement(fetchElement(elementName)))));
+        return null;
     }
 
     protected Throwable waitElementVisible(By by, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until((ExpectedConditions.visibilityOf(driver.get().findElement(by))));
-            System.out.println(by);
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until((ExpectedConditions.visibilityOf(driver.get().findElement(by))));
+        return null;
     }
 
     protected Throwable waitElementNotVisible(String elementName, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until((ExpectedConditions.invisibilityOf(driver.get().findElement(fetchElement(elementName)))));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until((ExpectedConditions.invisibilityOf(driver.get().findElement(fetchElement(elementName)))));
+        return null;
     }
 
     protected Throwable waitElementNotVisible(By by, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until((ExpectedConditions.invisibilityOf(driver.get().findElement(by))));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until((ExpectedConditions.invisibilityOf(driver.get().findElement(by))));
+        return null;
     }
 
     protected Throwable waitElementClickable(String elementName, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until((ExpectedConditions.elementToBeClickable(fetchElement(elementName))));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until((ExpectedConditions.elementToBeClickable(fetchElement(elementName))));
+        return null;
     }
 
     protected Throwable waitElementClickable(By by, Integer timeout) {
         if (timeout == null) {
             timeout = Integer.parseInt(globalDeviceParameter.get().get(0).get("timeOut"));
         }
-        try {
-            WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
-            wait.until((ExpectedConditions.elementToBeClickable(by)));
-            return null;
-        } catch (Throwable t) {
-            return t;
-        }
+        WebDriverWait wait = new WebDriverWait(driver.get(), Duration.ofSeconds(Long.valueOf(timeout)));
+        wait.until((ExpectedConditions.elementToBeClickable(by)));
+        return null;
     }
 
     protected By fetchElement(String elementName) {
@@ -216,11 +175,14 @@ public abstract class MainActions extends MainDriver {
                 e.printStackTrace();
                 return null;
             }
-        }
-        if (absolutePath.isEmpty()) {
+
+            if (absolutePath.isEmpty()) {
+                return null;
+            } else {
+                return MediaEntityBuilder.createScreenCaptureFromPath(absolutePath).build();
+            }
+        }else {
             return null;
-        } else {
-            return MediaEntityBuilder.createScreenCaptureFromPath(absolutePath).build();
         }
     }
 
@@ -271,7 +233,7 @@ public abstract class MainActions extends MainDriver {
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return t;
+            throw t;
         }
     }
 
@@ -283,19 +245,19 @@ public abstract class MainActions extends MainDriver {
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return t;
+            throw t;
         }
     }
 
-    protected Boolean verifyElementNotVisible(By by, Integer timeout){
+    protected Throwable verifyElementNotVisible(By by, Integer timeout){
         try{
             waitElementNotVisible(by, timeout);
             writeReportPassed();
-            return true;
+            return null;
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return false;
+            throw t;
         }
     }
 
@@ -306,7 +268,7 @@ public abstract class MainActions extends MainDriver {
             return true;
         }catch (Throwable t) {
             writeReportFailed(t);
-            return false;
+            throw t;
         }
     }
 
@@ -318,33 +280,33 @@ public abstract class MainActions extends MainDriver {
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportPassed();
-            return true;
+            throw t;
         }
     }
 
     protected Throwable verifyTextVisible(String text, Integer timeout){
-        By by = By.xpath("//*[text()=\"" + text + "\"]");
         try{
+            By by = By.xpath("//*[text()=\"" + text + "\"]");
             waitElementVisible(by, timeout);
             writeReportPassed();
             return null;
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return t;
+            throw t;
         }
     }
 
     protected Throwable verifyTextNotVisible(String text, Integer timeout){
-        By by = By.xpath("//*[text()=\"" + text + "\"]");
         try{
+            By by = By.xpath("//*[text()=\"" + text + "\"]");
             waitElementNotVisible(by, timeout);
             writeReportPassed();
             return null;
         }catch (Throwable t) {
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
-            return t;
+            throw t;
         }
     }
 
@@ -390,7 +352,6 @@ public abstract class MainActions extends MainDriver {
             js.executeScript("arguments[0].click();", element);
             writeReportPassed();
         }catch (Throwable t) {
-            System.out.println("Error: "+t.getMessage());
             StepListener.lastStepError.set(t);
             writeReportFailed(t);
         }

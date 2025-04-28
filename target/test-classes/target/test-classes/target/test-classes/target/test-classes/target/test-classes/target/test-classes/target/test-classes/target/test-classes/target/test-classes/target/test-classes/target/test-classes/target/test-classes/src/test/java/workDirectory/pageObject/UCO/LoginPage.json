@@ -1,0 +1,38 @@
+{
+  "UCO_Username_Input": {
+    "web": "//input[@id='userId']",
+    "android": "",
+    "ios": ""
+  },
+  "UCO_Password_Input": {
+    "web": "//input[@id='password']",
+    "android": "",
+    "ios": ""
+  },
+  "UCO_Login_Button": {
+    "web": "//button[@id='login']",
+    "android": "",
+    "ios": ""
+  },
+  "UCO_SearchCustomer_Button": {
+    "web": "(//a[normalize-space()='Search Customer'])[2]",
+    "android": "",
+    "ios": ""
+  },
+  "UCO_IDNumber_Input": {
+    "web": "//input[@id='UF0000005']",
+    "android": "",
+    "ios": ""
+  },
+  "UCO_Search_Button": {
+    "web": "//button[normalize-space()='Search']",
+    "android": "",
+    "ios": ""
+  },
+  "UCO_Yes_Button": {
+  "web": "//button[normalize-space()='Yes']",
+  "android": "",
+  "ios": ""
+}
+
+}
