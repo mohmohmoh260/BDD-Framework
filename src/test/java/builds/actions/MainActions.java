@@ -155,15 +155,20 @@ public abstract class MainActions extends MainDriver {
         if (driver.get() == null) {
             return null; // Return null to prevent errors
         }
-        String relativePath;
-        String absolutePath = "";
         if (globalDeviceParameter.get().get(0).get("screenshotEveryStep").equals("true") ||
-                currentSnippetStep.get().contains("And take screenshot") ||
-                currentSnippetStep.get().contains("if") ||
-                currentSnippetStep.get().contains("verify") ||
-                StepListener.gherkinStep.get().contains("And take screenshot") ||
-                StepListener.gherkinStep.get().contains("if") ||
-                StepListener.gherkinStep.get().contains("verify")) {
+        currentSnippetStep.get().contains("And take screenshot") ||
+        currentSnippetStep.get().contains("if text") ||
+        currentSnippetStep.get().contains("if element ") ||
+        currentSnippetStep.get().contains("verify text ") ||
+        currentSnippetStep.get().contains("verify element ") ||
+        StepListener.gherkinStep.get().contains("And take screenshot") ||
+        StepListener.gherkinStep.get().contains("if text ") ||
+        StepListener.gherkinStep.get().contains("if element ") ||
+        StepListener.gherkinStep.get().contains("verify text ") ||
+        StepListener.gherkinStep.get().contains("verify element ")) {
+
+            String relativePath;
+            String absolutePath = "";
             try {
                 relativePath = ExtentManager.baseScreenshotFolder + System.currentTimeMillis() + ".png";
                 absolutePath = new File(relativePath).getAbsolutePath();

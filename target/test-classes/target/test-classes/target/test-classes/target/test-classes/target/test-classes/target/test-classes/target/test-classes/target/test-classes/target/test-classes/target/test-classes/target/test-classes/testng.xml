@@ -6,6 +6,7 @@
     <parameter name="screenshotEveryStep" value="false"/>
     <parameter name="timeOut" value="10"/><!-- time to wait for element -->
     <parameter name="implicitwait" value="30"/>
+    <parameter name="continueonfailure" value="true"/>
     <parameter name="browserStackUsername" value="amirul_D6CMwe"/>
     <parameter name="browserStackAccessKey" value="FqzCyn83EZ5zx7xLy71C"/>
 

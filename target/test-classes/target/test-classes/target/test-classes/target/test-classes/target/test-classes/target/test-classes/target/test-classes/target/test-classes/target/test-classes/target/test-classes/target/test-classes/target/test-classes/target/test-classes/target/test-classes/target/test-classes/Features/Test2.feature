@@ -25,7 +25,7 @@ Feature: Reuse Scenarios
     And click element "UCO_Login_Button"
     Then run snippet scenario "To Test Search function and verify the user"
     Then click element "UCO_Yes_Button"
-    Then verify text "ALLY PARK" is visible within 30 seconds
+    Then verify text "ALLY PARK" is visible within 10 seconds
     Examples:
     | username | password |
     | C0101001 | Maybank1234|
